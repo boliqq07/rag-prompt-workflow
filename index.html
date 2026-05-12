@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>提示词优化器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">P</div>
+          <div>
+            <strong>提示词优化器</strong>
+            <p>结构化问答编排台</p>
+          </div>
+        </div>
+
+        <section class="sidebar-section">
+          <div class="section-label">基础模型</div>
+          <label class="select-wrap">
+            <select id="modelSelect">
+              <option value="qwen3.6-plus" selected>qwen3.6-plus</option>
+              <option value="qwen-plus">qwen-plus</option>
+              <option value="qwen-max">qwen-max</option>
+              <option value="gpt-4.1">gpt-4.1</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="sidebar-section">
+          <div class="section-label">LLM 接入</div>
+          <div class="knowledge-card">
+            <strong id="llmStatusTitle">正在检测后端</strong>
+            <p id="llmStatusText">通过 server.js 启动后，可调用真实 OpenAI-compatible 模型。</p>
+          </div>
+        </section>
+
+        <section class="sidebar-section">
+          <div class="section-label">关联知识源</div>
+          <div class="knowledge-card">
+            <strong id="knowledgeStatusTitle">当前使用通用模板</strong>
+            <p id="knowledgeStatusText">未接入知识库时，系统会基于通用领域模板生成候选项。</p>
+            <div class="knowledge-source-list" id="knowledgeSourceList"></div>
+          </div>
+          <button class="sidebar-btn" id="loadSampleBtn" type="button">载入钢结构示例</button>
+        </section>
+
+        <section class="sidebar-section">
+          <div class="section-label">提示词优化流程</div>
+          <div id="stepList" class="step-list"></div>
+        </section>
+
+        <section class="sidebar-section grow">
+          <div class="section-label">历史会话</div>
+          <div id="historyList" class="history-list">
+            <div class="history-item muted">尚未生成会话</div>
+          </div>
+        </section>
+
+        <div class="sidebar-footer">
+          <strong>当前定位</strong>
+          <p>先完成问答流程、同义词确认与规范提示词生成。</p>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="topbar-title">
+            <strong>工作台</strong>
+            <span>澄清问题、确认约束、生成可执行提示词</span>
+          </div>
+          <div class="topbar-date" id="todayLabel">2026年04月21日</div>
+        </header>
+
+        <div class="workspace">
+          <section class="center-column">
+            <div class="context-card">
+              <div class="context-head">
+                <div>
+                  <div class="context-kicker">原始任务输入</div>
+                  <h1>把模糊需求拆成逐步确认的问题流</h1>
+                </div>
+                <div class="status-cluster">
+                  <span class="status-chip" id="sourceBadge">通用模板</span>
+                  <span class="status-chip subtle" id="scenarioBadge">等待识别场景</span>
+                </div>
+              </div>
+
+              <label class="field">
+                <span>原始提示词</span>
+                <textarea
+                  id="promptInput"
+                  rows="4"
+                  placeholder="例如：提取文中钢结构的性能词条，并统一输出结构化结果"
+                ></textarea>
+              </label>
+
+              <label class="field compact">
+                <span>任务流程</span>
+                <div class="mode-switch workflow-switch" id="workflowSwitch">
+                  <button class="mode-btn active" data-workflow="field_template" type="button">字段模板生成</button>
+                  <button class="mode-btn" data-workflow="synonym_merge" type="button">同义词合并</button>
+                  <button class="mode-btn" data-workflow="prompt_generation" type="button">提示词生成</button>
+                </div>
+              </label>
+
+              <div class="mode-switch" id="modeSwitch">
+                <button class="mode-btn active" data-mode="generic" type="button">通用模板</button>
+                <button class="mode-btn" data-mode="rag" type="button">Milvus 知识库</button>
+              </div>
+
+              <label class="field hidden" id="knowledgeField">
+                <span>术语片段 / 标准条目</span>
+                <textarea
+                  id="knowledgeInput"
+                  rows="5"
+                  placeholder="切换到 Milvus 知识库后，系统会按原始提示词自动召回片段；也可以在这里追加人工术语或标准条目。"
+                ></textarea>
+              </label>
+
+              <div class="context-actions">
+                <button class="primary-btn" id="generateBtn" type="button">模板生成问答</button>
+                <button class="ghost-btn" id="llmGenerateBtn" type="button">LLM 生成问答</button>
+                <button class="ghost-btn" id="resetBtn" type="button">重置工作台</button>
+              </div>
+            </div>
+
+            <div class="process-banner">
+              <div class="banner-icon">◉</div>
+              <div>
+                <strong id="stageLabel">第一步：等待生成问答</strong>
+                <p id="stageDesc">系统会先识别任务类型与领域，再进入逐步确认流程。</p>
+              </div>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+              <p>输入原始提示词后，系统会生成逐步追问的问题流。</p>
+              <p>支持单选、多选、判断题与补充说明，并优先围绕同义词确认和输出约束来组织问题。</p>
+            </div>
+
+            <div id="questionnaire" class="questionnaire hidden">
+              <div class="question-shell">
+                <div class="question-shell-head">
+                  <span class="question-overline" id="questionStepLabel">步骤 1</span>
+                  <div class="question-pager">
+                    <button class="mini-btn" id="prevBtn" type="button">‹</button>
+                    <span id="progressPill">1 / 1</span>
+                    <button class="mini-btn" id="nextBtn" type="button">›</button>
+                  </div>
+                </div>
+
+                <div id="questionMeta" class="question-meta"></div>
+                <div id="questionCard" class="question-card"></div>
+
+                <div class="question-footer">
+                  <button class="ghost-btn" id="skipBtn" type="button">跳过当前</button>
+                  <button class="primary-btn" id="confirmBtn" type="button">确认选择</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="refine-card">
+              <label class="field compact">
+                <span>继续追问修改</span>
+                <textarea
+                  id="refineInput"
+                  rows="3"
+                  placeholder="例如：把输出格式改成 Markdown 表格，并强制保留原文证据句。"
+                ></textarea>
+              </label>
+              <div class="context-actions">
+                <button class="primary-btn" id="refineBtn" type="button">模板应用修改</button>
+                <button class="ghost-btn" id="llmPromptBtn" type="button">LLM 生成提示词</button>
+                <button class="ghost-btn" id="downloadBtn" type="button">导出提示词</button>
+              </div>
+            </div>
+          </section>
+
+          <aside class="preview-column">
+            <div class="preview-head">
+              <div>
+                <div class="section-label">实时预览</div>
+                <strong>规范提示词草稿</strong>
+              </div>
+              <div class="preview-format-switch" id="previewFormatSwitch">
+                <button class="format-btn active" data-format="text" type="button">Text</button>
+                <button class="format-btn" data-format="markdown" type="button">Markdown</button>
+                <button class="format-btn" data-format="json" type="button">JSON</button>
+              </div>
+            </div>
+
+            <div id="summaryCards" class="summary-cards"></div>
+
+            <div class="preview-card">
+              <pre id="previewOutput" class="preview-output"></pre>
+            </div>
+
+            <div class="preview-foot">
+              <div class="preview-metric">
+                <span>模式</span>
+                <strong id="modeLabel">通用模板</strong>
+              </div>
+              <div class="preview-metric">
+                <span>当前阶段</span>
+                <strong id="previewStageLabel">等待生成</strong>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+  </html>

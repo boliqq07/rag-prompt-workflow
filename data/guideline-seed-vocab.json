@@ -1,0 +1,5368 @@
+{
+  "schema_version": "0.1",
+  "generated_at": "2026-04-30T04:58:32.564Z",
+  "input_dir": "/Users/cyc/Desktop/立讯/知识库文档",
+  "policy": {
+    "status": "guideline_seed_candidate",
+    "note": "Terms are extracted from human-authored guidelines, but extraction is automated. Do not treat them as expert_confirmed.",
+    "no_auto_promotion_without_seed_calibration": true
+  },
+  "files": [
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Mechanic Assist Design Guide.doc",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/LXQB-CO-0001-SMD&PIP Connector Design Guideline 01(1).docx",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mechanic Assist Design Guide(1).doc",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+    "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Tab design and pin retention force.DOC",
+    "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+    "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx"
+  ],
+  "candidates": [
+    {
+      "vocab_id": "designcontrol.the_o_ring_should_have_obvious_l_bd99e3c3",
+      "canonical_name": "The O-ring should have obvious L/W",
+      "facet_type": "DesignControl",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "The O-ring should have obvious L/W ratio, and the ratio 1",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "The O-ring should have obvious L/W ratio, and the ratio 1",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "designcontrol.another_requirement_is_that_the__b162cede",
+      "canonical_name": "Another requirement is that the O-ring",
+      "facet_type": "DesignControl",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Another requirement is that the O-ring’s profile should symmetry or square, then the O-ring can be matted both side and avoid mismatched",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Another requirement is that the O-ring’s profile should symmetry or square, then the O-ring can be matted both side and avoid mismatched",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "designcontrol.o_ring_can_be_matted_both_side_71ebf98b",
+      "canonical_name": "O-ring can be matted both side",
+      "facet_type": "DesignControl",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Another requirement is that the O-ring’s profile should symmetry or square, then the O-ring can be matted both side and avoid mismatched",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Another requirement is that the O-ring’s profile should symmetry or square, then the O-ring can be matted both side and avoid mismatched",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "designcontrol.lubrication_applying_11_1dc5076c",
+      "canonical_name": "Lubrication Applying 11",
+      "facet_type": "DesignControl",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "5.3.5 Lubrication Applying 11",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "5 Lubrication Applying 11",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "designcontrol.figure_6_coplanarity_control_65a4dfb2",
+      "canonical_name": "Figure 6- Coplanarity Control",
+      "facet_type": "DesignControl",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 6- Coplanarity Control",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 6- Coplanarity Control",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.coding_efficiency_design_3e160a0c",
+      "canonical_name": "Coding Efficiency Design",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Efficiency Design",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Efficiency Design",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "403-101112 Coding Efficiency Design",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Efficiency Design",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Efficiency Design",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 6,
+        "documents": 4
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.pitch_of_codings_26f92c78",
+      "canonical_name": "Pitch of Codings",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4.5 Pitch of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Pitch of codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "5 Pitch of Codings……",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Pitch of codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "4.5 Pitch of Codings",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 8,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.coding_feature_92bb68b3",
+      "canonical_name": "Coding feature",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4.1 Coding feature",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "1 Coding feature",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "4.1 Coding feature",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "1 Coding feature",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.color_of_coding_7ea64c38",
+      "canonical_name": "Color of Coding",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4.2 Color of Coding",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "2 Color of Coding",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "4.2 Color of Coding",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "2 Color of Coding",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.quantity_of_codings_75cb2ea6",
+      "canonical_name": "Quantity of Codings",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4.6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "4.6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.different_p_ns_8d424225",
+      "canonical_name": "Different P/Ns",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4.6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "4.6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.quantity_of_codings_different_p__b81c0d1c",
+      "canonical_name": "Quantity of Codings (Different P/Ns",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4.6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "4.6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "6 Quantity of Codings (Different P/Ns)",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.coding_features_7b9ca082",
+      "canonical_name": "Coding Features",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Features",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Features",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Features",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Coding Features",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.color_of_codings_155ff4d2",
+      "canonical_name": "Color of Codings",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Color of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Color of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Color of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Color of Codings",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.quantity_of_coding_3b9f8108",
+      "canonical_name": "Quantity of Coding",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Quantity of Coding",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Quantity of Coding",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Quantity of Coding",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Quantity of Coding",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.pitch_of_codings_a1aa5da0",
+      "canonical_name": "Pitch of Codings……",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "5 Pitch of Codings……",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "5 Pitch of Codings……",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.height_of_coding_a335be72",
+      "canonical_name": "Height of coding",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "D: Chamfer of interface, H: Height of coding, W: Width of coding",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "D: Chamfer of interface, H: Height of coding, W: Width of coding",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.width_of_coding_ac729eae",
+      "canonical_name": "Width of coding",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "D: Chamfer of interface, H: Height of coding, W: Width of coding",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "D: Chamfer of interface, H: Height of coding, W: Width of coding",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.chamfer_distance_from_c_l_of_int_9bd5d157",
+      "canonical_name": "Chamfer distance from C/L of interface",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "M: Chamfer distance from C/L of interface, N: Chamfer distance from C/L of interface",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "M: Chamfer distance from C/L of interface, N: Chamfer distance from C/L of interface",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.normally_quantity_of_coding_9e7328b3",
+      "canonical_name": "Normally quantity of coding",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Normally quantity of coding (different P/Ns) request by customer",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Normally quantity of coding (different P/Ns) request by customer",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.annex_1_a31355cb",
+      "canonical_name": "Annex 1",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Annex 1: Check list --- Coding efficiency design",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Annex 1: Check list --- Coding efficiency design",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.check_list_coding_efficiency_des_d8e80b8b",
+      "canonical_name": "Check list --- Coding efficiency design",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Annex 1: Check list --- Coding efficiency design",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Annex 1: Check list --- Coding efficiency design",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.just_like_the_figure_2_e1a6a162",
+      "canonical_name": "Just like the figure 2",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Just like the figure 2, add a step on latch, but have lead-in in right position",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Just like the figure 2, add a step on latch, but have lead-in in right position",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "engineeringfeature.term_3a706585",
+      "canonical_name": "密封结构",
+      "facet_type": "EngineeringFeature",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "密封结构",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "密封结构",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "failuremode.stitching_failure_mode_d08c878f",
+      "canonical_name": "Stitching failure mode",
+      "facet_type": "FailureMode",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6 Stitching failure mode 组装后失效形式",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Stitching failure mode 装配失效分析",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6 Stitching failure mode 组装后失效形式",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "failuremode.term_6b33e1b5",
+      "canonical_name": "组装后失效",
+      "facet_type": "FailureMode",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6 Stitching failure mode 组装后失效形式",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6 Stitching failure mode 组装后失效形式",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "failuremode.stitching_failure_mode_4d1d4ba3",
+      "canonical_name": "Stitching failure mode 组装后失效形式",
+      "facet_type": "FailureMode",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6 Stitching failure mode 组装后失效形式",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6 Stitching failure mode 组装后失效形式",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.insertion_force_21a55a78",
+      "canonical_name": "Insertion force",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force, at least 80N",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force (>=60N and <=150N). >=150N/3s for with Mechanical Assist",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force, at least 80N",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force (>=60N and <=150N)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Preliminary Coding mis-mating force calculation: F=σ *W*H²/6A> 3x Insertion force (σ: Yield stress)",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 10,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.x_insertion_force_at_least_80n_dbb878c0",
+      "canonical_name": "x Insertion force, at least 80N",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force, at least 80N",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force, at least 80N",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force, at least 80N",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force, at least 80N",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.insertion_force_or_150n_b57408c1",
+      "canonical_name": "Insertion force or 150N",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.x_insertion_force_or_150n_contac_252dbefd",
+      "canonical_name": "x Insertion force or 150N(contact can’t touch each other",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force or 150N(contact can’t touch each other)",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.normally_the_preventing_mis_mati_6d1d2f0d",
+      "canonical_name": "Normally the preventing mis-mating force is",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Normally the preventing mis-mating force is more than 3 times insertion force of connector but at least 80N/10s",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Normally the preventing mis-mating force is more than 3 times insertion force of connector but at least 80N/10s",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.x_insertion_force_60n_and_150n_25278b2d",
+      "canonical_name": "x Insertion force (>=60N and <=150N",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force (>=60N and <=150N)",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "3x Insertion force (>=60N and <=150N)",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.preliminary_coding_mis_mating_fo_0014041f",
+      "canonical_name": "Preliminary Coding mis-mating force calculation",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Preliminary Coding mis-mating force calculation: F=σ *W*H²/6A> 3x Insertion force (σ: Yield stress)",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Preliminary Coding mis-mating force calculation: F=σ *W*H²/6A> 3x Insertion force (σ: Yield stress)",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.like_the_3a_34cd6fee",
+      "canonical_name": "Like the 3a",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Like the 3a, 3b and 3c in figure 3",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Like the 3a, 3b and 3c in figure 3",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.assembly_tolerance_calculation_4b555e02",
+      "canonical_name": "Assembly tolerance calculation",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 Assembly tolerance calculation 配合公差计算",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Assembly tolerance calculation",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 Assembly tolerance calculation 配合公差计算",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Assembly tolerance calculation",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mm_n_a_2e8739ea",
+      "canonical_name": "mm) N/A",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2mm) N/A",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2mm) N/A",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2mm) N/A",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2mm) N/A",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.term_87ebd00f",
+      "canonical_name": "该区域建议公差",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "该区域建议公差为±0",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "该区域建议公差为：+0",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "该区域建议公差为：+0",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.dimension_and_tolerance_design_59c17d90",
+      "canonical_name": "Dimension and tolerance design",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5.1 Dimension and tolerance design",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "1 Dimension and tolerance design",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Dimension and tolerance design",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mm_while_stencil_thickness_is_be_bf7301c2",
+      "canonical_name": "mm while stencil thickness is between 0",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "3mm while stencil thickness is between 0",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "3 mm while stencil thickness is between 0",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "3 mm while stencil thickness is between 0",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.and_0_b939b466",
+      "canonical_name": "and 0",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "10 and 0",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "10 and 0",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "10 and 0",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mm_while_stencil_thickness_is_la_9bbd1941",
+      "canonical_name": "mm while stencil thickness is larger than 0",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5mm while stencil thickness is larger than 0",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "4 mm while stencil thickness is larger than 0",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "4 mm while stencil thickness is larger than 0",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.air_trap_force_8_c1c74ea0",
+      "canonical_name": "Air Trap Force 8",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "5.3.2 Air Trap Force 8",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "2 Air Trap Force 8",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.staggered_insert_force_9_24f2fc56",
+      "canonical_name": "Staggered Insert Force 9",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "5.3.4 Staggered Insert Force 9",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "4 Staggered Insert Force 9",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.electro_magnetic_interference_9f13b908",
+      "canonical_name": "Electro Magnetic Interference",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Electro Magnetic Interference",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Electro Magnetic Interference",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mating_force_class_8960b1e0",
+      "canonical_name": "Mating Force Class",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Class",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Class",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mating_force_design_72418b15",
+      "canonical_name": "Mating Force design",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force design",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force design",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.component_mating_force_008e50d6",
+      "canonical_name": "Component Mating Force",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Component Mating Force",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Component Mating Force",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mating_force_estimate_023c2394",
+      "canonical_name": "Mating Force Estimate",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Estimate",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Estimate",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mating_force_calculate_2c3753a1",
+      "canonical_name": "Mating Force Calculate",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Calculate",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Calculate",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.mating_force_reduction_a622cac4",
+      "canonical_name": "Mating Force Reduction",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Reduction",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Force Reduction",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.air_trap_force_036b167f",
+      "canonical_name": "Air Trap Force",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Air Trap Force",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Air Trap Force",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.staggered_insert_force_8df81ed4",
+      "canonical_name": "Staggered Insert Force",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Staggered Insert Force",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Staggered Insert Force",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.retention_force_push_out_force_dd1ed5a5",
+      "canonical_name": "Retention force Push-out force",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Retention force Push-out force",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Retention force Push-out force",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.term_9c8c51e6",
+      "canonical_name": "厚度的端子",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 所示。对于 0.6mm 厚度的端子，推荐采用一级倒刺的结构。端子厚度大于 0.6mm 时，建议两级倒刺结构。.",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6mm 厚度的端子，推荐采用一级倒刺的结构",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.term_387eb8bf",
+      "canonical_name": "推荐采用一级倒刺的结构",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 所示。对于 0.6mm 厚度的端子，推荐采用一级倒刺的结构。端子厚度大于 0.6mm 时，建议两级倒刺结构。.",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6mm 厚度的端子，推荐采用一级倒刺的结构",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.retention_force_push_out_force_c_0dcbc1c5",
+      "canonical_name": "Retention force/push-out force comparision",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Retention force/push-out force comparision",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Retention force/push-out force comparision",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.term_d41ae3cd",
+      "canonical_name": "配合公差",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 Assembly tolerance calculation 配合公差计算",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 Assembly tolerance calculation 配合公差计算",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.assembly_tolerance_calculation_9ec8bae8",
+      "canonical_name": "Assembly tolerance calculation 配合公差计算",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 Assembly tolerance calculation 配合公差计算",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "5 Assembly tolerance calculation 配合公差计算",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.assembly_tolerance_9088a41c",
+      "canonical_name": "Assembly tolerance",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Assembly tolerance",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Assembly tolerance",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.pad_width_height_674b7d0e",
+      "canonical_name": "PAD Width/Height",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5.7.1.1 PAD Width/Height",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "1 PAD Width/Height",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.figure_7_effective_solder_length_76f5954a",
+      "canonical_name": "Figure 7- Effective solder length",
+      "facet_type": "ParameterLimit",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 7- Effective solder length",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 7- Effective solder length",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.10_25_b18dea08",
+      "canonical_name": "对应压缩率10%-25%",
+      "facet_type": "ParameterLimit",
+      "aliases": [
+        "mm"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "端面密封设计需满足：压缩量最小0.5mm，最大约1.5mm（对应压缩率10%-25%）。连接器尺寸越大，密封面越大，所需压缩量越大，以补偿公差（包括翘曲变形）。设计时需预留密封件变形空间。",
+          "method": "bilingual_or_heading"
+        }
+      ],
+      "counts": {
+        "mentions": 1,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.term_8c5a08da",
+      "canonical_name": "焊接宽度",
+      "facet_type": "ParameterLimit",
+      "aliases": [
+        "mm"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "焊接宽度（mm）",
+          "method": "bilingual_or_heading"
+        }
+      ],
+      "counts": {
+        "mentions": 1,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading"
+      ]
+    },
+    {
+      "vocab_id": "parameterlimit.term_129476d9",
+      "canonical_name": "焊接高度",
+      "facet_type": "ParameterLimit",
+      "aliases": [
+        "mm"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "焊接高度（mm）",
+          "method": "bilingual_or_heading"
+        }
+      ],
+      "counts": {
+        "mentions": 1,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.distribution_of_codings_76e13d55",
+      "canonical_name": "Distribution of Codings",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4.4 Distribution of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Distribution of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "4 Distribution of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Distribution of Codings",
+          "method": "heading"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "4.4 Distribution of Codings",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 8,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.error_proof_between_main_housing_e709f3ed",
+      "canonical_name": "Error proof between Main Housing and O-ring",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and O-ring",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and O-ring",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and O-ring",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and O-ring",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing and O-ring",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 8,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.cavity_block_7da0b4c3",
+      "canonical_name": "Cavity Block",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and Cavity Block",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and Cavity Block",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and Cavity Block",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and Cavity Block",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing and Cavity Block",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 8,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_71187c7b",
+      "canonical_name": "端子设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.1 Tab pin design 端子设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.1 端子设计 Tab pin design",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "1 Tab pin design 端子设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "1 端子设计 Tab pin design",
+          "method": "heading"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子设计",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 5,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.plug_shift_6e600c85",
+      "canonical_name": "Plug shift",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "M=X-b/2-c1, N=Y-a/2+c2, Pitch=X-Y, Plug shift=(B-A)/2,",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "Theoretically, M-(N+Plug shift)>0 , acutally it is expected more than 1mm",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "M=X-b/2-c1, N=Y-a/2+c2, Pitch=X-Y, Plug shift=(B-A)/2,",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "Theoretically, M-(N+Plug shift)>0 , acutally it is expected more than 1mm",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.terminal_position_assurance_c0a0fe4a",
+      "canonical_name": "Terminal Position Assurance",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Terminal Position Assurance",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Terminal Position Assurance",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Terminal Position Assurance",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Terminal Position Assurance",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.connector_position_assurance_759074d0",
+      "canonical_name": "Connector Position Assurance",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Connector Position Assurance",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Connector Position Assurance",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Connector Position Assurance",
+          "method": "heading"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Connector Position Assurance",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.family_sealing_sealing_cover_b74fd80a",
+      "canonical_name": "Family sealing / sealing cover",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and Family sealing / sealing cover",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing and Family sealing / sealing cover",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing and Family sealing / sealing cover",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing and Family sealing / sealing cover",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.error_proof_between_main_housing_4d6b40db",
+      "canonical_name": "Error proof between Main Housing",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.cavity_block_and_retainer_tpa_9bfb31d0",
+      "canonical_name": "Cavity block and retainer / TPA",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "Error proof between Main Housing / Cavity block and retainer / TPA",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.smd_pip_connector_design_guideli_2a5a27ac",
+      "canonical_name": "SMD&PIP Connector Design Guideline",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "LXQB-CO-0001-SMD&PIP Connector Design Guideline 01(1).docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/LXQB-CO-0001-SMD&PIP Connector Design Guideline 01(1).docx",
+          "evidence_text": "文件名称Document name：SMD&PIP Connector Design Guideline",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "SMD&PIP Connector Design Guideline",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "SMD&PIP Connector Design Guideline",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule",
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.sae_uscar_2_revision_6_performan_d5036f74",
+      "canonical_name": "SAE USCAR-2 Revision 6 Performance Specification",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "SAE USCAR-2 Revision 6 Performance Specification for Automotive Electrical Connector System",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "SAE USCAR-2 Revision 6 Performance Specification for Automotive Electrical Connector System",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.automotive_electrical_connector__2fc94165",
+      "canonical_name": "Automotive Electrical Connector System",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "SAE USCAR-2 Revision 6 Performance Specification for Automotive Electrical Connector System",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "SAE USCAR-2 Revision 6 Performance Specification for Automotive Electrical Connector System",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.motor_vehicle_connectors_0738674a",
+      "canonical_name": "Motor Vehicle Connectors",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "LV214 (VW75174)-2010 Motor Vehicle Connectors",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "LV214 (VW75174)-2010 Motor Vehicle Connectors",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.length_of_coding_e26deb91",
+      "canonical_name": "Length of coding",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "A: Length of coding, B: Chamfer of coding, C: Gap between plug housing and interface",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "A: Length of coding, B: Chamfer of coding, C: Gap between plug housing and interface",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.chamfer_of_coding_a1204432",
+      "canonical_name": "Chamfer of coding",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "A: Length of coding, B: Chamfer of coding, C: Gap between plug housing and interface",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "A: Length of coding, B: Chamfer of coding, C: Gap between plug housing and interface",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.adjacent_coding_position_67d1d26f",
+      "canonical_name": "Adjacent coding position",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Coding Efficiency Design.doc",
+          "evidence_text": "B: length of interface, A: length of plug housing, X,Y: Adjacent coding position",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Coding Efficiency Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Coding Efficiency Design.doc",
+          "evidence_text": "B: length of interface, A: length of plug housing, X,Y: Adjacent coding position",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.in_connector_design_db3a1148",
+      "canonical_name": "In connector design",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Error Proof Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/Error Proof Design.doc",
+          "evidence_text": "In connector design, it’s better to consider all the components assembly follow type I",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "Error Proof Design.docx.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Error Proof Design.docx.doc",
+          "evidence_text": "In connector design, it’s better to consider all the components assembly follow type I",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 2
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_882ea12d",
+      "canonical_name": "高压连接器转移阻抗",
+      "facet_type": "PhysicalComponent",
+      "aliases": [
+        "Zr"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器转移阻抗（Zr），频率范围100kHz到2MHz",
+          "method": "bilingual_or_heading"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器转移阻抗（Zr），频率范围2MHz到30MHz",
+          "method": "bilingual_or_heading"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器转移阻抗（Zr），频率范围100kHz到2MHz",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器转移阻抗（Zr），频率范围2MHz到30MHz",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器转移阻抗（Zr），频率范围100kHz到2MHz",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 6,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.gb_t_28046_d46c7c30",
+      "canonical_name": "GB/T 28046",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器应进行耐化学试剂试验，试验方法见GB/T 28046",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器应进行随机振动试验，随机振动的严酷度限值及试验持续时间应符合GB/T 28046",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器应进行湿热循环试验，湿热循环应符合GB/T 28046",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "对于有密封要求的高压连接器，应进行冰水冲击试验，冰水冲击试验应符合GB/T 28046",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器应进行混合气体腐蚀试验，混合气体腐蚀应符合GB/T 28046",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 5,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_size_61d28866",
+      "canonical_name": "Tab Size",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Tab Size",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Tab Size",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Tab Size",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Tab Size",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_pin_design_1858a5e2",
+      "canonical_name": "Tab pin design",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.1 Tab pin design 端子设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.1 端子设计 Tab pin design",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "1 Tab pin design 端子设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "1 端子设计 Tab pin design",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_bc3b7d53",
+      "canonical_name": "壳体形腔设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.2 Housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.2 housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 housing cavity design 壳体形腔设计",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.housing_cavity_design_5f5c5730",
+      "canonical_name": "Housing cavity design",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.2 Housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Housing cavity design",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Housing cavity design",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.housing_cavity_design_25e8ed45",
+      "canonical_name": "Housing cavity design 壳体形腔设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.2 Housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.2 housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Housing cavity design 壳体形腔设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 housing cavity design 壳体形腔设计",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.smd_connector_introduce_8762a6e4",
+      "canonical_name": "SMD Connector Introduce",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "4.1 SMD Connector Introduce",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "SMD Connector Introduce",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "1 SMD Connector Introduce",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "SMD Connector Introduce",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.solder_pin_length_75e63da4",
+      "canonical_name": "Solder Pin Length",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5.1.2.2 Solder Pin Length",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5.1.2.2 Solder Pin Length",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "2 Solder Pin Length",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "2 Solder Pin Length",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.smd_connector_925f8666",
+      "canonical_name": "SMD Connector",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5.1.1 SMD Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "SMD Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "1 SMD Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "SMD Connector",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.pip_connector_548347d8",
+      "canonical_name": "PIP Connector",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5.1.2 PIP Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "5.7.2 PIP Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "2 PIP Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "2 PIP Connector",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.pin_volume_bba97c07",
+      "canonical_name": "Pin Volume",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "When filling degree requirement is minimum 75%, the solder paste volume can be calculated according to following formula: Solder volume (Sv) ≥ Hole Volume (Hv) - Pin Volume (Pv)",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Solder volume (Sv) ≥ (Hole Volume (Hv) - Pin Volume (Pv)) x 2 x 75%",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Pin Volume (Pv) = 3",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Pin Volume (Pv) = L * W * H (For square or rectangular solder Pin)",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_891ce647",
+      "canonical_name": "壳体和箱体环形密封",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "4.4 壳体和箱体环形密封",
+          "method": "heading"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "4.5 壳体和箱体环形密封",
+          "method": "heading"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "4 壳体和箱体环形密封",
+          "method": "heading"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "5 壳体和箱体环形密封",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_ca97a99a",
+      "canonical_name": "端子保持力",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Tab pin retention force spe 端子保持力标准规范",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Tab pin retention force spec 端子保持力规范…",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Tab pin retention force spe 端子保持力标准规范",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_pin_housing_cavity_geometry__da8ad6ae",
+      "canonical_name": "Tab pin /housing cavity geometry dimension",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3 Tab pin /housing cavity geometry dimension design 端子与壳体形腔尺寸设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Tab pin /housing cavity geometry dimension design 端子/壳体形腔尺寸设计",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3 Tab pin /housing cavity geometry dimension design 端子与壳体形腔尺寸设计",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.plastic_housing_material_07d1c264",
+      "canonical_name": "Plastic housing material",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "4 Plastic housing material 塑胶外壳材料选择",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Plastic housing material 塑胶壳体材料",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "4 Plastic housing material 塑胶外壳材料选择",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.pin_in_paste_ebcbebb8",
+      "canonical_name": "Pin in Paste",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Pin in Paste",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Pin in Paste",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Pin in Paste, abbreviated as PIP",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.ip_69k_1f617f2d",
+      "canonical_name": "IP 69K",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "采用该类密封件并配合合适的壳体设计，可达到IP 69K和IP 67防护等级",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "对于IP 69K等级连接器，壳体需保护密封件免受高压水或蒸汽喷射的直接冲击，暴露的密封件易被蒸汽喷射穿透",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "7mm，可实现IP 69K防护等级，但高压水射流不得直接冲击密封区域，需通过壁面偏转射流并吸收能量，对密封件进行保护",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule",
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_49ded169",
+      "canonical_name": "端子标称厚度",
+      "facet_type": "PhysicalComponent",
+      "aliases": [
+        "mm"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子标称厚度 (mm)",
+          "method": "bilingual_or_heading"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子标称厚度 (mm)",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子标称厚度 (mm)",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_66e4a0ec",
+      "canonical_name": "端子适配线径",
+      "facet_type": "PhysicalComponent",
+      "aliases": [
+        "mm2"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子适配线径（mm2）",
+          "method": "bilingual_or_heading"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子适配线径（mm2）",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子适配线径（mm2）",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 3,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.terminal_position_control_8_8f71bd56",
+      "canonical_name": "Terminal Position Control 8",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "5.3.1 Terminal Position Control 8",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "1 Terminal Position Control 8",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.divided_connectors_9_eed24133",
+      "canonical_name": "Divided Connectors 9",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "5.3.3 Divided Connectors 9",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "3 Divided Connectors 9",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.multilock_79401b66",
+      "canonical_name": "MULTILOCK",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "MULTILOCK",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "MULTILOCK",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.econoseal_a960dc4e",
+      "canonical_name": "Econoseal",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Econoseal",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Econoseal",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.econoseal_j_9809916f",
+      "canonical_name": "Econoseal J",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Econoseal J",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Econoseal J",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.amp_superseal_34e13dbc",
+      "canonical_name": "AMP SUPERSEAL",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "AMP SUPERSEAL",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "AMP SUPERSEAL",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.terminal_position_control_53c776e1",
+      "canonical_name": "Terminal Position Control",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Terminal Position Control",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Terminal Position Control",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.divided_connectors_05035e71",
+      "canonical_name": "Divided Connectors",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Divided Connectors",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Divided Connectors",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.table_4_acf115c0",
+      "canonical_name": "Table 4",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Table 4",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Table 4",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.superseal_1_84d3c22f",
+      "canonical_name": "SUPERSEAL 1",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "SUPERSEAL 1",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "SUPERSEAL 1",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_pin_design_607ea06c",
+      "canonical_name": "Tab pin design 端子设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.1 Tab pin design 端子设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "1 Tab pin design 端子设计",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_pin_retention_force_spe_46bc4135",
+      "canonical_name": "Tab pin retention force spe",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Tab pin retention force spe 端子保持力标准规范",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Tab pin retention force spe 端子保持力标准规范",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_pin_retention_force_spe_b17f9f32",
+      "canonical_name": "Tab pin retention force spe 端子保持力标准规范",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Tab pin retention force spe 端子保持力标准规范",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "2 Tab pin retention force spe 端子保持力标准规范",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_10250453",
+      "canonical_name": "端子与壳体形腔尺寸设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3 Tab pin /housing cavity geometry dimension design 端子与壳体形腔尺寸设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3 Tab pin /housing cavity geometry dimension design 端子与壳体形腔尺寸设计",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_pin_housing_cavity_geometry__f2329ff4",
+      "canonical_name": "Tab pin /housing cavity geometry dimension design 端子与壳体形腔尺寸设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3 Tab pin /housing cavity geometry dimension design 端子与壳体形腔尺寸设计",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3 Tab pin /housing cavity geometry dimension design 端子与壳体形腔尺寸设计",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.tab_pin_design_c9c40692",
+      "canonical_name": "端子设计 Tab pin design",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3.1 端子设计 Tab pin design",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "1 端子设计 Tab pin design",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.pin_thickness_b6e28f0a",
+      "canonical_name": "Pin thickness",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Pin thickness",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Pin thickness",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.pin_width_nominal_bda9b370",
+      "canonical_name": "Pin width nominal",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Pin width nominal",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Pin width nominal",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_1d630dc3",
+      "canonical_name": "建议端子",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "3d model),as Fig.6 shows.尺寸 Y1 为密封区域的起点。建议端子接触区域的末端与塑胶腔体起始点之间的距离",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "建议端子接触区域的末端与塑胶腔体起始点之间的距离",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.pin_width_pin_thickness_f38373a8",
+      "canonical_name": "Pin width Pin thickness",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Pin width Pin thickness",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Pin width Pin thickness",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.plastic_housing_material_db300166",
+      "canonical_name": "Plastic housing material 塑胶外壳材料选择",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "4 Plastic housing material 塑胶外壳材料选择",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "4 Plastic housing material 塑胶外壳材料选择",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_37ba4c13",
+      "canonical_name": "一级倒刺",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "尺寸 Y2 为倒刺结构位置(一级倒刺为片宽 0",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "第一个方面是“壳体型腔干涉区域的起点”与“一级倒刺的起始点”之间",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_e9b83a97",
+      "canonical_name": "二级倒刺",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "6mm 的端子，二级倒刺为片",
+          "method": "heading"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "的距离，建议取值>0，如图 7 所示，第二个方面是 “二级倒刺中心位置”与“干涉区域直线末端”之间的距离 F 尺",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading",
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_b8bc4eca",
+      "canonical_name": "端子的保持力",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "F 越大，端子的保持力越大",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "G 越大，与端子的干涉量越小，端子的保持力越小",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.sealing_area_2e50560a",
+      "canonical_name": "Sealing area",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Sealing area Δ1/2=(B-B’)/2 is transition fit: (1",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "PIN针保持力及倒刺结构设计指南.pdf",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/PIN针保持力及倒刺结构设计指南.pdf",
+          "evidence_text": "Sealing area τ1/2=(T1-t)/2 is transition fit: (0",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_1_smd_connector_779bdb4d",
+      "canonical_name": "Figure 1- SMD Connector",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 1- SMD Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 1- SMD Connector",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_3_pip_connector_24b60403",
+      "canonical_name": "Figure 3- PIP Connector",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 3- PIP Connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 3- PIP Connector",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_4_pin_in_paste_process_se_fb663800",
+      "canonical_name": "Figure 4- Pin-In-Paste process sequence",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 4- Pin-In-Paste process sequence",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 4- Pin-In-Paste process sequence",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_5_pin_in_paste_process_ov_be8f3a2f",
+      "canonical_name": "Figure 5- Pin-In-Paste process overview",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 5- Pin-In-Paste process overview",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 5- Pin-In-Paste process overview",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_8_solder_through_hole_com_7ad74a20",
+      "canonical_name": "Figure 8- Solder-through-hole component gap",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 8- Solder-through-hole component gap",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 8- Solder-through-hole component gap",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_9_solder_pin_length_cd3e4857",
+      "canonical_name": "Figure 9- Solder Pin Length",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 9- Solder Pin Length",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 9- Solder Pin Length",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_11_tape_and_reel_packaged_3ba4d4e7",
+      "canonical_name": "Figure 11- Tape and Reel packaged",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 11- Tape and Reel packaged connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 11- Tape and Reel packaged connector",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_11_tape_and_reel_packaged_fc1f5c79",
+      "canonical_name": "Figure 11- Tape and Reel packaged connector",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 11- Tape and Reel packaged connector",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 11- Tape and Reel packaged connector",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_14_hole_diameter_design_47de5c0e",
+      "canonical_name": "Figure 14- hole diameter design",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 14- hole diameter design",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 14- hole diameter design",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_16_solder_pin_classificat_166707da",
+      "canonical_name": "Figure 16- Solder pin classification Figure",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 16- Solder pin classification Figure 17- PCB thickness",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 16- Solder pin classification Figure 17- PCB thickness",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure_16_solder_pin_classificat_3861df46",
+      "canonical_name": "Figure 16- Solder pin classification Figure 17- PCB thickness",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 16- Solder pin classification Figure 17- PCB thickness",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure 16- Solder pin classification Figure 17- PCB thickness",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure20_space_between_paste_and_f7983350",
+      "canonical_name": "Figure20 - space between paste and",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure20 - space between paste and housing",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure20 - space between paste and housing",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.figure20_space_between_paste_and_44c5507c",
+      "canonical_name": "Figure20 - space between paste and housing",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure20 - space between paste and housing",
+          "method": "heading"
+        },
+        {
+          "document": "SMD&PIP Connector Design.doc",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/SMD&PIP Connector Design.doc",
+          "evidence_text": "Figure20 - space between paste and housing",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_d71ade21",
+      "canonical_name": "磨加工槽",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "槽表面（磨加工槽、槽侧面）",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "槽表面（磨加工槽、槽侧面）",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_a4ebcdfe",
+      "canonical_name": "连接器锁定系统",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "连接器锁定系统需考虑装配状态下持续承受的机械载荷，工作截面的应力应控制在较低水平，避免塑料出现蠕变现象",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "连接器锁定系统需考虑垂直平面内的轴向分力，装配状态下该机械载荷持续作用，工作截面应力应较低，避免塑料蠕变",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_45bd2dae",
+      "canonical_name": "本节描述一种特殊密封件",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "本节描述一种特殊密封件，适用于塑料箱体与金属板、箱体盖板与适配壳体之间的密封场景",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "本节描述一种特殊密封件，适用于塑料箱体与金属板、箱体盖板与适配壳体之间的密封场景",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_e610f780",
+      "canonical_name": "箱体盖板与适配壳体",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "本节描述一种特殊密封件，适用于塑料箱体与金属板、箱体盖板与适配壳体之间的密封场景",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/接口密封系统设计指南（不含单丝密封和系列密封）.docx",
+          "evidence_text": "本节描述一种特殊密封件，适用于塑料箱体与金属板、箱体盖板与适配壳体之间的密封场景",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.mm2_23e171e3",
+      "canonical_name": "mm2",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子适配线径（mm2）",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "端子适配线径（mm2）",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_15cfb762",
+      "canonical_name": "新能源汽车高压连接器设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "新能源汽车高压连接器设计技术规范",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "新能源汽车高压连接器设计技术规范",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_53f735c7",
+      "canonical_name": "功率端子",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "——高压连接器连接时，功率端子先接通，信号/控制端子后接通",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "——高压连接器断开时，信号/控制端子先断开，功率端子后断开",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_b8314364",
+      "canonical_name": "信号/控制端子",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "——高压连接器连接时，功率端子先接通，信号/控制端子后接通",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "——高压连接器断开时，信号/控制端子先断开，功率端子后断开",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_83ee692d",
+      "canonical_name": "高压连接器的密封结构设计",
+      "facet_type": "PhysicalComponent",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器的密封结构设计，首要考虑根据使用环境要求选用适合的密封材料，优先考虑耐候性优良的硅胶材料，具体参考立讯汽车连接器《硅胶材料选型表》",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器的密封结构设计宜采用合理的密封配合量，立讯经验表明高压连接器公母间采用12%-25%的密封配合量较为适宜",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "physicalcomponent.term_77fd1e3e",
+      "canonical_name": "产品设计技术要求",
+      "facet_type": "PhysicalComponent",
+      "aliases": [
+        "PRD"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "高压连接器的尺寸应符合产品开发立项初期《产品设计技术要求（PRD）》相关技术文件的要求。",
+          "method": "bilingual_or_heading"
+        }
+      ],
+      "counts": {
+        "mentions": 1,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading"
+      ]
+    },
+    {
+      "vocab_id": "testcondition.mating_170a1a1b",
+      "canonical_name": "Mating",
+      "facet_type": "TestCondition",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "testcondition.unmating_e7bc2857",
+      "canonical_name": "Unmating",
+      "facet_type": "TestCondition",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Unmating",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Unmating",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Unmating",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Unmating",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 4,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "testcondition.mating_method_aeb6dd58",
+      "canonical_name": "Mating Method",
+      "facet_type": "TestCondition",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Method",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Method",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "testcondition.mating_components_18223ef8",
+      "canonical_name": "Mating Components",
+      "facet_type": "TestCondition",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Components",
+          "method": "heading"
+        },
+        {
+          "document": "Mating Force Design.DOCX",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/2026-03-24-不含TE/设计指导文件/Mating Force Design.DOCX",
+          "evidence_text": "Mating Components",
+          "method": "heading"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "heading"
+      ]
+    },
+    {
+      "vocab_id": "testcondition.gb_t_5095_15567111",
+      "canonical_name": "GB/T 5095",
+      "facet_type": "TestCondition",
+      "aliases": [],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "medium_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "测试方法：按照GB/T 5095",
+          "method": "phrase_rule"
+        },
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "测试方法：按照GB/T 5095",
+          "method": "phrase_rule"
+        }
+      ],
+      "counts": {
+        "mentions": 2,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "phrase_rule"
+      ]
+    },
+    {
+      "vocab_id": "testcondition.term_cd38d84c",
+      "canonical_name": "产品设计要求",
+      "facet_type": "TestCondition",
+      "aliases": [
+        "PRD"
+      ],
+      "status": "guideline_seed_candidate",
+      "confidence_bucket": "high_seed_candidate",
+      "created_by": "guideline_rule_extraction",
+      "sources": [
+        {
+          "document": "立讯高压连接器设计规范-2024.docx",
+          "path": "/Users/cyc/Desktop/立讯/知识库文档/立讯高压连接器设计规范-2024.docx",
+          "evidence_text": "根据立项初期的《产品设计要求（PRD）》进行与载流能力相关设计，使载流能力在额定使用条件下达到设计的载流能力且温升不超过55K。",
+          "method": "bilingual_or_heading"
+        }
+      ],
+      "counts": {
+        "mentions": 1,
+        "documents": 1
+      },
+      "extraction_methods": [
+        "bilingual_or_heading"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+.env
+.DS_Store
+node_modules/
+data/*.db
+data/*.db.lock
+data/*.db-shm
+data/*.db-wal
+__pycache__/
+.venv/
+
+# Generated evaluation artifacts
+reports/
+
+# Local source documents should be ingested locally, not committed.
+知识库文档/

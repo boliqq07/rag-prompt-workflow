@@ -140,12 +140,31 @@ python3 scripts/search_knowledge.py "泡沫玻璃 多孔玻璃 保温材料" --c
 
 ## 工作流质量评测
 
-工作流评测脚本位于 [scripts/evaluate-workflows.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/evaluate-workflows.js)。它会固定跑一组同义词合并和提示词生成用例，检查知识召回、候选问题、最终提示词和“不应合并”边界是否覆盖预期项。
+工作流评测脚本位于 [scripts/evaluate-workflows.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/evaluate-workflows.js)。黄金评测集位于 [eval/fixtures](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/eval/fixtures)，按 `synthetic.json` 和 `project.json` 拆分。它会固定跑一组同义词合并和提示词生成用例，检查知识召回、候选问题、最终提示词和“不应合并”边界是否覆盖预期项。
+
+本地完整自动审查：
+
+```bash
+npm run review
+```
+
+该命令会执行：
+
+- `npm run check`：Node 语法检查。
+- 启动一个临时本地服务。
+- 跑全部黄金评测集。
+- 要求每条 fixture 分数达到 `100`，否则返回失败码。
 
 默认评测不会调用远端 LLM，也不会把项目知识发到外部模型：
 
 ```bash
 npm run eval:workflows
+```
+
+CI 使用的是 fixture 内的小型知识快照，不依赖本地 Milvus DB。需要测试真实 Milvus 检索链路时，先启动 Web 服务并确保知识库已经入库，然后运行：
+
+```bash
+node scripts/evaluate-workflows.js --fixtures project --live-knowledge --min-score 100
 ```
 
 仅用合成样例测试远端 LLM 分支：
@@ -155,6 +174,17 @@ node scripts/evaluate-workflows.js --fixtures synthetic --allow-remote-llm
 ```
 
 报告会写入 `reports/workflow-eval-*.json` 和 `reports/workflow-eval-*.md`。如果要把真实项目知识片段发送到远端 LLM，需要显式增加 `--allow-project-remote`，正常开发评测不建议默认开启。
+
+新增黄金评测样例时，优先修改 `eval/fixtures/*.json`，不要直接把样例写回脚本。每条 fixture 至少包含：
+
+- `prompt`：原始需求。
+- `workflow`：流程类型，例如 `synonym_merge` 或 `prompt_generation`。
+- `requiredTerms`：最终问题和提示词中必须覆盖的术语。
+- `forbiddenMergeTerms`：必须明确标记为“不合并”的边界项。
+- `answers`：模拟用户确认过程。
+- `knowledgeResults`：项目类样例推荐提供小型知识快照，保证 CI 可离线审查。
+
+GitHub Actions 配置位于 [.github/workflows/ci.yml](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/.github/workflows/ci.yml)。每次 push 到 `main` 或创建 PR 时，会自动运行 `npm run review`。
 
 Web 应用启动后会暴露知识库接口：
 

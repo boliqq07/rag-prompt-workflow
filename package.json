@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "check": "node --check server.js && node --check backend/orchestrator.js && node --check app.js && node --check scripts/extract-guideline-vocab.js && node --check scripts/clean-guideline-vocab.js && node --check scripts/evaluate-workflows.js",
+    "check": "node --check server.js && node --check backend/orchestrator.js && node --check app.js && node --check scripts/extract-guideline-vocab.js && node --check scripts/clean-guideline-vocab.js && node --check scripts/evaluate-workflows.js && node --check scripts/run-ci-review.js",
     "eval:workflows": "node scripts/evaluate-workflows.js",
+    "eval:ci": "node scripts/run-ci-review.js",
+    "review": "npm run check && npm run eval:ci",
     "extract:vocab": "node scripts/extract-guideline-vocab.js",
     "clean:vocab": "node scripts/clean-guideline-vocab.js",
     "rag:ingest": "python3 scripts/ingest_knowledge.py",

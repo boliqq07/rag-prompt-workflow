@@ -5,163 +5,18 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-
-const PROJECT_FIXTURES = [
-  {
-    id: "excel-yield-strength",
-    label: "Excel: yield strength aliases",
-    sensitivity: "project",
-    workflow: "synonym_merge",
-    sourceMode: "rag",
-    collections: ["hydrogen_excel"],
-    prompt: "合并 yield strength、YS、σ0.2、Rp0.2 的同义词项，并说明 yield strength value 与 yield strength name 是否能合并。",
-    requiredTerms: ["yield strength", "YS", "σ0.2", "Rp0.2"],
-    forbiddenMergeTerms: ["yield strength value"],
-    answers: {
-      target_type: "抽取字段标准化",
-      candidate_terms: ["yield strength name", "yield strength", "YS", "σ0.2", "Rp0.2", "yield strength value"],
-      bilingual_synonym: "yes",
-      synonym_groups: ["yield strength name"],
-      merge_policy: "严格合并",
-      output_format: "JSON 数组",
-      constraints: ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因"],
-      extra_instructions: "yield strength value 与 yield strength name 不能合并；名称字段和数值字段必须分开。",
-    },
-  },
-  {
-    id: "excel-strength-loss-ratio",
-    label: "Excel: strength loss ratio aliases",
-    sensitivity: "project",
-    workflow: "synonym_merge",
-    sourceMode: "rag",
-    collections: ["hydrogen_excel"],
-    prompt: "合并 strength loss ratio、percentage loss of strength、reduction in strength、IUTS 的同义词项。",
-    requiredTerms: ["strength loss ratio", "percentage loss of strength", "reduction in strength", "IUTS"],
-    forbiddenMergeTerms: ["抗拉强度"],
-    answers: {
-      target_type: "抽取字段标准化",
-      candidate_terms: ["strength loss ratio name", "strength loss ratio", "percentage loss of strength", "reduction in strength", "IUTS"],
-      bilingual_synonym: "yes",
-      synonym_groups: ["strength loss ratio name"],
-      merge_policy: "严格合并",
-      output_format: "JSON 数组",
-      constraints: ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因"],
-      extra_instructions: "强度值、抗拉强度和强度损失率不能合并。",
-    },
-  },
-  {
-    id: "dict-foam-glass",
-    label: "Dictionary: foam glass aliases",
-    sensitivity: "project",
-    workflow: "synonym_merge",
-    sourceMode: "rag",
-    collections: ["material_dictionary"],
-    prompt: "判断泡沫玻璃和多孔玻璃是否可以作为同义词合并，并保留词典证据。",
-    requiredTerms: ["泡沫玻璃", "多孔玻璃"],
-    forbiddenMergeTerms: ["泡沫塑料"],
-    answers: {
-      target_type: "材料术语归一",
-      candidate_terms: ["泡沫玻璃", "多孔玻璃", "泡沫塑料"],
-      bilingual_synonym: "yes",
-      synonym_groups: ["泡沫玻璃"],
-      merge_policy: "严格合并",
-      output_format: "Markdown 表格",
-      constraints: ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因"],
-      extra_instructions: "泡沫塑料不能与泡沫玻璃合并。",
-    },
-  },
-  {
-    id: "dict-gamma-prime",
-    label: "Dictionary: gamma prime strengthening phase",
-    sensitivity: "project",
-    workflow: "synonym_merge",
-    sourceMode: "rag",
-    collections: ["material_dictionary"],
-    prompt: "判断 gamma prime、γ'强化相、高温合金强化相之间的合并边界。",
-    requiredTerms: ["γ'强化相", "gamma prime", "高温合金"],
-    forbiddenMergeTerms: ["γ''强化相"],
-    answers: {
-      target_type: "材料术语归一",
-      candidate_terms: ["γ'强化相", "gamma prime", "高温合金", "γ''强化相"],
-      bilingual_synonym: "yes",
-      synonym_groups: ["γ'强化相"],
-      merge_policy: "人工复核优先",
-      output_format: "JSON 数组",
-      constraints: ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因", "人工复核标记"],
-      extra_instructions: "γ'强化相与 γ''强化相不能直接合并。",
-    },
-  },
-];
-
-const SYNTHETIC_FIXTURES = [
-  {
-    id: "synthetic-synonym-alpha",
-    label: "Synthetic: alpha synonym merge",
-    sensitivity: "synthetic",
-    workflow: "synonym_merge",
-    sourceMode: "generic",
-    prompt: "请把测试术语 alpha strength、AS、A0.2 合并为同义词组，并生成可审计输出规则。注意 beta loss 是不同概念，不能合并。",
-    requiredTerms: ["alpha strength", "AS", "A0.2", "beta loss"],
-    forbiddenMergeTerms: ["beta loss"],
-    answers: {
-      target_type: "抽取字段标准化",
-      candidate_terms: ["alpha strength", "AS", "A0.2", "beta loss"],
-      bilingual_synonym: "yes",
-      synonym_groups: ["alpha strength"],
-      merge_policy: "严格合并",
-      output_format: "JSON 数组",
-      constraints: ["证据原文", "关系类型", "置信度", "不合并原因"],
-      extra_instructions: "beta loss 不得与 alpha strength 合并。",
-    },
-  },
-  {
-    id: "synthetic-field-type-boundary",
-    label: "Synthetic: field type boundary",
-    sensitivity: "synthetic",
-    workflow: "synonym_merge",
-    sourceMode: "generic",
-    prompt:
-      "判断 alpha name、alpha value、alpha unit、alpha ratio、alpha rate 的合并边界；这些字段类型相近但不能互相合并。",
-    requiredTerms: ["alpha name", "alpha value", "alpha unit", "alpha ratio", "alpha rate"],
-    forbiddenMergeTerms: ["alpha value", "alpha unit", "alpha ratio", "alpha rate"],
-    answers: {
-      target_type: "字段边界判定",
-      candidate_terms: ["alpha name", "alpha value", "alpha unit", "alpha ratio", "alpha rate"],
-      bilingual_synonym: "yes",
-      synonym_groups: [],
-      merge_policy: "严格合并",
-      output_format: "JSON 数组",
-      constraints: ["关系类型", "置信度", "不合并原因"],
-      extra_instructions: "alpha name、alpha value、alpha unit、alpha ratio、alpha rate 都是不同字段类型，禁止相互合并。",
-    },
-  },
-  {
-    id: "synthetic-prompt-alpha",
-    label: "Synthetic: prompt generation",
-    sensitivity: "synthetic",
-    workflow: "prompt_generation",
-    sourceMode: "generic",
-    prompt: "生成一个用于测试文档中抽取 alpha metric、test condition、sample id 的高质量提示词；要求 JSON 输出和证据句。",
-    requiredTerms: ["alpha metric", "test condition", "sample id"],
-    forbiddenMergeTerms: [],
-    answers: {
-      business_role: "材料数据抽取员",
-      target_type: "信息抽取",
-      candidate_terms: ["alpha metric", "test condition", "sample id"],
-      output_format: "JSON 数组",
-      constraints: ["只基于原文", "保留原文证据句", "输出前自检", "不确定时标记待确认"],
-      extra_instructions: "不要输出推理过程；没有证据时输出 null。",
-    },
-  },
-];
+const DEFAULT_FIXTURE_DIR = path.join(ROOT, "eval", "fixtures");
 
 function parseArgs(argv) {
   const args = {
     baseUrl: "http://127.0.0.1:8080",
     fixtures: "all",
+    fixtureDir: DEFAULT_FIXTURE_DIR,
     limit: 5,
     allowRemoteLlm: false,
     allowProjectRemote: false,
+    liveKnowledge: false,
+    minScore: 0,
     outDir: path.join(ROOT, "reports"),
   };
 
@@ -169,9 +24,12 @@ function parseArgs(argv) {
     const item = argv[index];
     if (item === "--base-url") args.baseUrl = argv[++index];
     else if (item === "--fixtures") args.fixtures = argv[++index];
+    else if (item === "--fixture-dir") args.fixtureDir = path.resolve(argv[++index]);
     else if (item === "--limit") args.limit = Number(argv[++index]) || args.limit;
     else if (item === "--allow-remote-llm") args.allowRemoteLlm = true;
     else if (item === "--allow-project-remote") args.allowProjectRemote = true;
+    else if (item === "--live-knowledge") args.liveKnowledge = true;
+    else if (item === "--min-score") args.minScore = Number(argv[++index]) || args.minScore;
     else if (item === "--out-dir") args.outDir = path.resolve(argv[++index]);
     else if (item === "--help") {
       printHelp();
@@ -186,18 +44,31 @@ function printHelp() {
 
 Options:
   --fixtures synthetic|project|all  Fixture group to run. Default: all
+  --fixture-dir DIR                 Fixture directory. Default: ./eval/fixtures
   --allow-remote-llm                Use questionMode=llm and promptMode=llm for synthetic fixtures
   --allow-project-remote            Also allow project fixtures to be sent to remote LLM
+  --live-knowledge                  Retrieve project RAG fixtures from the running knowledge service
+  --min-score N                     Exit with failure if any fixture scores below N
   --limit N                         Knowledge retrieval limit. Default: 5
   --base-url URL                    Local app URL. Default: http://127.0.0.1:8080
   --out-dir DIR                     Report directory. Default: ./reports
 `);
 }
 
-function selectFixtures(group) {
-  if (group === "synthetic") return SYNTHETIC_FIXTURES;
-  if (group === "project") return PROJECT_FIXTURES;
-  return [...SYNTHETIC_FIXTURES, ...PROJECT_FIXTURES];
+async function readFixtureFile(filePath) {
+  const payload = JSON.parse(await fs.readFile(filePath, "utf8"));
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload.fixtures)) return payload.fixtures;
+  throw new Error(`Invalid fixture file: ${filePath}`);
+}
+
+async function selectFixtures(args) {
+  const groups = args.fixtures === "all" ? ["synthetic", "project"] : [args.fixtures];
+  const fixtures = [];
+  for (const group of groups) {
+    fixtures.push(...(await readFixtureFile(path.join(args.fixtureDir, `${group}.json`))));
+  }
+  return fixtures;
 }
 
 async function postJson(baseUrl, route, body) {
@@ -241,14 +112,40 @@ function knowledgeToText(results, maxChars = 1800) {
     .slice(0, maxChars);
 }
 
-async function retrieveKnowledge(baseUrl, fixture, limit) {
+function getFixtureKnowledgeResults(fixture) {
+  if (Array.isArray(fixture.knowledgeResults) && fixture.knowledgeResults.length) {
+    return fixture.knowledgeResults;
+  }
+  if (fixture.knowledge) {
+    return [
+      {
+        title: `Fixture knowledge: ${fixture.id}`,
+        knowledge_source_label: "Fixture snapshot",
+        source_type: "fixture",
+        text: fixture.knowledge,
+      },
+    ];
+  }
+  return [];
+}
+
+async function retrieveKnowledge(baseUrl, fixture, args) {
+  const fixtureKnowledgeResults = getFixtureKnowledgeResults(fixture);
+  if (fixtureKnowledgeResults.length && !args.liveKnowledge) {
+    return {
+      results: fixtureKnowledgeResults,
+      errors: [],
+      knowledge: fixture.knowledge || knowledgeToText(fixtureKnowledgeResults),
+    };
+  }
+
   if (fixture.sourceMode !== "rag" || !fixture.collections?.length) {
     return { results: [], errors: [], knowledge: "" };
   }
   const payload = await postJson(baseUrl, "/api/knowledge/search", {
     query: fixture.prompt,
     collections: fixture.collections,
-    limit,
+    limit: args.limit,
   });
   return {
     results: payload.results || [],
@@ -353,7 +250,7 @@ function scoreFixture(fixture, knowledgeResults, questions, finalPrompt) {
 async function runOne(baseUrl, fixture, args) {
   const remoteAllowedForFixture =
     args.allowRemoteLlm && (fixture.sensitivity === "synthetic" || args.allowProjectRemote);
-  const retrieval = await retrieveKnowledge(baseUrl, fixture, args.limit);
+  const retrieval = await retrieveKnowledge(baseUrl, fixture, args);
   const { session, initialQuestions } = await runWorkflow(baseUrl, fixture, retrieval.knowledge, remoteAllowedForFixture);
   const score = scoreFixture(fixture, retrieval.results, initialQuestions, session.finalPrompt);
   return {
@@ -385,8 +282,11 @@ function renderMarkdown(results, args) {
     "",
     `- 生成时间：${new Date().toISOString()}`,
     `- Fixtures：${args.fixtures}`,
+    `- Fixture 目录：${path.relative(ROOT, args.fixtureDir) || "."}`,
     `- 远端 LLM：${args.allowRemoteLlm ? "synthetic enabled" : "disabled"}`,
     `- 项目知识远端发送：${args.allowProjectRemote ? "enabled" : "disabled"}`,
+    `- 知识来源：${args.liveKnowledge ? "live knowledge service" : "fixture snapshot"}`,
+    `- 最低分阈值：${args.minScore || "未启用"}`,
     "",
     "## 汇总",
     "",
@@ -427,7 +327,7 @@ function renderMarkdown(results, args) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  const fixtures = selectFixtures(args.fixtures);
+  const fixtures = await selectFixtures(args);
   await getJson(args.baseUrl, "/api/health");
 
   const results = [];
@@ -457,6 +357,12 @@ async function main() {
 
   const summary = results.map((item) => `${item.id}: ${item.score.total}`).join("\n");
   console.log(`Wrote:\n${jsonPath}\n${mdPath}\n\nScores:\n${summary}`);
+
+  const failed = results.filter((item) => item.score.total < args.minScore);
+  if (failed.length) {
+    console.error(`\nQuality gate failed: ${failed.map((item) => `${item.id}=${item.score.total}`).join(", ")}`);
+    process.exitCode = 1;
+  }
 }
 
 main().catch((error) => {

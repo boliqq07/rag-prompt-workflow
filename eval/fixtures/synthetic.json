@@ -1,0 +1,62 @@
+{
+  "fixtures": [
+    {
+      "id": "synthetic-synonym-alpha",
+      "label": "Synthetic: alpha synonym merge",
+      "sensitivity": "synthetic",
+      "workflow": "synonym_merge",
+      "sourceMode": "generic",
+      "prompt": "请把测试术语 alpha strength、AS、A0.2 合并为同义词组，并生成可审计输出规则。注意 beta loss 是不同概念，不能合并。",
+      "requiredTerms": ["alpha strength", "AS", "A0.2", "beta loss"],
+      "forbiddenMergeTerms": ["beta loss"],
+      "answers": {
+        "target_type": "抽取字段标准化",
+        "candidate_terms": ["alpha strength", "AS", "A0.2", "beta loss"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": ["alpha strength"],
+        "merge_policy": "严格合并",
+        "output_format": "JSON 数组",
+        "constraints": ["证据原文", "关系类型", "置信度", "不合并原因"],
+        "extra_instructions": "beta loss 不得与 alpha strength 合并。"
+      }
+    },
+    {
+      "id": "synthetic-field-type-boundary",
+      "label": "Synthetic: field type boundary",
+      "sensitivity": "synthetic",
+      "workflow": "synonym_merge",
+      "sourceMode": "generic",
+      "prompt": "判断 alpha name、alpha value、alpha unit、alpha ratio、alpha rate 的合并边界；这些字段类型相近但不能互相合并。",
+      "requiredTerms": ["alpha name", "alpha value", "alpha unit", "alpha ratio", "alpha rate"],
+      "forbiddenMergeTerms": ["alpha value", "alpha unit", "alpha ratio", "alpha rate"],
+      "answers": {
+        "target_type": "字段边界判定",
+        "candidate_terms": ["alpha name", "alpha value", "alpha unit", "alpha ratio", "alpha rate"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": [],
+        "merge_policy": "严格合并",
+        "output_format": "JSON 数组",
+        "constraints": ["关系类型", "置信度", "不合并原因"],
+        "extra_instructions": "alpha name、alpha value、alpha unit、alpha ratio、alpha rate 都是不同字段类型，禁止相互合并。"
+      }
+    },
+    {
+      "id": "synthetic-prompt-alpha",
+      "label": "Synthetic: prompt generation",
+      "sensitivity": "synthetic",
+      "workflow": "prompt_generation",
+      "sourceMode": "generic",
+      "prompt": "生成一个用于测试文档中抽取 alpha metric、test condition、sample id 的高质量提示词；要求 JSON 输出和证据句。",
+      "requiredTerms": ["alpha metric", "test condition", "sample id"],
+      "forbiddenMergeTerms": [],
+      "answers": {
+        "business_role": "材料数据抽取员",
+        "target_type": "信息抽取",
+        "candidate_terms": ["alpha metric", "test condition", "sample id"],
+        "output_format": "JSON 数组",
+        "constraints": ["只基于原文", "保留原文证据句", "输出前自检", "不确定时标记待确认"],
+        "extra_instructions": "不要输出推理过程；没有证据时输出 null。"
+      }
+    }
+  ]
+}

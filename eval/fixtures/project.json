@@ -1,0 +1,138 @@
+{
+  "fixtures": [
+    {
+      "id": "excel-yield-strength",
+      "label": "Excel: yield strength aliases",
+      "sensitivity": "project",
+      "workflow": "synonym_merge",
+      "sourceMode": "rag",
+      "collections": ["hydrogen_excel"],
+      "prompt": "合并 yield strength、YS、σ0.2、Rp0.2 的同义词项，并说明 yield strength value 与 yield strength name 是否能合并。",
+      "requiredTerms": ["yield strength", "YS", "σ0.2", "Rp0.2"],
+      "forbiddenMergeTerms": ["yield strength value"],
+      "knowledgeResults": [
+        {
+          "title": "氢脆 Excel / yield strength name",
+          "knowledge_source_label": "氢脆 Excel 抽取要求",
+          "source_type": "excel",
+          "text": "字段: yield strength name\n定义: 屈服强度字段名。\n涵盖参数: yield strength / YS / σys / σy / PS / σ0.2 / Rp0.2"
+        },
+        {
+          "title": "氢脆 Excel / yield strength value",
+          "knowledge_source_label": "氢脆 Excel 抽取要求",
+          "source_type": "excel",
+          "text": "字段: yield strength value\n定义: 屈服强度的数值字段。yield strength name 表示名称，yield strength value 表示数值，二者不能合并。"
+        }
+      ],
+      "answers": {
+        "target_type": "抽取字段标准化",
+        "candidate_terms": ["yield strength name", "yield strength", "YS", "σ0.2", "Rp0.2", "yield strength value"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": ["yield strength name"],
+        "merge_policy": "严格合并",
+        "output_format": "JSON 数组",
+        "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因"],
+        "extra_instructions": "yield strength value 与 yield strength name 不能合并；名称字段和数值字段必须分开。"
+      }
+    },
+    {
+      "id": "excel-strength-loss-ratio",
+      "label": "Excel: strength loss ratio aliases",
+      "sensitivity": "project",
+      "workflow": "synonym_merge",
+      "sourceMode": "rag",
+      "collections": ["hydrogen_excel"],
+      "prompt": "合并 strength loss ratio、percentage loss of strength、reduction in strength、IUTS 的同义词项。",
+      "requiredTerms": ["strength loss ratio", "percentage loss of strength", "reduction in strength", "IUTS"],
+      "forbiddenMergeTerms": ["抗拉强度"],
+      "knowledgeResults": [
+        {
+          "title": "氢脆 Excel / strength loss ratio name",
+          "knowledge_source_label": "氢脆 Excel 抽取要求",
+          "source_type": "excel",
+          "text": "字段: strength loss ratio name\n定义: 强度损失率字段名。\n涵盖参数: strength loss ratio / percentage loss of strength / reduction in strength / strength loss / Iσ / IUTS"
+        },
+        {
+          "title": "氢脆 Excel / tensile strength boundary",
+          "knowledge_source_label": "氢脆 Excel 抽取要求",
+          "source_type": "excel",
+          "text": "强度损失率是比例指标，抗拉强度是强度值字段。强度值、抗拉强度和强度损失率不能合并。"
+        }
+      ],
+      "answers": {
+        "target_type": "抽取字段标准化",
+        "candidate_terms": ["strength loss ratio name", "strength loss ratio", "percentage loss of strength", "reduction in strength", "IUTS"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": ["strength loss ratio name"],
+        "merge_policy": "严格合并",
+        "output_format": "JSON 数组",
+        "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因"],
+        "extra_instructions": "强度值、抗拉强度和强度损失率不能合并。"
+      }
+    },
+    {
+      "id": "dict-foam-glass",
+      "label": "Dictionary: foam glass aliases",
+      "sensitivity": "project",
+      "workflow": "synonym_merge",
+      "sourceMode": "rag",
+      "collections": ["material_dictionary"],
+      "prompt": "判断泡沫玻璃和多孔玻璃是否可以作为同义词合并，并保留词典证据。",
+      "requiredTerms": ["泡沫玻璃", "多孔玻璃"],
+      "forbiddenMergeTerms": ["泡沫塑料"],
+      "knowledgeResults": [
+        {
+          "title": "材料大辞典 / 泡沫玻璃",
+          "knowledge_source_label": "材料大辞典第二版",
+          "source_type": "material_dictionary",
+          "text": "术语: 泡沫玻璃\n定义: 又称多孔玻璃，是由玻璃相和大量封闭或连通孔隙组成的无机非金属材料。泡沫塑料为聚合物材料，不能与泡沫玻璃合并。"
+        }
+      ],
+      "answers": {
+        "target_type": "材料术语归一",
+        "candidate_terms": ["泡沫玻璃", "多孔玻璃", "泡沫塑料"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": ["泡沫玻璃"],
+        "merge_policy": "严格合并",
+        "output_format": "Markdown 表格",
+        "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因"],
+        "extra_instructions": "泡沫塑料不能与泡沫玻璃合并。"
+      }
+    },
+    {
+      "id": "dict-gamma-prime",
+      "label": "Dictionary: gamma prime strengthening phase",
+      "sensitivity": "project",
+      "workflow": "synonym_merge",
+      "sourceMode": "rag",
+      "collections": ["material_dictionary"],
+      "prompt": "判断 gamma prime、γ'强化相、高温合金强化相之间的合并边界。",
+      "requiredTerms": ["γ'强化相", "gamma prime", "高温合金"],
+      "forbiddenMergeTerms": ["γ''强化相"],
+      "knowledgeResults": [
+        {
+          "title": "材料大辞典 / γ'强化相",
+          "knowledge_source_label": "材料大辞典第二版",
+          "source_type": "material_dictionary",
+          "text": "术语: γ'强化相\n定义: gamma prime strengthening phase，高温合金中常见强化相。γ''强化相为另一类强化相，不能与 γ'强化相直接合并。"
+        },
+        {
+          "title": "材料大辞典 / 高温合金",
+          "knowledge_source_label": "材料大辞典第二版",
+          "source_type": "material_dictionary",
+          "text": "术语: 高温合金\n定义: superalloy / high temperature alloy，常通过 gamma prime 等析出相强化。"
+        }
+      ],
+      "answers": {
+        "target_type": "材料术语归一",
+        "candidate_terms": ["γ'强化相", "gamma prime", "高温合金", "γ''强化相"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": ["γ'强化相"],
+        "merge_policy": "人工复核优先",
+        "output_format": "JSON 数组",
+        "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因", "人工复核标记"],
+        "extra_instructions": "γ'强化相与 γ''强化相不能直接合并。"
+      }
+    }
+  ]
+}

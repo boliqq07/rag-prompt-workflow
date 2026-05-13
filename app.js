@@ -273,6 +273,9 @@ const state = {
   knowledgeProfile: null,
   knowledgeAvailable: false,
   knowledgeStatusDetail: "尚未检测",
+  knowledgeDbPath: "",
+  knowledgeDbModifiedAt: "",
+  knowledgeInspectError: "",
   knowledgeSources: [],
   selectedKnowledgeSourceIds: [],
   retrievedKnowledge: [],
@@ -336,6 +339,7 @@ const elements = {
   knowledgeStatusTitle: document.querySelector("#knowledgeStatusTitle"),
   knowledgeStatusText: document.querySelector("#knowledgeStatusText"),
   knowledgeSourceList: document.querySelector("#knowledgeSourceList"),
+  refreshKnowledgeBtn: document.querySelector("#refreshKnowledgeBtn"),
   historyList: document.querySelector("#historyList"),
   previewFormatSwitch: document.querySelector("#previewFormatSwitch"),
   todayLabel: document.querySelector("#todayLabel"),
@@ -1178,23 +1182,58 @@ function formatKnowledgeResults(results) {
   return [termBlock, synonymBlock, sourceBlock].filter(Boolean).join("\n\n");
 }
 
+function formatKnowledgeTime(value) {
+  if (!value) return "未记录";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "未记录";
+  return date.toLocaleString("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function getKnowledgeHealthClass(source) {
+  if (source.health === "ready") return "ready";
+  if (source.health === "unknown") return "unknown";
+  return "missing";
+}
+
 async function refreshKnowledgeStatus() {
+  if (elements.refreshKnowledgeBtn) {
+    elements.refreshKnowledgeBtn.disabled = true;
+    elements.refreshKnowledgeBtn.textContent = "检测中";
+  }
   try {
     const payload = await apiJson("/api/knowledge/status");
     state.knowledgeAvailable = Boolean(payload.configured);
     state.knowledgeSources = Array.isArray(payload.sources) ? payload.sources : [];
+    state.knowledgeDbPath = payload.dbPath || "";
+    state.knowledgeDbModifiedAt = payload.dbModifiedAt || "";
+    state.knowledgeInspectError = payload.inspectError || "";
     if (!state.selectedKnowledgeSourceIds.length && state.knowledgeSources.length) {
-      state.selectedKnowledgeSourceIds = [state.knowledgeSources[0].id];
+      const readySource = state.knowledgeSources.find((source) => source.health === "ready");
+      state.selectedKnowledgeSourceIds = readySource ? [readySource.id] : [];
     } else {
       const availableIds = new Set(state.knowledgeSources.map((source) => source.id));
       state.selectedKnowledgeSourceIds = state.selectedKnowledgeSourceIds.filter((id) => availableIds.has(id));
     }
+    const readyCount = state.knowledgeSources.filter((source) => source.health === "ready").length;
     state.knowledgeStatusDetail = state.knowledgeAvailable
-      ? `可用知识库：${state.knowledgeSources.length || 0} 个`
+      ? `可用知识库：${readyCount}/${state.knowledgeSources.length || 0} 个`
       : "Milvus 本地库尚未创建";
   } catch (_error) {
     state.knowledgeAvailable = false;
     state.knowledgeStatusDetail = "知识库服务不可用";
+    state.knowledgeDbPath = "";
+    state.knowledgeDbModifiedAt = "";
+    state.knowledgeInspectError = "";
+  } finally {
+    if (elements.refreshKnowledgeBtn) {
+      elements.refreshKnowledgeBtn.disabled = false;
+      elements.refreshKnowledgeBtn.textContent = "刷新状态";
+    }
   }
   renderKnowledgeSourceList();
   updateTopStatus();
@@ -1215,20 +1254,37 @@ function renderKnowledgeSourceList() {
   const selected = new Set(state.selectedKnowledgeSourceIds);
   elements.knowledgeSourceList.innerHTML = state.knowledgeSources
     .map(
-      (source) => `
-        <label class="knowledge-source-option">
-          <input
-            type="checkbox"
-            name="knowledgeSource"
-            value="${escapeHtml(source.id)}"
-            ${selected.has(source.id) ? "checked" : ""}
-          />
-          <span>
-            ${escapeHtml(source.label)}
-            <small>${escapeHtml(source.collection)}</small>
-          </span>
-        </label>
-      `
+      (source) => {
+        const sampleTitles = (source.sampleTitles || []).slice(0, 2).filter(Boolean);
+        const meta = [
+          `${Number(source.rowCount || 0)} chunks`,
+          `更新 ${formatKnowledgeTime(source.lastUpdated || state.knowledgeDbModifiedAt)}`,
+        ];
+        if (source.sourceTypes?.length) meta.push(source.sourceTypes.join("/"));
+        return `
+          <label class="knowledge-source-option health-${escapeHtml(getKnowledgeHealthClass(source))}">
+            <input
+              type="checkbox"
+              name="knowledgeSource"
+              value="${escapeHtml(source.id)}"
+              ${selected.has(source.id) ? "checked" : ""}
+              ${source.health === "ready" ? "" : "disabled"}
+            />
+            <span>
+              <b>${escapeHtml(source.label)}</b>
+              <em>${escapeHtml(source.healthLabel || "未知")}</em>
+              <small>${escapeHtml(source.collection)}</small>
+              <small>${escapeHtml(meta.join(" · "))}</small>
+              <small>${escapeHtml(source.healthMessage || "")}</small>
+              ${
+                sampleTitles.length
+                  ? `<small>样例：${sampleTitles.map((title) => escapeHtml(title)).join("；")}</small>`
+                  : ""
+              }
+            </span>
+          </label>
+        `;
+      }
     )
     .join("");
 }
@@ -1946,6 +2002,8 @@ function updateTopStatus() {
   const sourceLabel = state.mode === "rag" ? state.knowledgeProfile?.sourceLabel || "Milvus 知识库" : "通用模板";
   const selectedSources = getSelectedKnowledgeSources();
   const selectedSourceText = selectedSources.length ? selectedSources.map((source) => source.label).join("、") : "未选择知识库";
+  const readyCount = state.knowledgeSources.filter((source) => source.health === "ready").length;
+  const statusSuffix = state.knowledgeInspectError ? `；检查提示：${state.knowledgeInspectError}` : "";
   elements.modeLabel.textContent = sourceLabel;
   elements.sourceBadge.textContent = sourceLabel;
   elements.scenarioBadge.textContent = state.scenario ? state.scenario.label : "等待识别场景";
@@ -1956,12 +2014,12 @@ function updateTopStatus() {
     elements.knowledgeStatusText.textContent = state.retrievedKnowledge.length
       ? `已从 ${selectedSourceText} 召回 ${state.retrievedKnowledge.length} 条知识片段。`
       : state.knowledgeAvailable
-        ? `生成问答时会从已选知识库召回片段：${selectedSourceText}。`
+        ? `可用知识库 ${readyCount}/${state.knowledgeSources.length}；生成问答时会从已选知识库召回片段：${selectedSourceText}${statusSuffix}。`
         : "尚未检测到 Milvus 本地知识库。";
   } else {
     elements.knowledgeStatusTitle.textContent = state.knowledgeAvailable ? "Milvus 知识库已接入" : "当前使用通用模板";
     elements.knowledgeStatusText.textContent = state.knowledgeAvailable
-      ? `当前任务使用通用模板；切换到 Milvus 知识库后可从 ${selectedSourceText} 召回片段。`
+      ? `当前任务使用通用模板；可用知识库 ${readyCount}/${state.knowledgeSources.length}${statusSuffix}。`
       : "未接入知识库时，系统会基于通用领域模板生成候选项。";
   }
 }
@@ -2470,6 +2528,10 @@ elements.knowledgeSourceList.addEventListener("change", () => {
   updateTopStatus();
   updateSummaryCards();
   renderPreview();
+});
+
+elements.refreshKnowledgeBtn.addEventListener("click", () => {
+  refreshKnowledgeStatus();
 });
 
 elements.previewFormatSwitch.addEventListener("click", (event) => {

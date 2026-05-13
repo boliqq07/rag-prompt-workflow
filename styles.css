@@ -177,9 +177,25 @@ button:disabled {
   grid-template-columns: 18px 1fr;
   gap: 8px;
   align-items: start;
+  padding: 8px;
+  border: 1px solid rgba(220, 211, 195, 0.72);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.42);
   color: var(--ink);
   font-size: 0.86rem;
   line-height: 1.35;
+}
+
+.knowledge-source-option.health-ready {
+  border-color: rgba(47, 139, 107, 0.32);
+}
+
+.knowledge-source-option.health-missing {
+  opacity: 0.7;
+}
+
+.knowledge-source-option.health-unknown {
+  border-color: rgba(179, 133, 52, 0.36);
 }
 
 .knowledge-source-option input {
@@ -190,12 +206,54 @@ button:disabled {
   display: block;
 }
 
+.knowledge-source-option b {
+  font-weight: 800;
+}
+
+.knowledge-source-option em {
+  display: inline-flex;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(52, 142, 109, 0.12);
+  color: var(--accent-strong);
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.knowledge-source-option.health-missing em {
+  background: rgba(120, 113, 104, 0.12);
+  color: var(--muted);
+}
+
+.knowledge-source-option.health-unknown em {
+  background: rgba(179, 133, 52, 0.14);
+  color: #8a5c16;
+}
+
 .knowledge-source-option small {
   display: block;
   color: var(--muted-2);
   font-size: 0.74rem;
   margin-top: 2px;
   word-break: break-all;
+}
+
+.mini-btn {
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.mini-btn:disabled {
+  cursor: wait;
+  opacity: 0.62;
 }
 
 .sidebar-btn {

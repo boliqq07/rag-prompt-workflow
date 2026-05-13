@@ -50,16 +50,22 @@ const KNOWLEDGE_SOURCES = [
     id: "hydrogen_excel",
     label: "氢脆 Excel 抽取要求",
     collection: process.env.MILVUS_COLLECTION_HYDROGEN_EXCEL || "kb_hydrogen_excel",
+    sourceType: "excel",
+    sampleQuery: "yield strength YS σ0.2 Rp0.2",
   },
   {
     id: "samr_standards",
     label: "全国标准信息公共服务平台",
     collection: process.env.MILVUS_COLLECTION_SAMR || "kb_samr_standards",
+    sourceType: "web",
+    sampleQuery: "国家标准 全文公开 公告",
   },
   {
     id: "material_dictionary",
     label: "材料大辞典第二版",
     collection: process.env.MILVUS_COLLECTION_MATERIAL_DICTIONARY || "kb_material_dictionary",
+    sourceType: "markdown_term",
+    sampleQuery: "泡沫玻璃 多孔玻璃",
   },
 ];
 
@@ -218,6 +224,141 @@ function runKnowledgeSearch({ query, collection, limit = 8 }) {
   });
 }
 
+function getDbModifiedAt() {
+  try {
+    return fs.statSync(MILVUS_DB_PATH).mtime.toISOString();
+  } catch (_error) {
+    return "";
+  }
+}
+
+function sourceHealthFromStats(source, stats, inspectError = "") {
+  const dbExists = fs.existsSync(MILVUS_DB_PATH);
+  if (!dbExists) {
+    return {
+      ...source,
+      exists: false,
+      rowCount: 0,
+      sampleTitles: [],
+      sourceTypes: [],
+      metadataPreview: [],
+      lastUpdated: "",
+      health: "missing_db",
+      healthLabel: "未入库",
+      healthMessage: "Milvus 本地数据库文件尚未创建。",
+    };
+  }
+
+  if (inspectError) {
+    return {
+      ...source,
+      exists: Boolean(stats?.exists),
+      rowCount: stats?.rowCount ?? null,
+      sampleTitles: stats?.sampleTitles || [],
+      sourceTypes: stats?.sourceTypes || [],
+      metadataPreview: stats?.metadataPreview || [],
+      lastUpdated: getDbModifiedAt(),
+      health: "unknown",
+      healthLabel: "待检查",
+      healthMessage: inspectError,
+    };
+  }
+
+  if (!stats?.exists) {
+    return {
+      ...source,
+      exists: false,
+      rowCount: 0,
+      sampleTitles: [],
+      sourceTypes: [],
+      metadataPreview: [],
+      lastUpdated: getDbModifiedAt(),
+      health: "missing_collection",
+      healthLabel: "未入库",
+      healthMessage: `collection ${source.collection} 尚不存在。`,
+    };
+  }
+
+  const rowCount = Number(stats.rowCount || 0);
+  if (!rowCount) {
+    return {
+      ...source,
+      exists: true,
+      rowCount: 0,
+      sampleTitles: stats.sampleTitles || [],
+      sourceTypes: stats.sourceTypes || [],
+      metadataPreview: stats.metadataPreview || [],
+      lastUpdated: getDbModifiedAt(),
+      health: "empty",
+      healthLabel: "空库",
+      healthMessage: "collection 已创建，但未检测到知识片段。",
+    };
+  }
+
+  return {
+    ...source,
+    exists: true,
+    rowCount,
+    sampleTitles: stats.sampleTitles || [],
+    sourceTypes: stats.sourceTypes || [],
+    metadataPreview: stats.metadataPreview || [],
+    lastUpdated: getDbModifiedAt(),
+    health: "ready",
+    healthLabel: "可用",
+    healthMessage: `已检测到 ${rowCount} 条知识片段。`,
+  };
+}
+
+function runKnowledgeInspect() {
+  return new Promise((resolve) => {
+    const scriptPath = path.join(ROOT, "scripts", "inspect_knowledge.py");
+    const args = [scriptPath, "--db-path", MILVUS_DB_PATH, "--sample-limit", "5"];
+    KNOWLEDGE_SOURCES.forEach((source) => {
+      args.push("--collection", source.collection);
+    });
+
+    execFile(PYTHON_BIN, args, { cwd: ROOT, timeout: 30000, maxBuffer: 1024 * 1024 * 2 }, (error, stdout, stderr) => {
+      if (error) {
+        resolve({
+          dbPath: MILVUS_DB_PATH,
+          dbExists: fs.existsSync(MILVUS_DB_PATH),
+          collections: [],
+          error: `${stderr || ""}${stdout || ""}${error.message || ""}`.slice(0, 1200),
+        });
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(stdout || "{}"));
+      } catch (parseError) {
+        resolve({
+          dbPath: MILVUS_DB_PATH,
+          dbExists: fs.existsSync(MILVUS_DB_PATH),
+          collections: [],
+          error: `Invalid inspect output: ${parseError.message}`,
+        });
+      }
+    });
+  });
+}
+
+async function getKnowledgeStatusPayload() {
+  const inspect = fs.existsSync(MILVUS_DB_PATH)
+    ? await enqueueKnowledgeSearch(() => runKnowledgeInspect())
+    : { dbPath: MILVUS_DB_PATH, dbExists: false, collections: [], error: "" };
+  const statsByCollection = new Map((inspect.collections || []).map((item) => [item.collection, item]));
+  const sources = KNOWLEDGE_SOURCES.map((source) => sourceHealthFromStats(source, statsByCollection.get(source.collection), inspect.error));
+  return {
+    configured: fs.existsSync(MILVUS_DB_PATH),
+    dbPath: MILVUS_DB_PATH,
+    dbExists: fs.existsSync(MILVUS_DB_PATH),
+    dbModifiedAt: getDbModifiedAt(),
+    collection: MILVUS_COLLECTION,
+    inspectError: inspect.error || "",
+    sources,
+  };
+}
+
 async function searchKnowledgeCollections({ query, collections, limit }) {
   const perCollectionLimit = Math.max(1, Math.min(Number(limit) || 8, 20));
   const errors = [];
@@ -300,12 +441,7 @@ async function handleKnowledge(request, response) {
 
   try {
     if (request.method === "GET" && url.pathname === "/api/knowledge/status") {
-      sendJson(response, 200, {
-        configured: fs.existsSync(MILVUS_DB_PATH),
-        dbPath: MILVUS_DB_PATH,
-        collection: MILVUS_COLLECTION,
-        sources: KNOWLEDGE_SOURCES,
-      });
+      sendJson(response, 200, await getKnowledgeStatusPayload());
       return;
     }
 

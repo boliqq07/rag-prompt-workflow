@@ -6,6 +6,7 @@ data/*.db.lock
 data/*.db-shm
 data/*.db-wal
 __pycache__/
+.pycache/
 .venv/
 
 # Generated evaluation artifacts

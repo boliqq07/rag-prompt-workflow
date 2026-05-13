@@ -195,6 +195,16 @@ curl -s -X POST http://127.0.0.1:8080/api/knowledge/search \
   -d '{"query":"氢脆 应力应变曲线 测试条件","limit":5}'
 ```
 
+`/api/knowledge/status` 会返回每个知识源的管理状态，包括：
+
+- `health` / `healthLabel`：`ready`、`missing_db`、`missing_collection`、`empty`、`unknown` 等状态。
+- `rowCount`：当前 collection 中的知识片段数量。
+- `lastUpdated`：本地 Milvus DB 最近更新时间。
+- `sampleTitles`：用于快速判断入库内容的样例标题。
+- `healthMessage`：缺库、空库或依赖缺失时的具体说明。
+
+页面左侧“关联知识源”卡片会展示这些状态，并可点击“刷新状态”重新检测。未入库或空库的知识源会禁用勾选，避免误以为已经接入。
+
 页面中把模式切到 `Milvus 知识库` 后，点击“模板生成问答”或“LLM 生成问答”会先按原始提示词召回 Milvus 片段，再把召回文本交给后端 Orchestrator 生成候选词条与同义词组。
 
 后端默认暴露两个可选知识源：

@@ -44,6 +44,22 @@ async function waitForHealth(timeoutMs = 15000) {
   throw new Error(`Server did not become healthy at ${BASE_URL}: ${lastError?.message || "timeout"}`);
 }
 
+async function assertKnowledgeStatus() {
+  const response = await fetch(`${BASE_URL}/api/knowledge/status`);
+  if (!response.ok) {
+    throw new Error(`knowledge status returned ${response.status}`);
+  }
+  const payload = await response.json();
+  if (!Array.isArray(payload.sources) || payload.sources.length < 3) {
+    throw new Error("knowledge status did not return the configured knowledge sources");
+  }
+  for (const source of payload.sources) {
+    if (!source.id || !source.collection || !source.health || !source.healthLabel) {
+      throw new Error(`knowledge source status is incomplete: ${JSON.stringify(source)}`);
+    }
+  }
+}
+
 async function main() {
   const server = spawn(process.execPath, ["server.js"], {
     cwd: ROOT,
@@ -69,6 +85,7 @@ async function main() {
     if (serverExit) {
       throw new Error(`Server exited early: ${JSON.stringify(serverExit)}`);
     }
+    await assertKnowledgeStatus();
     await runNode([
       "scripts/evaluate-workflows.js",
       "--base-url",

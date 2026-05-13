@@ -33,8 +33,8 @@ const WORKFLOW_DEFINITIONS = {
     steps: FLOW_STEPS,
   },
   synonym_merge: {
-    label: "同义词合并",
-    description: "围绕术语簇、证据来源和合并边界生成标准化规则。",
+    label: "仅同义词合并",
+    description: "作为专门工具，只围绕术语簇、证据来源和合并边界生成标准化规则。",
     steps: [
       { id: "target", title: "合并范围", description: "确认要合并的术语集合与应用场景" },
       { id: "synonym", title: "术语证据", description: "确认同义、别名、参见关系和不应合并项" },
@@ -43,11 +43,12 @@ const WORKFLOW_DEFINITIONS = {
     ],
   },
   prompt_generation: {
-    label: "提示词生成",
-    description: "直接围绕最终 prompt 的目标、输入、输出和约束进行确认。",
+    label: "完整提示词生成",
+    description: "围绕最终 prompt 的目标、术语合并、输入、输出和约束进行确认。",
     steps: [
       { id: "role", title: "使用场景", description: "确定模型角色与 prompt 用途" },
       { id: "target", title: "任务目标", description: "确认待处理文档、任务边界和输入变量" },
+      { id: "synonym", title: "术语确认", description: "确认同义词、相关项和禁止合并边界" },
       { id: "format", title: "输出约束", description: "确认输出结构、证据要求和失败策略" },
       { id: "finalize", title: "最终修改", description: "补充措辞偏好并生成提示词" },
     ],
@@ -582,6 +583,10 @@ function setLLMStatus(title, text, configured = false) {
   setLLMBusy(false);
 }
 
+function isServerBackedPage() {
+  return window.location.protocol === "http:" || window.location.protocol === "https:";
+}
+
 function ensureModelOption(model) {
   if (!model) {
     return;
@@ -1000,6 +1005,43 @@ function buildQuestions() {
         required: false,
       },
       {
+        id: "bilingual_synonym",
+        stepId: "synonym",
+        type: "boolean",
+        category: "术语确认",
+        title: "最终提示词是否需要包含同义词归并与术语边界？",
+        description: "同义词合并是提示词生成的重要组成部分；建议保留这一步。",
+        options: [
+          { value: "yes", label: "是", description: "把同义词、近义相关项和禁止合并边界写入最终提示词。" },
+          { value: "no", label: "否", description: "仅生成普通任务提示词，不强制术语归并。" },
+        ],
+        required: true,
+      },
+      {
+        id: "synonym_groups",
+        stepId: "synonym",
+        type: "multi",
+        category: "术语确认",
+        title: "请确认最终提示词需要采用的同义词与边界证据",
+        description: "A/B 项会作为可合并关系进入提示词；C/D 项会作为相关但不合并或禁止合并边界保留。",
+        options: [],
+        required: false,
+      },
+      {
+        id: "merge_policy",
+        stepId: "synonym",
+        type: "single",
+        category: "术语确认",
+        title: "最终提示词应采用哪种术语合并策略？",
+        description: "这会控制模型在执行抽取或总结时如何处理相近术语。",
+        options: [
+          { value: "严格合并", label: "严格合并", description: "只有明确同义、别名、缩写、又称、见/参见才合并。" },
+          { value: "宽松聚类", label: "宽松聚类", description: "允许近义词或同类术语进入同一候选簇，但标注关系类型。" },
+          { value: "人工复核优先", label: "人工复核优先", description: "低证据项进入待确认列表，不自动合并。" },
+        ],
+        required: true,
+      },
+      {
         id: "output_format",
         stepId: "format",
         type: "single",
@@ -1252,6 +1294,9 @@ async function callLLM(messages, { jsonMode = false, temperature = 0.2 } = {}) {
 }
 
 async function apiJson(path, { method = "GET", body } = {}) {
+  if (!isServerBackedPage()) {
+    throw new Error("当前页面是通过本地文件打开的，无法访问后端接口。请使用 http://127.0.0.1:8080/ 打开。");
+  }
   const response = await fetch(path, {
     method,
     headers: body ? { "Content-Type": "application/json" } : undefined,
@@ -1419,23 +1464,33 @@ async function refreshKnowledgeStatus() {
     elements.refreshKnowledgeBtn.textContent = "检测中";
   }
   try {
-    const payload = await apiJson("/api/knowledge/status");
-    state.knowledgeAvailable = Boolean(payload.configured);
-    state.knowledgeSources = Array.isArray(payload.sources) ? payload.sources : [];
-    state.knowledgeDbPath = payload.dbPath || "";
-    state.knowledgeDbModifiedAt = payload.dbModifiedAt || "";
-    state.knowledgeInspectError = payload.inspectError || "";
-    if (!state.selectedKnowledgeSourceIds.length && state.knowledgeSources.length) {
-      const readySource = state.knowledgeSources.find((source) => source.health === "ready");
-      state.selectedKnowledgeSourceIds = readySource ? [readySource.id] : [];
+    if (!isServerBackedPage()) {
+      state.knowledgeAvailable = false;
+      state.knowledgeSources = [];
+      state.selectedKnowledgeSourceIds = [];
+      state.knowledgeDbPath = "";
+      state.knowledgeDbModifiedAt = "";
+      state.knowledgeInspectError = "";
+      state.knowledgeStatusDetail = "当前通过本地文件打开，无法连接知识库接口；请使用 http://127.0.0.1:8080/ 打开。";
     } else {
-      const availableIds = new Set(state.knowledgeSources.map((source) => source.id));
-      state.selectedKnowledgeSourceIds = state.selectedKnowledgeSourceIds.filter((id) => availableIds.has(id));
+      const payload = await apiJson("/api/knowledge/status");
+      state.knowledgeAvailable = Boolean(payload.configured);
+      state.knowledgeSources = Array.isArray(payload.sources) ? payload.sources : [];
+      state.knowledgeDbPath = payload.dbPath || "";
+      state.knowledgeDbModifiedAt = payload.dbModifiedAt || "";
+      state.knowledgeInspectError = payload.inspectError || "";
+      if (!state.selectedKnowledgeSourceIds.length && state.knowledgeSources.length) {
+        const readySource = state.knowledgeSources.find((source) => source.health === "ready");
+        state.selectedKnowledgeSourceIds = readySource ? [readySource.id] : [];
+      } else {
+        const availableIds = new Set(state.knowledgeSources.map((source) => source.id));
+        state.selectedKnowledgeSourceIds = state.selectedKnowledgeSourceIds.filter((id) => availableIds.has(id));
+      }
+      const readyCount = state.knowledgeSources.filter((source) => source.health === "ready").length;
+      state.knowledgeStatusDetail = state.knowledgeAvailable
+        ? `可用知识库：${readyCount}/${state.knowledgeSources.length || 0} 个`
+        : "Milvus 本地库尚未创建";
     }
-    const readyCount = state.knowledgeSources.filter((source) => source.health === "ready").length;
-    state.knowledgeStatusDetail = state.knowledgeAvailable
-      ? `可用知识库：${readyCount}/${state.knowledgeSources.length || 0} 个`
-      : "Milvus 本地库尚未创建";
   } catch (_error) {
     state.knowledgeAvailable = false;
     state.knowledgeStatusDetail = "知识库服务不可用";
@@ -2065,6 +2120,9 @@ ${getAnswerWithCustom({ id: "output_format", type: "single" }) || "待确认"}
 
 术语标准化要求：
 ${getAnswerWithCustom({ id: "bilingual_synonym", type: "boolean" }) === "yes" ? "需要英文附中文翻译，并合并同义词。" : "无需强制中英对照。"}
+术语合并策略：
+${mergePolicy}
+
 同义词确认结果：
 ${synonymsConfirmed}
 
@@ -2234,7 +2292,9 @@ function updateTopStatus() {
     elements.knowledgeStatusTitle.textContent = state.knowledgeAvailable ? "Milvus 知识库已接入" : "当前使用通用模板";
     elements.knowledgeStatusText.textContent = state.knowledgeAvailable
       ? `当前任务使用通用模板；可用知识库 ${readyCount}/${state.knowledgeSources.length}${statusSuffix}。`
-      : "未接入知识库时，系统会基于通用领域模板生成候选项。";
+      : state.knowledgeStatusDetail && state.knowledgeStatusDetail !== "尚未检测"
+        ? state.knowledgeStatusDetail
+        : "未接入知识库时，系统会基于通用领域模板生成候选项。";
   }
 }
 

@@ -178,7 +178,7 @@ node scripts/evaluate-workflows.js --fixtures synthetic --allow-remote-llm
 新增黄金评测样例时，优先修改 `eval/fixtures/*.json`，不要直接把样例写回脚本。每条 fixture 至少包含：
 
 - `prompt`：原始需求。
-- `workflow`：流程类型，例如 `synonym_merge` 或 `prompt_generation`。
+- `workflow`：流程类型，例如 `prompt_generation`（完整提示词生成，包含术语确认）或 `synonym_merge`（仅同义词合并专用工具）。
 - `requiredTerms`：最终问题和提示词中必须覆盖的术语。
 - `forbiddenMergeTerms`：必须明确标记为“不合并”的边界项。
 - `answers`：模拟用户确认过程。

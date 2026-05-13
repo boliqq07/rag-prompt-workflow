@@ -14,7 +14,7 @@ const WORKFLOW_DEFINITIONS = {
     steps: FLOW_STEPS,
   },
   synonym_merge: {
-    label: "同义词合并",
+    label: "仅同义词合并",
     steps: [
       { id: "target", title: "合并范围", description: "确认要合并的术语集合与应用场景" },
       { id: "synonym", title: "术语证据", description: "确认同义、别名、参见关系和不应合并项" },
@@ -23,10 +23,11 @@ const WORKFLOW_DEFINITIONS = {
     ],
   },
   prompt_generation: {
-    label: "提示词生成",
+    label: "完整提示词生成",
     steps: [
       { id: "role", title: "使用场景", description: "确定模型角色与 prompt 用途" },
       { id: "target", title: "任务目标", description: "确认待处理文档、任务边界和输入变量" },
+      { id: "synonym", title: "术语确认", description: "确认同义词、相关项和禁止合并边界" },
       { id: "format", title: "输出约束", description: "确认输出结构、证据要求和失败策略" },
       { id: "finalize", title: "最终修改", description: "补充措辞偏好并生成提示词" },
     ],
@@ -836,6 +837,43 @@ function buildQuestions({ sourceMode, scenario, knowledgeProfile, workflow = "fi
         required: false,
       },
       {
+        id: "bilingual_synonym",
+        stepId: "synonym",
+        type: "boolean",
+        category: "术语确认",
+        title: "最终提示词是否需要包含同义词归并与术语边界？",
+        description: "同义词合并是提示词生成的重要组成部分；建议保留这一步。",
+        options: [
+          { value: "yes", label: "是", description: "把同义词、近义相关项和禁止合并边界写入最终提示词。" },
+          { value: "no", label: "否", description: "仅生成普通任务提示词，不强制术语归并。" },
+        ],
+        required: true,
+      },
+      {
+        id: "synonym_groups",
+        stepId: "synonym",
+        type: "multi",
+        category: "术语确认",
+        title: "请确认最终提示词需要采用的同义词与边界证据",
+        description: "A/B 项会作为可合并关系进入提示词；C/D 项会作为相关但不合并或禁止合并边界保留。",
+        options: [],
+        required: false,
+      },
+      {
+        id: "merge_policy",
+        stepId: "synonym",
+        type: "single",
+        category: "术语确认",
+        title: "最终提示词应采用哪种术语合并策略？",
+        description: "这会控制模型在执行抽取或总结时如何处理相近术语。",
+        options: [
+          { value: "严格合并", label: "严格合并", description: "只有明确同义、别名、缩写、又称、见/参见才合并。" },
+          { value: "宽松聚类", label: "宽松聚类", description: "允许近义词或同类术语进入同一候选簇，但标注关系类型。" },
+          { value: "人工复核优先", label: "人工复核优先", description: "低证据项进入待确认列表，不自动合并。" },
+        ],
+        required: true,
+      },
+      {
         id: "output_format",
         stepId: "format",
         type: "single",
@@ -1217,6 +1255,9 @@ ${outputFormat}
 
 术语标准化要求：
 ${bilingual === "yes" ? "需要英文附中文翻译，并合并同义词。" : "无需强制中英对照。"}
+术语合并策略：
+${mergePolicy}
+
 同义词确认结果：
 ${synonymsConfirmed}
 

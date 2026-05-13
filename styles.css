@@ -241,14 +241,19 @@ button:disabled {
 }
 
 .mini-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 10px;
   padding: 7px 10px;
+  min-width: max-content;
   border-radius: 8px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.58);
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .mini-btn:disabled {
@@ -657,11 +662,14 @@ select:focus {
   color: var(--muted);
 }
 
-.mini-btn {
+.question-pager .mini-btn {
   display: grid;
   place-items: center;
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  margin-top: 0;
+  padding: 0;
   border-radius: 10px;
   background: var(--green-soft);
   color: var(--green);

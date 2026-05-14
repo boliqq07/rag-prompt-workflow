@@ -5,6 +5,7 @@ data/*.db
 data/*.db.lock
 data/*.db-shm
 data/*.db-wal
+data/runtime/
 __pycache__/
 .pycache/
 .venv/

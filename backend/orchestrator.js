@@ -1475,6 +1475,7 @@ function serializeSession(session) {
     workflowLabel: getWorkflowDefinition(session.workflow).label,
     sourceMode: session.sourceMode,
     model: session.model,
+    knowledge: session.knowledge,
     scenario: session.scenario,
     knowledgeProfile: session.knowledgeProfile,
     questionSource: session.questionSource,
@@ -1493,8 +1494,43 @@ function serializeSession(session) {
   };
 }
 
-function createOrchestrator({ callLLM, defaultModel }) {
+function createOrchestrator({ callLLM, defaultModel, storage }) {
   const sessions = new Map();
+  const store = storage || {};
+
+  function persistSession(session, eventType, detail = {}) {
+    const serialized = serializeSession(session);
+    if (typeof store.saveSession === "function") {
+      store.saveSession(serialized);
+    }
+    if (typeof store.appendAudit === "function") {
+      store.appendAudit({
+        type: eventType,
+        sessionId: session.id,
+        workflow: session.workflow,
+        sourceMode: session.sourceMode,
+        detail,
+      });
+    }
+    return serialized;
+  }
+
+  function requireSession(id) {
+    const memorySession = sessions.get(id);
+    if (memorySession) return memorySession;
+
+    if (typeof store.loadSession === "function") {
+      const loaded = store.loadSession(id);
+      if (loaded) {
+        sessions.set(id, loaded);
+        return loaded;
+      }
+    }
+
+    const error = new Error("session not found.");
+    error.statusCode = 404;
+    throw error;
+  }
 
   async function createSession(input) {
     const prompt = String(input.prompt || "").trim();
@@ -1586,26 +1622,16 @@ function createOrchestrator({ callLLM, defaultModel }) {
     };
     moveToFirstUnskippedQuestion(session);
     sessions.set(session.id, session);
-    return serializeSession(session);
+    return persistSession(session, "create_session", { questionMode, questionCount: session.questions.length });
   }
 
   function getSession(id) {
-    const session = sessions.get(id);
-    if (!session) {
-      const error = new Error("session not found.");
-      error.statusCode = 404;
-      throw error;
-    }
+    const session = requireSession(id);
     return serializeSession(session);
   }
 
   function submitAnswer(id, input) {
-    const session = sessions.get(id);
-    if (!session) {
-      const error = new Error("session not found.");
-      error.statusCode = 404;
-      throw error;
-    }
+    const session = requireSession(id);
     const question = getCurrentQuestion(session);
     const questionId = input.questionId || question?.id;
     if (!question || question.id !== questionId) {
@@ -1624,16 +1650,11 @@ function createOrchestrator({ callLLM, defaultModel }) {
     session.promptSource = { type: "本地模板", detail: "实时预览" };
     session.finalPrompt = "";
     session.updatedAt = new Date().toISOString();
-    return serializeSession(session);
+    return persistSession(session, "submit_answer", { questionId: question.id });
   }
 
   function navigateSession(id, input) {
-    const session = sessions.get(id);
-    if (!session) {
-      const error = new Error("session not found.");
-      error.statusCode = 404;
-      throw error;
-    }
+    const session = requireSession(id);
 
     if (input.direction === "previous") {
       moveToPreviousQuestion(session);
@@ -1653,16 +1674,11 @@ function createOrchestrator({ callLLM, defaultModel }) {
     session.finalPrompt = "";
     session.promptSource = { type: "本地模板", detail: "实时预览" };
     session.updatedAt = new Date().toISOString();
-    return serializeSession(session);
+    return persistSession(session, "navigate_session", { direction: input.direction || "", currentIndex: session.currentIndex });
   }
 
   async function finalizeSession(id, input = {}) {
-    const session = sessions.get(id);
-    if (!session) {
-      const error = new Error("session not found.");
-      error.statusCode = 404;
-      throw error;
-    }
+    const session = requireSession(id);
     const refinement = String(input.refinement || "").trim();
     if (refinement) session.refinements.push(refinement);
 
@@ -1704,12 +1720,34 @@ function createOrchestrator({ callLLM, defaultModel }) {
       session.promptSource = { type: "本地模板", detail: "后端规则归纳" };
     }
     session.updatedAt = new Date().toISOString();
-    return serializeSession(session);
+    const serialized = persistSession(session, "finalize_session", { promptMode, promptSource: session.promptSource });
+    if (typeof store.appendPromptVersion === "function") {
+      store.appendPromptVersion({
+        sessionId: session.id,
+        versionId: crypto.randomUUID(),
+        workflow: session.workflow,
+        sourceMode: session.sourceMode,
+        promptMode,
+        promptSource: session.promptSource,
+        prompt: session.prompt,
+        knowledge: session.knowledge,
+        knowledgeProfile: session.knowledgeProfile,
+        answers: session.answers,
+        customAnswers: session.customAnswers,
+        autoAnswers: session.autoAnswers,
+        refinements: session.refinements,
+        finalPrompt: session.finalPrompt,
+        createdAt: session.updatedAt,
+      });
+    }
+    return serialized;
   }
 
   return {
     createSession,
     getSession,
+    listSessions: () => (typeof store.listSessions === "function" ? store.listSessions() : [...sessions.values()].map(serializeSession)),
+    listPromptVersions: (sessionId) => (typeof store.listPromptVersions === "function" ? store.listPromptVersions(sessionId) : []),
     submitAnswer,
     navigateSession,
     finalizeSession,

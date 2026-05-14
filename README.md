@@ -57,7 +57,7 @@
 
 ## 后端编排 API
 
-后端 Orchestrator 位于 [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)，当前使用内存 `Map` 存储会话，服务重启后会话会丢失。它提供以下接口：
+后端 Orchestrator 位于 [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)。会话状态会同时保存在内存和本地 JSON 文件中，默认目录为 `data/runtime`，可用 `RUNTIME_STORE_DIR` 覆盖。它提供以下接口：
 
 创建会话：
 
@@ -71,6 +71,18 @@ curl -s -X POST http://127.0.0.1:8080/api/orchestrator/sessions \
 
 ```bash
 curl -s http://127.0.0.1:8080/api/orchestrator/sessions/<sessionId>
+```
+
+列出已保存会话：
+
+```bash
+curl -s http://127.0.0.1:8080/api/orchestrator/sessions
+```
+
+查看某个会话的最终提示词版本：
+
+```bash
+curl -s http://127.0.0.1:8080/api/orchestrator/sessions/<sessionId>/prompt-versions
 ```
 
 会话响应会包含：
@@ -312,25 +324,53 @@ curl -s -X POST http://127.0.0.1:8080/api/knowledge/search \
   -d '{"query":"氢脆 应力应变曲线 测试条件","limit":5}'
 ```
 
+也可以直接上传真实文本类文档作为 RAG 输入源。前端左侧“关联知识源”卡片提供文件选择入口；后端接口接受 `txt`、`md`、`csv`、`json` 等文本内容，写入 `data/runtime/uploads`，按段落切块并保存哈希向量：
+
+```bash
+curl -s -X POST http://127.0.0.1:8080/api/knowledge/uploads \
+  -H 'Content-Type: application/json' \
+  -d '{"filename":"sample.md","content":"# 屈服强度\nYS、Rp0.2 和 yield strength 在本规范中视为同义表达。"}'
+```
+
+上传后的文档会显示为 `上传文档` 知识源，可与 Milvus collection 一起检索，也可单独检索：
+
+```bash
+curl -s -X POST http://127.0.0.1:8080/api/knowledge/search \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"yield strength Rp0.2","collections":["uploaded_documents"],"limit":5}'
+```
+
 `/api/knowledge/status` 会返回每个知识源的管理状态，包括：
 
 - `health` / `healthLabel`：`ready`、`missing_db`、`missing_collection`、`empty`、`unknown` 等状态。
 - `rowCount`：当前 collection 中的知识片段数量。
-- `lastUpdated`：本地 Milvus DB 最近更新时间。
+- `lastUpdated`：本地 Milvus DB 或上传文档最近更新时间。
 - `sampleTitles`：用于快速判断入库内容的样例标题。
 - `healthMessage`：缺库、空库或依赖缺失时的具体说明。
 
 页面左侧“关联知识源”卡片会展示这些状态，并可点击“刷新状态”重新检测。未入库或空库的知识源会禁用勾选，避免误以为已经接入。
 
-页面中把模式切到 `Milvus 知识库` 后，点击“模板生成问答”或“LLM 生成问答”会先按原始提示词召回 Milvus 片段，再把召回文本交给后端 Orchestrator 生成候选词条与同义词组。
+页面中把模式切到 `RAG 知识库` 后，点击“模板生成问答”或“LLM 生成问答”会先按原始提示词召回知识片段，再把召回文本交给后端 Orchestrator 生成候选词条与同义词组。
 
 后端默认暴露三个可选知识源：
 
 - `氢脆 Excel 抽取要求` -> `kb_hydrogen_excel`
 - `全国标准信息公共服务平台` -> `kb_samr_standards`
 - `材料大辞典第二版` -> `kb_material_dictionary`
+- `上传文档` -> `local_uploaded_documents`
 
 前端可以多选知识源。生成问答时，后端会分别检索被选中的 collection，按向量相似度和术语词面命中重排后合并召回结果，并保留 `knowledge_source_label`、`collection`、`source_type`、`source_uri` 等来源信息。
+
+## 持久化存储
+
+默认运行数据写入 `data/runtime`，该目录已加入 `.gitignore`，避免上传真实业务文档、答案和审计日志。目录结构如下：
+
+- `sessions/<sessionId>.json`：会话、问题、答案、自动回答、最终提示词和更新时间。
+- `prompt_versions/<sessionId>.jsonl`：每次 finalize 生成的提示词版本、答案快照和生成方式。
+- `uploads/<documentId>.json`：上传文件 metadata、文本分块和本地哈希向量。
+- `audit.log.jsonl`：创建会话、提交答案、跳转问题、生成提示词、上传文档等审计事件。
+
+如果要把这些数据切到外部数据库，优先替换 [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js) 的实现，保持同一组读写函数即可。
 
 ## 动态问答编排
 
@@ -404,6 +444,7 @@ LLM_MODEL=你的模型名
 - [app.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/app.js)：前端渲染、用户输入收集、后端编排 API 调用与兜底逻辑
 - [server.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.js)：静态文件服务与 LLM 后端代理
 - [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)：后端会话编排器
+- [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js)：本地持久化存储、提示词版本、上传文档和审计日志
 - [scripts/ingest_knowledge.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/ingest_knowledge.py)：Excel、Markdown、网站知识入库
 - [scripts/search_knowledge.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/search_knowledge.py)：Milvus 检索、query expansion 和重排
 - [scripts/evaluate-workflows.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/evaluate-workflows.js)：工作流质量评测
@@ -413,10 +454,10 @@ LLM_MODEL=你的模型名
 
 ## 后续建议
 
-当前版本已经具备可审计评测、结构化知识 metadata、检索解释、同义词决策矩阵和动态问答编排。下一阶段建议优先做 `最终 prompt schema 化`：
+当前版本已经具备可审计评测、结构化知识 metadata、检索解释、同义词决策矩阵、动态问答编排、文件上传检索和本地持久化。下一阶段建议优先做 `最终 prompt schema 化`：
 
 1. 固定最终 prompt 结构：角色、任务目标、输入说明、字段范围、同义词规则、不合并边界、证据要求、输出 schema、空值策略、质量自检。
 2. 为抽取类任务生成 JSON Schema，例如 `standard_term`、`original_text`、`evidence_sentence`、`confidence`、`notes`。
 3. 为同义词合并任务生成结果 schema，例如 `canonical_name`、`aliases`、`relation_type`、`evidence_type`、`review_required`、`do_not_merge`。
 4. 把 schema 字段纳入 `evaluate-workflows.js` 评测，避免最终提示词退化为松散自然语言。
-5. 后续再接文件上传、持久化存储、抽取链路执行和用户反馈闭环。
+5. 后续再接抽取链路执行、外部数据库迁移和用户反馈闭环。

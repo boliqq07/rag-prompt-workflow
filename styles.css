@@ -172,6 +172,30 @@ button:disabled {
   margin-top: 12px;
 }
 
+.upload-panel {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.file-input {
+  width: 100%;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.upload-panel .mini-btn {
+  justify-self: start;
+  margin-top: 0;
+}
+
+.upload-panel small {
+  color: var(--muted-2);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
 .knowledge-source-option {
   display: grid;
   grid-template-columns: 18px 1fr;

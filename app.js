@@ -507,6 +507,7 @@ const state = {
   promptSourceDetail: "实时预览",
   llmConfigured: false,
   llmBusy: false,
+  uploadBusy: false,
   lastHealthCheckAt: 0,
 };
 
@@ -550,6 +551,9 @@ const elements = {
   knowledgeStatusText: document.querySelector("#knowledgeStatusText"),
   knowledgeSourceList: document.querySelector("#knowledgeSourceList"),
   refreshKnowledgeBtn: document.querySelector("#refreshKnowledgeBtn"),
+  knowledgeFileInput: document.querySelector("#knowledgeFileInput"),
+  uploadKnowledgeBtn: document.querySelector("#uploadKnowledgeBtn"),
+  uploadKnowledgeStatus: document.querySelector("#uploadKnowledgeStatus"),
   historyList: document.querySelector("#historyList"),
   previewFormatSwitch: document.querySelector("#previewFormatSwitch"),
   todayLabel: document.querySelector("#todayLabel"),
@@ -1489,7 +1493,7 @@ async function refreshKnowledgeStatus() {
       const readyCount = state.knowledgeSources.filter((source) => source.health === "ready").length;
       state.knowledgeStatusDetail = state.knowledgeAvailable
         ? `可用知识库：${readyCount}/${state.knowledgeSources.length || 0} 个`
-        : "Milvus 本地库尚未创建";
+        : "尚未检测到可用知识源";
     }
   } catch (_error) {
     state.knowledgeAvailable = false;
@@ -1557,6 +1561,59 @@ function renderKnowledgeSourceList() {
     .join("");
 }
 
+async function uploadKnowledgeFiles() {
+  const files = [...(elements.knowledgeFileInput?.files || [])];
+  if (!files.length) {
+    elements.uploadKnowledgeStatus.textContent = "请先选择一个文本文件";
+    return;
+  }
+  if (!isServerBackedPage()) {
+    elements.uploadKnowledgeStatus.textContent = "请通过 http://127.0.0.1:8080/ 打开后再上传";
+    return;
+  }
+
+  state.uploadBusy = true;
+  elements.uploadKnowledgeBtn.disabled = true;
+  elements.uploadKnowledgeBtn.textContent = "上传中";
+  elements.uploadKnowledgeStatus.textContent = `正在处理 ${files.length} 个文件`;
+
+  try {
+    const payload = {
+      files: await Promise.all(
+        files.map(async (file) => ({
+          filename: file.name,
+          mimeType: file.type || "text/plain",
+          content: await file.text(),
+        }))
+      ),
+    };
+    const result = await apiJson("/api/knowledge/uploads", {
+      method: "POST",
+      body: payload,
+    });
+    const uploaded = result.uploaded || [];
+    elements.uploadKnowledgeStatus.textContent = uploaded.length
+      ? `已上传 ${uploaded.length} 个文件，生成 ${uploaded.reduce((sum, item) => sum + Number(item.chunkCount || 0), 0)} 个向量片段`
+      : "没有生成可检索片段";
+    elements.knowledgeFileInput.value = "";
+    await refreshKnowledgeStatus();
+    state.selectedKnowledgeSourceIds = [...new Set([...state.selectedKnowledgeSourceIds, "uploaded_documents"])];
+    state.mode = "rag";
+    elements.knowledgeField.classList.remove("hidden");
+    [...elements.modeSwitch.querySelectorAll(".mode-btn")].forEach((item) =>
+      item.classList.toggle("active", item.dataset.mode === "rag")
+    );
+    renderKnowledgeSourceList();
+    updateTopStatus();
+  } catch (error) {
+    elements.uploadKnowledgeStatus.textContent = error.message || "上传失败";
+  } finally {
+    state.uploadBusy = false;
+    elements.uploadKnowledgeBtn.disabled = false;
+    elements.uploadKnowledgeBtn.textContent = "上传文档";
+  }
+}
+
 async function hydrateKnowledgeFromMilvus() {
   if (state.mode !== "rag") {
     state.retrievedKnowledge = [];
@@ -1571,7 +1628,7 @@ async function hydrateKnowledgeFromMilvus() {
   }
 
   state.manualKnowledge = elements.knowledgeInput.value.trim();
-  elements.stageLabel.textContent = "正在检索 Milvus 知识库";
+  elements.stageLabel.textContent = "正在检索 RAG 知识库";
   elements.stageDesc.textContent = `系统会从 ${selectedSources.map((source) => source.label).join("、")} 中召回知识片段。`;
   const payload = await apiJson("/api/knowledge/search", {
     method: "POST",
@@ -1600,6 +1657,7 @@ function syncFromOrchestratorSession(session) {
   state.prompt = session.prompt || state.prompt;
   state.mode = session.sourceMode || state.mode;
   state.model = session.model || state.model;
+  state.knowledge = session.knowledge || state.knowledge;
   state.knowledgeProfile = session.knowledgeProfile || null;
   state.scenario = session.scenario || null;
   state.questions = session.questions || [];
@@ -1612,6 +1670,13 @@ function syncFromOrchestratorSession(session) {
   state.questionSourceDetail = session.questionSource?.detail || "Orchestrator";
   state.promptSource = session.promptSource?.type || "本地模板";
   state.promptSourceDetail = session.promptSource?.detail || "实时预览";
+
+  elements.promptInput.value = state.prompt;
+  elements.knowledgeInput.value = state.knowledge;
+  elements.knowledgeField.classList.toggle("hidden", state.mode !== "rag");
+  [...elements.modeSwitch.querySelectorAll(".mode-btn")].forEach((item) =>
+    item.classList.toggle("active", item.dataset.mode === state.mode)
+  );
 
   elements.emptyState.classList.add("hidden");
   elements.questionnaire.classList.remove("hidden");
@@ -2271,7 +2336,7 @@ function updateSummaryCards() {
 }
 
 function updateTopStatus() {
-  const sourceLabel = state.mode === "rag" ? state.knowledgeProfile?.sourceLabel || "Milvus 知识库" : "通用模板";
+  const sourceLabel = state.mode === "rag" ? state.knowledgeProfile?.sourceLabel || "RAG 知识库" : "通用模板";
   const selectedSources = getSelectedKnowledgeSources();
   const selectedSourceText = selectedSources.length ? selectedSources.map((source) => source.label).join("、") : "未选择知识库";
   const readyCount = state.knowledgeSources.filter((source) => source.health === "ready").length;
@@ -2286,10 +2351,10 @@ function updateTopStatus() {
     elements.knowledgeStatusText.textContent = state.retrievedKnowledge.length
       ? `已从 ${selectedSourceText} 召回 ${state.retrievedKnowledge.length} 条知识片段。`
       : state.knowledgeAvailable
-        ? `可用知识库 ${readyCount}/${state.knowledgeSources.length}；生成问答时会从已选知识库召回片段：${selectedSourceText}${statusSuffix}。`
-        : "尚未检测到 Milvus 本地知识库。";
+      ? `可用知识库 ${readyCount}/${state.knowledgeSources.length}；生成问答时会从已选知识库召回片段：${selectedSourceText}${statusSuffix}。`
+        : "尚未检测到可用知识源。";
   } else {
-    elements.knowledgeStatusTitle.textContent = state.knowledgeAvailable ? "Milvus 知识库已接入" : "当前使用通用模板";
+    elements.knowledgeStatusTitle.textContent = state.knowledgeAvailable ? "RAG 知识库已接入" : "当前使用通用模板";
     elements.knowledgeStatusText.textContent = state.knowledgeAvailable
       ? `当前任务使用通用模板；可用知识库 ${readyCount}/${state.knowledgeSources.length}${statusSuffix}。`
       : state.knowledgeStatusDetail && state.knowledgeStatusDetail !== "尚未检测"
@@ -2806,6 +2871,10 @@ elements.knowledgeSourceList.addEventListener("change", () => {
 
 elements.refreshKnowledgeBtn.addEventListener("click", () => {
   refreshKnowledgeStatus();
+});
+
+elements.uploadKnowledgeBtn.addEventListener("click", () => {
+  uploadKnowledgeFiles();
 });
 
 elements.previewFormatSwitch.addEventListener("click", (event) => {

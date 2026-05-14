@@ -1,8 +1,10 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const { execFile } = require("child_process");
 const { createOrchestrator } = require("./backend/orchestrator");
+const { createRuntimeStorage } = require("./backend/storage");
 
 const ROOT = __dirname;
 const ENV_FILE = path.join(ROOT, ".env");
@@ -43,9 +45,11 @@ const LLM_MODEL = process.env.LLM_MODEL || "gpt-4.1";
 const LLM_API_KEY = process.env.LLM_API_KEY || "";
 const LLM_PATH = process.env.LLM_CHAT_COMPLETIONS_PATH || "/chat/completions";
 const PYTHON_BIN = process.env.PYTHON_BIN || (fs.existsSync(BUNDLED_PYTHON) ? BUNDLED_PYTHON : "python3");
+const RUNTIME_STORE_DIR = path.resolve(ROOT, process.env.RUNTIME_STORE_DIR || path.join("data", "runtime"));
 const MILVUS_DB_PATH = path.resolve(ROOT, process.env.MILVUS_DB_PATH || path.join("data", "milvus_knowledge.db"));
 const MILVUS_COLLECTION = process.env.MILVUS_COLLECTION || "szlab_knowledge";
-const KNOWLEDGE_SOURCES = [
+const LOCAL_UPLOAD_COLLECTION = "local_uploaded_documents";
+const MILVUS_KNOWLEDGE_SOURCES = [
   {
     id: "hydrogen_excel",
     label: "氢脆 Excel 抽取要求",
@@ -68,6 +72,15 @@ const KNOWLEDGE_SOURCES = [
     sampleQuery: "泡沫玻璃 多孔玻璃",
   },
 ];
+const UPLOADED_KNOWLEDGE_SOURCE = {
+  id: "uploaded_documents",
+  label: "上传文档",
+  collection: LOCAL_UPLOAD_COLLECTION,
+  sourceType: "uploaded_file",
+  backend: "local_vector",
+  sampleQuery: "从上传文档中检索术语、标准或证据句",
+};
+const KNOWLEDGE_SOURCES = [...MILVUS_KNOWLEDGE_SOURCES, UPLOADED_KNOWLEDGE_SOURCE];
 
 const MIME_TYPES = {
   ".html": "text/html;charset=utf-8",
@@ -142,9 +155,11 @@ async function callLLMProvider({ model, messages, temperature = 0.2, jsonMode = 
   };
 }
 
+const runtimeStorage = createRuntimeStorage({ rootDir: RUNTIME_STORE_DIR });
 const orchestrator = createOrchestrator({
   defaultModel: LLM_MODEL,
   callLLM: callLLMProvider,
+  storage: runtimeStorage,
 });
 let knowledgeSearchQueue = Promise.resolve();
 
@@ -153,12 +168,12 @@ function sendJson(response, statusCode, payload) {
   response.end(JSON.stringify(payload));
 }
 
-function readRequestBody(request) {
+function readRequestBody(request, maxBytes = 1024 * 1024) {
   return new Promise((resolve, reject) => {
     let body = "";
     request.on("data", (chunk) => {
       body += chunk;
-      if (body.length > 1024 * 1024) {
+      if (body.length > maxBytes) {
         reject(new Error("Request body too large"));
         request.destroy();
       }
@@ -166,6 +181,176 @@ function readRequestBody(request) {
     request.on("end", () => resolve(body));
     request.on("error", reject);
   });
+}
+
+function tokenizeForVector(text) {
+  const normalized = String(text || "").toLowerCase();
+  const latinTokens = normalized.match(/[a-z0-9_.%+\-]{2,}/g) || [];
+  const chineseTokens = [];
+  const chineseText = normalized.replace(/[^\u4e00-\u9fff]/g, "");
+  for (let index = 0; index < chineseText.length; index += 1) {
+    chineseTokens.push(chineseText[index]);
+    if (index < chineseText.length - 1) chineseTokens.push(chineseText.slice(index, index + 2));
+  }
+  return [...latinTokens, ...chineseTokens].filter(Boolean);
+}
+
+function hashToken(token) {
+  const digest = crypto.createHash("sha1").update(token).digest();
+  return digest.readUInt32BE(0);
+}
+
+function makeHashEmbedding(text, dimensions = 128) {
+  const vector = Array(dimensions).fill(0);
+  tokenizeForVector(text).forEach((token) => {
+    const hash = hashToken(token);
+    const index = hash % dimensions;
+    const sign = hash % 2 === 0 ? 1 : -1;
+    vector[index] += sign;
+  });
+  const norm = Math.sqrt(vector.reduce((sum, value) => sum + value * value, 0)) || 1;
+  return vector.map((value) => Number((value / norm).toFixed(6)));
+}
+
+function cosineSimilarity(left, right) {
+  if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) return 0;
+  return left.reduce((sum, value, index) => sum + value * Number(right[index] || 0), 0);
+}
+
+function lexicalOverlapScore(query, text) {
+  const queryTokens = [...new Set(tokenizeForVector(query))];
+  if (!queryTokens.length) return 0;
+  const textTokens = new Set(tokenizeForVector(text));
+  const hits = queryTokens.filter((token) => textTokens.has(token)).length;
+  return hits / queryTokens.length;
+}
+
+function chunkUploadedText(text, { chunkSize = 900, overlap = 140 } = {}) {
+  const cleaned = String(text || "").replace(/\r\n/g, "\n").trim();
+  if (!cleaned) return [];
+  const paragraphs = cleaned.split(/\n{2,}/).map((item) => item.trim()).filter(Boolean);
+  const chunks = [];
+  let buffer = "";
+
+  function flushBuffer() {
+    const value = buffer.trim();
+    if (!value) return;
+    chunks.push(value);
+    buffer = overlap > 0 ? value.slice(-overlap) : "";
+  }
+
+  paragraphs.forEach((paragraph) => {
+    if (!buffer) {
+      buffer = paragraph;
+      if (buffer.length >= chunkSize) flushBuffer();
+      return;
+    }
+    if (`${buffer}\n\n${paragraph}`.length > chunkSize) {
+      flushBuffer();
+    }
+    buffer = buffer ? `${buffer}\n\n${paragraph}` : paragraph;
+    while (buffer.length > chunkSize * 1.4) {
+      chunks.push(buffer.slice(0, chunkSize));
+      buffer = buffer.slice(chunkSize - overlap);
+    }
+  });
+  flushBuffer();
+  return chunks;
+}
+
+function getUploadedKnowledgeStatus() {
+  const documents = runtimeStorage.listUploadedDocuments();
+  const rowCount = documents.reduce((sum, document) => sum + (document.chunks?.length || 0), 0);
+  const lastUpdated = documents
+    .map((document) => document.updatedAt || document.createdAt || "")
+    .filter(Boolean)
+    .sort()
+    .at(-1) || "";
+  return {
+    ...UPLOADED_KNOWLEDGE_SOURCE,
+    exists: Boolean(documents.length),
+    rowCount,
+    sampleTitles: documents.slice(-3).map((document) => document.filename),
+    sourceTypes: documents.length ? ["uploaded_file"] : [],
+    metadataPreview: documents.slice(-2).map((document) => ({
+      filename: document.filename,
+      chunkCount: document.chunks?.length || 0,
+      size: document.size,
+    })),
+    lastUpdated,
+    health: rowCount ? "ready" : "empty",
+    healthLabel: rowCount ? "可用" : "未上传",
+    healthMessage: rowCount ? `已上传 ${documents.length} 个文件、${rowCount} 个向量片段。` : "尚未上传可检索文档。",
+  };
+}
+
+function buildUploadedDocument({ filename, content, mimeType = "text/plain" }) {
+  const text = String(content || "").trim();
+  if (!text) {
+    const error = new Error("uploaded file content is empty.");
+    error.statusCode = 400;
+    throw error;
+  }
+  const id = crypto.randomUUID();
+  const now = new Date().toISOString();
+  const chunks = chunkUploadedText(text).map((chunkText, index) => ({
+    id: `${id}#${index + 1}`,
+    index,
+    text: chunkText,
+    embedding: makeHashEmbedding(chunkText),
+  }));
+  if (!chunks.length) {
+    const error = new Error("uploaded file produced no searchable chunks.");
+    error.statusCode = 400;
+    throw error;
+  }
+  return {
+    id,
+    filename: String(filename || "uploaded-document.txt").slice(0, 180),
+    mimeType,
+    size: Buffer.byteLength(text, "utf8"),
+    contentHash: crypto.createHash("sha256").update(text).digest("hex"),
+    chunkCount: chunks.length,
+    chunks,
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+function runUploadedKnowledgeSearch({ query, limit = 8 }) {
+  const queryEmbedding = makeHashEmbedding(query);
+  const queryTokens = new Set(tokenizeForVector(query));
+  const results = [];
+  runtimeStorage.listUploadedDocuments().forEach((document) => {
+    (document.chunks || []).forEach((chunk) => {
+      const vectorScore = cosineSimilarity(queryEmbedding, chunk.embedding);
+      const lexicalScore = lexicalOverlapScore(query, chunk.text);
+      const score = Math.max(0, vectorScore) * 0.72 + lexicalScore * 0.28;
+      const textTokens = new Set(tokenizeForVector(chunk.text));
+      const matchedTerms = [...queryTokens].filter((token) => textTokens.has(token)).slice(0, 12);
+      results.push({
+        id: chunk.id,
+        title: `${document.filename} · 片段 ${chunk.index + 1}`,
+        text: chunk.text,
+        source_type: "uploaded_file",
+        source_uri: `runtime/uploads/${document.id}.json`,
+        metadata_json: JSON.stringify({
+          document_id: document.id,
+          filename: document.filename,
+          chunk_index: chunk.index,
+          content_hash: document.contentHash,
+        }),
+        distance: Number(score.toFixed(6)),
+        vector_distance: Number(vectorScore.toFixed(6)),
+        rerank_score: Number(score.toFixed(6)),
+        match_reasons: matchedTerms.length ? [`词面命中：${matchedTerms.join("、")}`] : ["哈希向量相似"],
+        knowledge_source_id: UPLOADED_KNOWLEDGE_SOURCE.id,
+        knowledge_source_label: UPLOADED_KNOWLEDGE_SOURCE.label,
+        collection: LOCAL_UPLOAD_COLLECTION,
+      });
+    });
+  });
+  return results.sort((left, right) => Number(right.distance || 0) - Number(left.distance || 0)).slice(0, limit);
 }
 
 function getKnowledgeSourceByCollection(collection) {
@@ -313,7 +498,7 @@ function runKnowledgeInspect() {
   return new Promise((resolve) => {
     const scriptPath = path.join(ROOT, "scripts", "inspect_knowledge.py");
     const args = [scriptPath, "--db-path", MILVUS_DB_PATH, "--sample-limit", "5"];
-    KNOWLEDGE_SOURCES.forEach((source) => {
+    MILVUS_KNOWLEDGE_SOURCES.forEach((source) => {
       args.push("--collection", source.collection);
     });
 
@@ -347,14 +532,19 @@ async function getKnowledgeStatusPayload() {
     ? await enqueueKnowledgeSearch(() => runKnowledgeInspect())
     : { dbPath: MILVUS_DB_PATH, dbExists: false, collections: [], error: "" };
   const statsByCollection = new Map((inspect.collections || []).map((item) => [item.collection, item]));
-  const sources = KNOWLEDGE_SOURCES.map((source) => sourceHealthFromStats(source, statsByCollection.get(source.collection), inspect.error));
+  const uploadedStatus = getUploadedKnowledgeStatus();
+  const sources = [
+    ...MILVUS_KNOWLEDGE_SOURCES.map((source) => sourceHealthFromStats(source, statsByCollection.get(source.collection), inspect.error)),
+    uploadedStatus,
+  ];
   return {
-    configured: fs.existsSync(MILVUS_DB_PATH),
+    configured: fs.existsSync(MILVUS_DB_PATH) || uploadedStatus.health === "ready",
     dbPath: MILVUS_DB_PATH,
     dbExists: fs.existsSync(MILVUS_DB_PATH),
     dbModifiedAt: getDbModifiedAt(),
     collection: MILVUS_COLLECTION,
     inspectError: inspect.error || "",
+    runtimeStoreDir: RUNTIME_STORE_DIR,
     sources,
   };
 }
@@ -366,7 +556,11 @@ async function searchKnowledgeCollections({ query, collections, limit }) {
 
   for (const collection of collections) {
     try {
-      results.push(...(await runKnowledgeSearch({ query, collection, limit: perCollectionLimit })));
+      if (collection === LOCAL_UPLOAD_COLLECTION) {
+        results.push(...runUploadedKnowledgeSearch({ query, limit: perCollectionLimit }));
+      } else {
+        results.push(...(await runKnowledgeSearch({ query, collection, limit: perCollectionLimit })));
+      }
     } catch (error) {
       errors.push(error?.detail || error?.message || `search failed: ${collection}`);
     }
@@ -445,6 +639,38 @@ async function handleKnowledge(request, response) {
       return;
     }
 
+    if (request.method === "POST" && url.pathname === "/api/knowledge/uploads") {
+      const body = JSON.parse(await readRequestBody(request, 12 * 1024 * 1024));
+      const files = Array.isArray(body.files) ? body.files : [body];
+      const uploaded = files.map((file) => {
+        const document = buildUploadedDocument({
+          filename: file.filename || file.name,
+          content: file.content,
+          mimeType: file.mimeType || file.type || "text/plain",
+        });
+        runtimeStorage.saveUploadedDocument(document);
+        runtimeStorage.appendAudit({
+          type: "upload_document",
+          documentId: document.id,
+          detail: {
+            filename: document.filename,
+            chunkCount: document.chunkCount,
+            contentHash: document.contentHash,
+          },
+        });
+        return {
+          id: document.id,
+          filename: document.filename,
+          chunkCount: document.chunkCount,
+          size: document.size,
+          contentHash: document.contentHash,
+          createdAt: document.createdAt,
+        };
+      });
+      sendJson(response, 200, { uploaded, source: getUploadedKnowledgeStatus() });
+      return;
+    }
+
     if (request.method === "POST" && url.pathname === "/api/knowledge/search") {
       const body = JSON.parse(await readRequestBody(request));
       const query = String(body.query || "").trim();
@@ -452,13 +678,14 @@ async function handleKnowledge(request, response) {
         sendJson(response, 400, { error: "query is required." });
         return;
       }
-      if (!fs.existsSync(MILVUS_DB_PATH)) {
+      const collections = resolveKnowledgeCollections(body.collections);
+      const usesMilvus = collections.some((collection) => collection !== LOCAL_UPLOAD_COLLECTION);
+      if (usesMilvus && !fs.existsSync(MILVUS_DB_PATH)) {
         sendJson(response, 404, { error: "Milvus knowledge database not found.", dbPath: MILVUS_DB_PATH });
         return;
       }
       const limit = Math.max(1, Math.min(Number(body.limit) || 8, 20));
-      const collections = resolveKnowledgeCollections(body.collections);
-        const { results, errors } = await enqueueKnowledgeSearch(() => searchKnowledgeCollections({ query, collections, limit }));
+      const { results, errors } = await enqueueKnowledgeSearch(() => searchKnowledgeCollections({ query, collections, limit }));
       sendJson(response, 200, {
         query,
         count: results.length,
@@ -490,8 +717,18 @@ async function handleOrchestrator(request, response) {
       return;
     }
 
+    if (request.method === "GET" && url.pathname === "/api/orchestrator/sessions") {
+      sendJson(response, 200, { sessions: orchestrator.listSessions() });
+      return;
+    }
+
     if (request.method === "GET" && parts.length === 4 && parts[0] === "api" && parts[1] === "orchestrator" && parts[2] === "sessions") {
       sendJson(response, 200, orchestrator.getSession(parts[3]));
+      return;
+    }
+
+    if (request.method === "GET" && parts.length === 5 && parts[0] === "api" && parts[1] === "orchestrator" && parts[2] === "sessions" && parts[4] === "prompt-versions") {
+      sendJson(response, 200, { versions: orchestrator.listPromptVersions(parts[3]) });
       return;
     }
 
@@ -528,9 +765,10 @@ const server = http.createServer((request, response) => {
       llmConfigured: Boolean(LLM_API_KEY),
       model: LLM_MODEL,
       baseUrl: LLM_BASE_URL,
-      knowledgeConfigured: fs.existsSync(MILVUS_DB_PATH),
+      knowledgeConfigured: fs.existsSync(MILVUS_DB_PATH) || getUploadedKnowledgeStatus().health === "ready",
       knowledgeCollection: MILVUS_COLLECTION,
       knowledgeSources: KNOWLEDGE_SOURCES,
+      runtimeStoreDir: RUNTIME_STORE_DIR,
     });
     return;
   }

@@ -43,6 +43,11 @@
             <strong id="knowledgeStatusTitle">当前使用通用模板</strong>
             <p id="knowledgeStatusText">未接入知识库时，系统会基于通用领域模板生成候选项。</p>
             <button class="mini-btn" id="refreshKnowledgeBtn" type="button">刷新状态</button>
+            <div class="upload-panel">
+              <input id="knowledgeFileInput" class="file-input" type="file" multiple accept=".txt,.md,.csv,.json,.log" />
+              <button class="mini-btn" id="uploadKnowledgeBtn" type="button">上传文档</button>
+              <small id="uploadKnowledgeStatus">支持 txt、md、csv、json 文本文件</small>
+            </div>
             <div class="knowledge-source-list" id="knowledgeSourceList"></div>
           </div>
           <button class="sidebar-btn" id="loadSampleBtn" type="button">载入钢结构示例</button>
@@ -109,7 +114,7 @@
 
               <div class="mode-switch" id="modeSwitch">
                 <button class="mode-btn active" data-mode="generic" type="button">通用模板</button>
-                <button class="mode-btn" data-mode="rag" type="button">Milvus 知识库</button>
+                <button class="mode-btn" data-mode="rag" type="button">RAG 知识库</button>
               </div>
 
               <label class="field hidden" id="knowledgeField">
@@ -117,7 +122,7 @@
                 <textarea
                   id="knowledgeInput"
                   rows="5"
-                  placeholder="切换到 Milvus 知识库后，系统会按原始提示词自动召回片段；也可以在这里追加人工术语或标准条目。"
+                  placeholder="切换到 RAG 知识库后，系统会按原始提示词自动召回片段；也可以在这里追加人工术语或标准条目。"
                 ></textarea>
               </label>
 

@@ -525,6 +525,7 @@ const elements = {
   knowledgeField: document.querySelector("#knowledgeField"),
   modeSwitch: document.querySelector("#modeSwitch"),
   modelSelect: document.querySelector("#modelSelect"),
+  llmConfigCard: document.querySelector("#llmConfigCard"),
   llmStatusTitle: document.querySelector("#llmStatusTitle"),
   llmStatusText: document.querySelector("#llmStatusText"),
   llmBaseUrlInput: document.querySelector("#llmBaseUrlInput"),
@@ -597,6 +598,8 @@ function setLLMStatus(title, text, configured = false) {
   state.llmConfigured = configured;
   elements.llmStatusTitle.textContent = title;
   elements.llmStatusText.textContent = text;
+  elements.llmConfigCard.classList.toggle("is-connected", configured);
+  elements.llmConfigCard.classList.toggle("is-disconnected", !configured);
   setLLMBusy(false);
 }
 
@@ -2607,7 +2610,13 @@ async function checkLLMHealth(force = false) {
     }
 
     ensureModelOption(payload.model);
-    setLLMStatus("LLM 已连接", `模型：${payload.model}；接口：${payload.baseUrl}`, true);
+    let endpointLabel = payload.baseUrl || "";
+    try {
+      endpointLabel = new URL(payload.baseUrl).host;
+    } catch (_error) {
+      endpointLabel = payload.baseUrl || "";
+    }
+    setLLMStatus("LLM 已连接", `${payload.model} · ${endpointLabel}`, true);
   } catch (error) {
     setLLMStatus("未启动 LLM 后端", "直接打开 HTML 时使用本地模板；真实调用请用 node server.js 启动。", false);
   }

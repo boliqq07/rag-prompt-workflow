@@ -31,12 +31,17 @@
 
         <section class="sidebar-section">
           <div class="section-label">LLM 接入</div>
-          <div class="knowledge-card">
-            <strong id="llmStatusTitle">正在检测后端</strong>
-            <p id="llmStatusText">通过 server.js 启动后，可调用真实 OpenAI-compatible 模型。</p>
+          <div class="knowledge-card agent-card" id="llmConfigCard">
+            <div class="agent-status-head">
+              <span class="agent-status-dot"></span>
+              <div>
+                <strong id="llmStatusTitle">正在检测后端</strong>
+                <p id="llmStatusText">通过 server.js 启动后，可调用真实 OpenAI-compatible 模型。</p>
+              </div>
+            </div>
             <div class="llm-config-form">
               <label>
-                <span>接口地址</span>
+                <span>Endpoint</span>
                 <input id="llmBaseUrlInput" class="sidebar-input" type="url" placeholder="https://api.openai.com/v1" />
               </label>
               <label>
@@ -47,7 +52,7 @@
                 <input id="rememberLlmConfigInput" type="checkbox" />
                 <span>记住到本机</span>
               </label>
-              <button class="mini-btn" id="saveLlmConfigBtn" type="button">保存 API 设置</button>
+              <button class="agent-save-btn" id="saveLlmConfigBtn" type="button">保存 API 设置</button>
               <small id="llmConfigStatus">Key 只发送到本机后端，不会在页面回显。</small>
             </div>
           </div>

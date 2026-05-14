@@ -555,6 +555,7 @@ const elements = {
   knowledgeSourceList: document.querySelector("#knowledgeSourceList"),
   refreshKnowledgeBtn: document.querySelector("#refreshKnowledgeBtn"),
   knowledgeFileInput: document.querySelector("#knowledgeFileInput"),
+  knowledgeFileName: document.querySelector("#knowledgeFileName"),
   uploadKnowledgeBtn: document.querySelector("#uploadKnowledgeBtn"),
   uploadKnowledgeStatus: document.querySelector("#uploadKnowledgeStatus"),
   uploadedDocumentList: document.querySelector("#uploadedDocumentList"),
@@ -1659,6 +1660,7 @@ async function uploadKnowledgeFiles() {
       ? `已上传 ${uploaded.length} 个文件，生成 ${uploaded.reduce((sum, item) => sum + Number(item.chunkCount || 0), 0)} 个向量片段`
       : "没有生成可检索片段";
     elements.knowledgeFileInput.value = "";
+    elements.knowledgeFileName.textContent = "未选择文件";
     await refreshKnowledgeStatus();
     await loadUploadedDocuments();
     await loadAuditLogs();
@@ -1677,6 +1679,16 @@ async function uploadKnowledgeFiles() {
     elements.uploadKnowledgeBtn.disabled = false;
     elements.uploadKnowledgeBtn.textContent = "上传文档";
   }
+}
+
+function updateSelectedFileName() {
+  const files = [...(elements.knowledgeFileInput?.files || [])];
+  if (!files.length) {
+    elements.knowledgeFileName.textContent = "未选择文件";
+    return;
+  }
+  elements.knowledgeFileName.textContent =
+    files.length === 1 ? files[0].name : `${files[0].name} 等 ${files.length} 个文件`;
 }
 
 async function deleteUploadedDocument(documentId) {
@@ -3036,6 +3048,8 @@ elements.refreshKnowledgeBtn.addEventListener("click", () => {
 elements.uploadKnowledgeBtn.addEventListener("click", () => {
   uploadKnowledgeFiles();
 });
+
+elements.knowledgeFileInput.addEventListener("change", updateSelectedFileName);
 
 elements.uploadedDocumentList.addEventListener("click", (event) => {
   const button = event.target.closest("[data-delete-upload]");

@@ -94,6 +94,52 @@
         "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因"],
         "extra_instructions": "材料名、性能指标、测量结果和试验条件必须分开；yield strength 与 tensile strength 仅相关但不自动合并。"
       }
+    },
+    {
+      "id": "synthetic-prompt-schema-guard",
+      "label": "Synthetic: prompt schema and evidence guard",
+      "sensitivity": "synthetic",
+      "workflow": "prompt_generation",
+      "sourceMode": "generic",
+      "prompt": "生成一个用于测试报告中抽取 coating thickness、coating thickness unit、sample id 的提示词；要求 JSON 数组、证据句、没有证据输出 null。",
+      "requiredTerms": ["coating thickness", "coating thickness unit", "sample id"],
+      "forbiddenMergeTerms": [],
+      "requiredPromptPhrases": ["JSON 数组", "证据句", "null", "输出前检查"],
+      "requiredQuestionIds": ["business_role", "target_type", "candidate_terms", "output_format", "constraints"],
+      "answers": {
+        "business_role": "材料数据抽取员",
+        "target_type": "信息抽取",
+        "candidate_terms": ["coating thickness", "coating thickness unit", "sample id"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": [],
+        "merge_policy": "严格合并",
+        "output_format": "JSON 数组",
+        "constraints": ["只基于原文", "保留原文证据句", "输出前自检", "不确定时标记待确认"],
+        "extra_instructions": "没有证据时输出 null；不要输出推理过程。"
+      }
+    },
+    {
+      "id": "synthetic-material-performance-boundary",
+      "label": "Synthetic: material vs performance boundary",
+      "sensitivity": "synthetic",
+      "workflow": "synonym_merge",
+      "sourceMode": "generic",
+      "prompt": "判断 foam glass、porous glass、compressive strength、test temperature 是否可以合并；材料名、性能指标和试验条件必须分开。",
+      "requiredTerms": ["foam glass", "porous glass", "compressive strength", "test temperature"],
+      "forbiddenMergeTerms": ["compressive strength", "test temperature"],
+      "requiredEvidenceTypes": ["category_type_conflict"],
+      "requiredPromptPhrases": ["不应合并", "证据来源", "人工复核"],
+      "requiredQuestionIds": ["target_type", "candidate_terms", "synonym_groups", "merge_policy", "output_format"],
+      "answers": {
+        "target_type": "材料术语归一",
+        "candidate_terms": ["foam glass", "porous glass", "compressive strength", "test temperature"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": [],
+        "merge_policy": "严格合并",
+        "output_format": "JSON 数组",
+        "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因", "人工复核标记"],
+        "extra_instructions": "foam glass/porous glass 是材料术语；compressive strength 是性能指标；test temperature 是试验条件，三类不能合并。"
+      }
     }
   ]
 }

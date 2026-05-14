@@ -133,6 +133,87 @@
         "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因", "人工复核标记"],
         "extra_instructions": "γ'强化相与 γ''强化相不能直接合并。"
       }
+    },
+    {
+      "id": "excel-test-condition-prompt",
+      "label": "Excel: test condition prompt generation",
+      "sensitivity": "project",
+      "workflow": "prompt_generation",
+      "sourceMode": "rag",
+      "collections": ["hydrogen_excel"],
+      "prompt": "生成一个从氢脆试验报告中抽取 pre-strain rate、test temperature、charging time 的提示词，要求 JSON 数组、证据句和 null 空值策略。",
+      "requiredTerms": ["pre-strain rate", "test temperature", "charging time"],
+      "forbiddenMergeTerms": [],
+      "requiredPromptPhrases": ["优先参考附带术语片段", "JSON 数组", "证据句", "null"],
+      "requiredQuestionIds": ["business_role", "target_type", "candidate_terms", "bilingual_synonym", "output_format", "constraints"],
+      "knowledgeResults": [
+        {
+          "title": "氢脆 Excel / pre-strain rate",
+          "knowledge_source_label": "氢脆 Excel 抽取要求",
+          "source_type": "excel",
+          "text": "字段: pre-strain rate\n定义: 预应变速率，属于试验条件字段。\n涵盖参数: pre-strain rate / pre strain rate / 预应变速率"
+        },
+        {
+          "title": "氢脆 Excel / test temperature",
+          "knowledge_source_label": "氢脆 Excel 抽取要求",
+          "source_type": "excel",
+          "text": "字段: test temperature\n定义: 试验温度，属于测试条件字段。\n涵盖参数: test temperature / testing temperature / 温度"
+        },
+        {
+          "title": "氢脆 Excel / charging time",
+          "knowledge_source_label": "氢脆 Excel 抽取要求",
+          "source_type": "excel",
+          "text": "字段: charging time\n定义: 充氢时间，属于试验条件字段。\n涵盖参数: charging time / hydrogen charging duration / 充氢时间"
+        }
+      ],
+      "answers": {
+        "business_role": "材料数据抽取员",
+        "target_type": "信息抽取",
+        "candidate_terms": ["pre-strain rate", "test temperature", "charging time"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": [],
+        "merge_policy": "严格合并",
+        "output_format": "JSON 数组",
+        "constraints": ["只基于原文", "保留原文证据句", "保留试验环境", "输出前自检", "不确定时标记待确认"],
+        "extra_instructions": "没有证据时输出 null；字段名保持英文。"
+      }
+    },
+    {
+      "id": "dict-foam-glass-boundary",
+      "label": "Dictionary: foam glass boundary guard",
+      "sensitivity": "project",
+      "workflow": "synonym_merge",
+      "sourceMode": "rag",
+      "collections": ["material_dictionary"],
+      "prompt": "判断泡沫玻璃、多孔玻璃、泡沫塑料、抗压强度、导热系数之间的合并边界。",
+      "requiredTerms": ["泡沫玻璃", "多孔玻璃", "抗压强度", "导热系数"],
+      "forbiddenMergeTerms": ["泡沫塑料", "抗压强度", "导热系数"],
+      "requiredEvidenceTypes": ["dictionary_alias", "category_type_conflict"],
+      "requiredPromptPhrases": ["不应合并", "证据原文", "关系类型", "人工复核"],
+      "knowledgeResults": [
+        {
+          "title": "材料大辞典 / 泡沫玻璃",
+          "knowledge_source_label": "材料大辞典第二版",
+          "source_type": "material_dictionary",
+          "text": "术语: 泡沫玻璃\n定义: 又称多孔玻璃，是由玻璃相和大量封闭或连通孔隙组成的无机非金属材料。泡沫塑料为聚合物材料，不能与泡沫玻璃合并。"
+        },
+        {
+          "title": "材料大辞典 / 泡沫玻璃性能",
+          "knowledge_source_label": "材料大辞典第二版",
+          "source_type": "material_dictionary",
+          "text": "术语: 抗压强度\n定义: 泡沫玻璃的性能指标之一。导热系数也是性能指标，不是材料名称，不能与泡沫玻璃或多孔玻璃作为同义词合并。"
+        }
+      ],
+      "answers": {
+        "target_type": "材料术语归一",
+        "candidate_terms": ["泡沫玻璃", "多孔玻璃", "泡沫塑料", "抗压强度", "导热系数"],
+        "bilingual_synonym": "yes",
+        "synonym_groups": ["泡沫玻璃"],
+        "merge_policy": "严格合并",
+        "output_format": "Markdown 表格",
+        "constraints": ["知识来源", "证据原文", "关系类型", "置信度", "不合并原因", "人工复核标记"],
+        "extra_instructions": "泡沫塑料、抗压强度、导热系数不得与泡沫玻璃/多孔玻璃合并。"
+      }
     }
   ]
 }

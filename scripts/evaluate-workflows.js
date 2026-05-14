@@ -205,6 +205,8 @@ function scoreFixture(fixture, knowledgeResults, questions, finalPrompt) {
   const required = fixture.requiredTerms || [];
   const forbidden = fixture.forbiddenMergeTerms || [];
   const requiredEvidenceTypes = fixture.requiredEvidenceTypes || [];
+  const requiredPromptPhrases = fixture.requiredPromptPhrases || [];
+  const requiredQuestionIds = fixture.requiredQuestionIds || [];
 
   function aliases(term) {
     const table = {
@@ -212,7 +214,7 @@ function scoreFixture(fixture, knowledgeResults, questions, finalPrompt) {
       "γ'强化相": ["γ'强化相", "gamma prime", "γ'strengtheningphase"],
       高温合金: ["高温合金", "superalloy", "high temperature alloy"],
     };
-    return table[term] || [term];
+    return fixture.termAliases?.[term] || table[term] || [term];
   }
 
   function includesTerm(haystack, term) {
@@ -225,6 +227,9 @@ function scoreFixture(fixture, knowledgeResults, questions, finalPrompt) {
   const promptHits = required.filter((term) => includesTerm(promptText, term));
   const forbiddenMentioned = forbidden.filter((term) => promptText.toLowerCase().includes(term.toLowerCase()));
   const evidenceTypeHits = requiredEvidenceTypes.filter((item) => promptText.toLowerCase().includes(String(item).toLowerCase()));
+  const promptPhraseHits = requiredPromptPhrases.filter((item) => promptText.toLowerCase().includes(String(item).toLowerCase()));
+  const questionIds = new Set(questions.map((question) => question.id));
+  const questionIdHits = requiredQuestionIds.filter((item) => questionIds.has(item));
   const hasNoMergeLanguage = /不能合并|不得.*合并|严禁.*合并|禁止.*合并|不应合并|独立概念|not merge|must not/i.test(
     promptText
   );
@@ -234,19 +239,63 @@ function scoreFixture(fixture, knowledgeResults, questions, finalPrompt) {
   const promptScore = promptHits.length / Math.max(required.length, 1);
   const boundaryScore = forbidden.length ? (forbiddenMentioned.length / forbidden.length) * (hasNoMergeLanguage ? 1 : 0) : 1;
   const evidenceScore = requiredEvidenceTypes.length ? evidenceTypeHits.length / requiredEvidenceTypes.length : 1;
-  const total = Math.round(((retrievalScore + questionScore + promptScore + boundaryScore + evidenceScore) / 5) * 100);
+  const promptPhraseScore = requiredPromptPhrases.length ? promptPhraseHits.length / requiredPromptPhrases.length : 1;
+  const questionIdScore = requiredQuestionIds.length ? questionIdHits.length / requiredQuestionIds.length : 1;
+  const scoreDimensions = [
+    ["retrieval", retrievalScore],
+    ["question", questionScore],
+    ["prompt", promptScore],
+    ["boundary", boundaryScore],
+    ["evidence", evidenceScore],
+  ];
+  if (requiredPromptPhrases.length) scoreDimensions.push(["promptPhrase", promptPhraseScore]);
+  if (requiredQuestionIds.length) scoreDimensions.push(["questionId", questionIdScore]);
+  const total = Math.round((scoreDimensions.reduce((sum, [, score]) => sum + score, 0) / scoreDimensions.length) * 100);
+
+  const diagnostics = [];
+  const missingRetrievalTerms = required.filter((term) => !retrievalHits.includes(term));
+  const missingQuestionTerms = required.filter((term) => !questionHits.includes(term));
+  const missingPromptTerms = required.filter((term) => !promptHits.includes(term));
+  const missingForbiddenBoundaryTerms = forbidden.filter((term) => !forbiddenMentioned.includes(term));
+  const missingEvidenceTypes = requiredEvidenceTypes.filter((item) => !evidenceTypeHits.includes(item));
+  const missingPromptPhrases = requiredPromptPhrases.filter((item) => !promptPhraseHits.includes(item));
+  const missingQuestionIds = requiredQuestionIds.filter((item) => !questionIdHits.includes(item));
+
+  if (missingRetrievalTerms.length && fixture.sourceMode === "rag") {
+    diagnostics.push(`召回缺失：${missingRetrievalTerms.join("；")}`);
+  }
+  if (missingQuestionTerms.length) diagnostics.push(`候选问题缺失：${missingQuestionTerms.join("；")}`);
+  if (missingPromptTerms.length) diagnostics.push(`最终提示词缺失：${missingPromptTerms.join("；")}`);
+  if (missingForbiddenBoundaryTerms.length) diagnostics.push(`不合并边界缺失：${missingForbiddenBoundaryTerms.join("；")}`);
+  if (forbidden.length && !hasNoMergeLanguage) diagnostics.push("最终提示词缺少明确的不合并/禁止合并措辞");
+  if (missingEvidenceTypes.length) diagnostics.push(`证据类型缺失：${missingEvidenceTypes.join("；")}`);
+  if (missingPromptPhrases.length) diagnostics.push(`必需提示词短语缺失：${missingPromptPhrases.join("；")}`);
+  if (missingQuestionIds.length) diagnostics.push(`必需问题缺失：${missingQuestionIds.join("；")}`);
 
   return {
     total,
+    dimensions: Object.fromEntries(scoreDimensions),
     retrievalScore,
     questionScore,
     promptScore,
     boundaryScore,
+    promptPhraseScore,
+    questionIdScore,
     retrievalHits,
     questionHits,
     promptHits,
     forbiddenMentioned,
     evidenceTypeHits,
+    promptPhraseHits,
+    questionIdHits,
+    missingRetrievalTerms,
+    missingQuestionTerms,
+    missingPromptTerms,
+    missingForbiddenBoundaryTerms,
+    missingEvidenceTypes,
+    missingPromptPhrases,
+    missingQuestionIds,
+    diagnostics,
     hasNoMergeLanguage,
     evidenceScore,
   };
@@ -282,6 +331,7 @@ async function runOne(baseUrl, fixture, args) {
 }
 
 function renderMarkdown(results, args) {
+  const formatScore = (value) => Number(value || 0).toFixed(2);
   const lines = [
     "# 工作流质量评测报告",
     "",
@@ -301,24 +351,39 @@ function renderMarkdown(results, args) {
 
   for (const item of results) {
     lines.push(
-      `| ${item.label} | ${item.mode} | ${item.score.total} | ${item.score.retrievalScore.toFixed(2)} | ${item.score.questionScore.toFixed(2)} | ${item.score.promptScore.toFixed(2)} | ${item.score.boundaryScore.toFixed(2)} | ${item.score.evidenceScore.toFixed(2)} |`
+      `| ${item.label} | ${item.mode} | ${item.score.total} | ${formatScore(item.score.retrievalScore)} | ${formatScore(item.score.questionScore)} | ${formatScore(item.score.promptScore)} | ${formatScore(item.score.boundaryScore)} | ${formatScore(item.score.evidenceScore)} |`
     );
   }
 
   lines.push("", "## 详情", "");
   for (const item of results) {
+    const retrieval = item.retrieval || { topTitles: [] };
+    const score = {
+      questionHits: [],
+      promptHits: [],
+      forbiddenMentioned: [],
+      evidenceTypeHits: [],
+      promptPhraseHits: [],
+      questionIdHits: [],
+      diagnostics: [],
+      ...item.score,
+    };
     lines.push(
       `### ${item.label}`,
       "",
       `- Workflow：${item.workflow}`,
       `- Sensitivity：${item.sensitivity}`,
       `- Mode：${item.mode}`,
-      `- Score：${item.score.total}`,
-      `- Retrieval top：${item.retrieval.topTitles.join("；") || "无"}`,
-      `- Required in questions：${item.score.questionHits.join("；") || "无"}`,
-      `- Required in final prompt：${item.score.promptHits.join("；") || "无"}`,
-      `- Forbidden boundary mentioned：${item.score.forbiddenMentioned.join("；") || "无"}`,
-      `- Evidence type hits：${item.score.evidenceTypeHits.join("；") || "无"}`,
+      `- Score：${score.total}`,
+      item.error ? `- Error：${item.error}` : "",
+      `- Retrieval top：${retrieval.topTitles.join("；") || "无"}`,
+      `- Required in questions：${score.questionHits.join("；") || "无"}`,
+      `- Required in final prompt：${score.promptHits.join("；") || "无"}`,
+      `- Forbidden boundary mentioned：${score.forbiddenMentioned.join("；") || "无"}`,
+      `- Evidence type hits：${score.evidenceTypeHits.join("；") || "无"}`,
+      `- Required prompt phrases：${score.promptPhraseHits.join("；") || "无"}`,
+      `- Required question ids：${score.questionIdHits.join("；") || "无"}`,
+      `- Diagnostics：${score.diagnostics.join("；") || "无"}`,
       "",
       "Final prompt preview:",
       "",

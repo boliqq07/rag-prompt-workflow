@@ -44,10 +44,11 @@
             <p id="knowledgeStatusText">未接入知识库时，系统会基于通用领域模板生成候选项。</p>
             <button class="mini-btn" id="refreshKnowledgeBtn" type="button">刷新状态</button>
             <div class="upload-panel">
-              <input id="knowledgeFileInput" class="file-input" type="file" multiple accept=".txt,.md,.csv,.json,.log" />
+              <input id="knowledgeFileInput" class="file-input" type="file" multiple accept=".txt,.md,.csv,.json,.log,.html,.htm,.pdf,.docx,.xlsx" />
               <button class="mini-btn" id="uploadKnowledgeBtn" type="button">上传文档</button>
-              <small id="uploadKnowledgeStatus">支持 txt、md、csv、json 文本文件</small>
+              <small id="uploadKnowledgeStatus">支持 txt、md、csv、json、html、pdf、docx、xlsx</small>
             </div>
+            <div class="uploaded-document-list" id="uploadedDocumentList"></div>
             <div class="knowledge-source-list" id="knowledgeSourceList"></div>
           </div>
           <button class="sidebar-btn" id="loadSampleBtn" type="button">载入钢结构示例</button>
@@ -60,8 +61,17 @@
 
         <section class="sidebar-section grow">
           <div class="section-label">历史会话</div>
+          <button class="mini-btn" id="refreshSessionsBtn" type="button">刷新会话</button>
           <div id="historyList" class="history-list">
             <div class="history-item muted">尚未生成会话</div>
+          </div>
+          <div class="section-label tight">提示词版本</div>
+          <div id="promptVersionList" class="history-list">
+            <div class="history-item muted">尚未生成版本</div>
+          </div>
+          <div class="section-label tight">审计日志</div>
+          <div id="auditLogList" class="history-list">
+            <div class="history-item muted">暂无审计事件</div>
           </div>
         </section>
 

@@ -172,6 +172,10 @@ button:disabled {
   margin-top: 12px;
 }
 
+.section-label.tight {
+  margin-top: 14px;
+}
+
 .upload-panel {
   display: grid;
   gap: 8px;
@@ -194,6 +198,44 @@ button:disabled {
   color: var(--muted-2);
   font-size: 0.74rem;
   line-height: 1.4;
+}
+
+.uploaded-document-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.document-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid rgba(220, 211, 195, 0.72);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.36);
+  font-size: 0.78rem;
+}
+
+.document-item strong,
+.document-item small {
+  display: block;
+}
+
+.document-item small {
+  color: var(--muted-2);
+  margin-top: 2px;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(174, 78, 64, 0.28);
+  background: rgba(174, 78, 64, 0.08);
+  color: #9a3e31;
+  font-weight: 900;
 }
 
 .knowledge-source-option {
@@ -353,6 +395,10 @@ button:disabled {
   color: var(--ink);
   line-height: 1.55;
   font-size: 0.86rem;
+}
+
+.history-item button {
+  margin-top: 7px;
 }
 
 .history-item.muted {

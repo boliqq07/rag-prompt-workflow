@@ -57,7 +57,7 @@
 
 ## 后端编排 API
 
-后端 Orchestrator 位于 [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)。会话状态会同时保存在内存和本地 JSON 文件中，默认目录为 `data/runtime`，可用 `RUNTIME_STORE_DIR` 覆盖。它提供以下接口：
+后端 Orchestrator 位于 [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)。会话状态会同时保存在内存和本地 SQLite 中，默认目录为 `data/runtime`，可用 `RUNTIME_STORE_DIR` 覆盖。它提供以下接口：
 
 创建会话：
 
@@ -324,7 +324,7 @@ curl -s -X POST http://127.0.0.1:8080/api/knowledge/search \
   -d '{"query":"氢脆 应力应变曲线 测试条件","limit":5}'
 ```
 
-也可以直接上传真实文本类文档作为 RAG 输入源。前端左侧“关联知识源”卡片提供文件选择入口；后端接口接受 `txt`、`md`、`csv`、`json` 等文本内容，写入 `data/runtime/uploads`，按段落切块并保存哈希向量：
+也可以直接上传真实文档作为 RAG 输入源。前端左侧“关联知识源”卡片提供文件选择入口；后端接口接受 `txt`、`md`、`csv`、`json`、`html`、`pdf`、`docx`、`xlsx`，会先抽取文本，再写入 SQLite 和 Milvus Lite 的 `kb_uploaded_documents` collection；如果 Milvus 入库失败，会保留本地哈希向量兜底检索：
 
 ```bash
 curl -s -X POST http://127.0.0.1:8080/api/knowledge/uploads \
@@ -332,7 +332,7 @@ curl -s -X POST http://127.0.0.1:8080/api/knowledge/uploads \
   -d '{"filename":"sample.md","content":"# 屈服强度\nYS、Rp0.2 和 yield strength 在本规范中视为同义表达。"}'
 ```
 
-上传后的文档会显示为 `上传文档` 知识源，可与 Milvus collection 一起检索，也可单独检索：
+上传后的文档会显示为 `上传文档` 知识源，可与其他 Milvus collection 一起检索，也可单独检索：
 
 ```bash
 curl -s -X POST http://127.0.0.1:8080/api/knowledge/search \
@@ -357,20 +357,33 @@ curl -s -X POST http://127.0.0.1:8080/api/knowledge/search \
 - `氢脆 Excel 抽取要求` -> `kb_hydrogen_excel`
 - `全国标准信息公共服务平台` -> `kb_samr_standards`
 - `材料大辞典第二版` -> `kb_material_dictionary`
-- `上传文档` -> `local_uploaded_documents`
+- `上传文档` -> `kb_uploaded_documents`，本地兜底 collection 标识为 `local_uploaded_documents`
 
-前端可以多选知识源。生成问答时，后端会分别检索被选中的 collection，按向量相似度和术语词面命中重排后合并召回结果，并保留 `knowledge_source_label`、`collection`、`source_type`、`source_uri` 等来源信息。
+前端可以多选知识源。生成问答时，后端会分别检索被选中的 collection，按向量相似度和术语词面命中重排后合并召回结果，并保留 `knowledge_source_label`、`collection`、`source_type`、`source_uri` 等来源信息。上传文档支持删除、重新上传和查看索引状态；删除会清理本地记录并尝试删除对应 Milvus 主键。
 
 ## 持久化存储
 
-默认运行数据写入 `data/runtime`，该目录已加入 `.gitignore`，避免上传真实业务文档、答案和审计日志。目录结构如下：
+默认运行数据写入 `data/runtime/runtime.sqlite`，该目录已加入 `.gitignore`，避免上传真实业务文档、答案和审计日志。主要表如下：
 
-- `sessions/<sessionId>.json`：会话、问题、答案、自动回答、最终提示词和更新时间。
-- `prompt_versions/<sessionId>.jsonl`：每次 finalize 生成的提示词版本、答案快照和生成方式。
-- `uploads/<documentId>.json`：上传文件 metadata、文本分块和本地哈希向量。
-- `audit.log.jsonl`：创建会话、提交答案、跳转问题、生成提示词、上传文档等审计事件。
+- `sessions`：会话、问题、答案、自动回答、最终提示词和更新时间。
+- `answers`：按 `session_id/question_id` 保存答案快照。
+- `prompt_versions`：每次 finalize 生成的提示词版本、答案快照和生成方式。
+- `uploaded_documents`：上传文件 metadata、抽取文本、Milvus collection、Milvus 主键和入库状态。
+- `document_chunks`：上传文档的本地向量兜底检索片段。
+- `audit_logs`：创建会话、提交答案、跳转问题、生成提示词、上传/删除文档等审计事件。
 
 如果要把这些数据切到外部数据库，优先替换 [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js) 的实现，保持同一组读写函数即可。
+
+## 自由文本证据解析
+
+RAG 片段除了结构化 `字段/涵盖参数/同义词组` 写法，也会解析常见自然语言证据：
+
+- `A、B、C 表示同一字段，可作为同义/别名合并到 X` -> A 级 `exact_alias`。
+- `A 又称/也称/等价于 B` -> A 级 `dictionary_alias`。
+- `A 缩写为/简称/符号为 B` -> B 级 `abbreviation`。
+- `A 不能与 B 合并` -> D 级禁止合并边界。
+
+这让直接上传普通说明文档时，也能稳定生成自动合并、建议合并和禁止合并证据。
 
 ## 动态问答编排
 
@@ -444,7 +457,10 @@ LLM_MODEL=你的模型名
 - [app.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/app.js)：前端渲染、用户输入收集、后端编排 API 调用与兜底逻辑
 - [server.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.js)：静态文件服务与 LLM 后端代理
 - [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)：后端会话编排器
-- [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js)：本地持久化存储、提示词版本、上传文档和审计日志
+- [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js)：SQLite 持久化存储、提示词版本、上传文档和审计日志
+- [scripts/extract_upload_text.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/extract_upload_text.py)：上传文档文本抽取
+- [scripts/index_uploaded_document.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/index_uploaded_document.py)：上传文档写入 Milvus
+- [scripts/delete_uploaded_document.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/delete_uploaded_document.py)：删除上传文档的 Milvus 记录
 - [scripts/ingest_knowledge.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/ingest_knowledge.py)：Excel、Markdown、网站知识入库
 - [scripts/search_knowledge.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/search_knowledge.py)：Milvus 检索、query expansion 和重排
 - [scripts/evaluate-workflows.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/evaluate-workflows.js)：工作流质量评测
@@ -454,7 +470,7 @@ LLM_MODEL=你的模型名
 
 ## 后续建议
 
-当前版本已经具备可审计评测、结构化知识 metadata、检索解释、同义词决策矩阵、动态问答编排、文件上传检索和本地持久化。下一阶段建议优先做 `最终 prompt schema 化`：
+当前版本已经具备可审计评测、结构化知识 metadata、检索解释、同义词决策矩阵、动态问答编排、真实文件上传、Milvus 上传索引、SQLite 持久化和前端会话/版本/审计视图。下一阶段建议优先做 `最终 prompt schema 化`：
 
 1. 固定最终 prompt 结构：角色、任务目标、输入说明、字段范围、同义词规则、不合并边界、证据要求、输出 schema、空值策略、质量自检。
 2. 为抽取类任务生成 JSON Schema，例如 `standard_term`、`original_text`、`evidence_sentence`、`confidence`、`notes`。

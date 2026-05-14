@@ -6,6 +6,9 @@ data/*.db.lock
 data/*.db-shm
 data/*.db-wal
 data/runtime/
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
 __pycache__/
 .pycache/
 .venv/

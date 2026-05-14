@@ -566,6 +566,13 @@ function parseKnowledgeProfile(text, scenario) {
   const synonymGroups = [];
   let currentFieldName = "";
 
+  function splitAliasText(value) {
+    return String(value || "")
+      .split(/\s*(?:[;；|、,，/]|\b和\b|\band\b)\s*/i)
+      .map(cleanBoundaryTerm)
+      .filter((item) => item && item.length <= 60);
+  }
+
   function addSynonymGroup(canonical, aliases, evidence = {}) {
     const evidenceType = evidence.evidenceType || "llm_inferred";
     const selectedTerms = chooseCanonicalTerm(canonical, aliases, evidenceType);
@@ -604,6 +611,63 @@ function parseKnowledgeProfile(text, scenario) {
       evidenceText: item,
       relationType: "知识片段禁止合并",
     });
+  }
+
+  function addFreeTextEvidenceGroups(item) {
+    const text = String(item || "").trim();
+    const explicitTargetMatch = text.match(
+      /^(.{2,160}?)(?:表示|均为|同为|都是|属于)(.{0,40}?)(?:字段|术语|表达|参数|指标)[^。；;]*?(?:可|可以|应|应该|视为|作为|按)[^。；;]*?(?:同义|别名|等价|合并|归并)[^。；;]*?(?:到|为|至)\s*([^。；;，,]{2,80})/
+    );
+    if (explicitTargetMatch) {
+      const aliases = splitAliasText(explicitTargetMatch[1]);
+      addSynonymGroup(cleanBoundaryTerm(explicitTargetMatch[3]), aliases, {
+        evidenceType: "exact_alias",
+        grade: "A",
+        relationType: "自由文本同义证据",
+        evidenceText: item,
+      });
+      return true;
+    }
+
+    const sameFieldMatch = text.match(
+      /^(.{2,180}?)(?:表示|均为|同为|都是|属于)(.{0,60}?)(?:字段|术语|表达|参数|指标)[^。；;]*?(?:同义|别名|等价|合并|归并)/
+    );
+    if (sameFieldMatch) {
+      const aliases = splitAliasText(sameFieldMatch[1]);
+      if (aliases.length >= 2) {
+        addSynonymGroup(aliases[0], aliases.slice(1), {
+          evidenceType: "exact_alias",
+          grade: "A",
+          relationType: "自由文本同义证据",
+          evidenceText: item,
+        });
+        return true;
+      }
+    }
+
+    const aliasMatch = text.match(/^([^。；;，,]{2,80}?)(?:又称|也称|亦称|别称|等价于|等同于|即)\s*([^。；;]{2,140})/);
+    if (aliasMatch) {
+      addSynonymGroup(cleanBoundaryTerm(aliasMatch[1]), splitAliasText(aliasMatch[2]), {
+        evidenceType: "dictionary_alias",
+        grade: "A",
+        relationType: "自由文本又称/等价",
+        evidenceText: item,
+      });
+      return true;
+    }
+
+    const abbreviationMatch = text.match(/^([^。；;，,]{2,80}?)(?:缩写为|简称|符号为|记作)\s*([^。；;，,]{2,80})/);
+    if (abbreviationMatch) {
+      addSynonymGroup(cleanBoundaryTerm(abbreviationMatch[1]), splitAliasText(abbreviationMatch[2]), {
+        evidenceType: "abbreviation",
+        grade: "B",
+        relationType: "自由文本缩写/符号",
+        evidenceText: item,
+      });
+      return true;
+    }
+
+    return false;
   }
 
   String(text || "")
@@ -659,6 +723,11 @@ function parseKnowledgeProfile(text, scenario) {
           evidenceType: "dictionary_see_also",
           evidenceText: item,
         });
+        addForbiddenBoundaryGroups(item);
+        return;
+      }
+
+      if (addFreeTextEvidenceGroups(item)) {
         addForbiddenBoundaryGroups(item);
         return;
       }

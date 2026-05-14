@@ -17,6 +17,20 @@ from ingest_knowledge import DEFAULT_COLLECTION, DEFAULT_DB_PATH, embed_texts, l
 ROOT = Path(__file__).resolve().parents[1]
 warnings.filterwarnings("ignore", message="pkg_resources is deprecated as an API.*", category=UserWarning)
 
+QUERY_EXPANSIONS = {
+    "yield strength": ["YS", "σ0.2", "Rp0.2", "屈服强度"],
+    "屈服强度": ["yield strength", "YS", "σ0.2", "Rp0.2"],
+    "strength loss ratio": ["percentage loss of strength", "reduction in strength", "strength loss", "IUTS", "强度损失率"],
+    "强度损失率": ["strength loss ratio", "percentage loss of strength", "reduction in strength", "IUTS"],
+    "foam glass": ["porous glass", "泡沫玻璃", "多孔玻璃"],
+    "泡沫玻璃": ["foam glass", "porous glass", "多孔玻璃"],
+    "gamma prime": ["γ'", "γ'强化相", "gamma prime strengthening phase"],
+    "γ'强化相": ["gamma prime", "γ'", "gamma prime strengthening phase"],
+    "test temperature": ["testing temperature", "试验温度", "测试温度", "温度"],
+    "pre-strain rate": ["pre strain rate", "预应变速率"],
+    "charging time": ["hydrogen charging duration", "充氢时间"],
+}
+
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Search the local Milvus knowledge collection.")
@@ -57,42 +71,85 @@ def query_words(query: str) -> list[str]:
     return sorted(set(re.findall(r"[a-z0-9][a-z0-9_\-/.]{1,}", query.lower())), key=len, reverse=True)
 
 
-def lexical_score(query: str, title: str, text: str, metadata_json: str) -> float:
+def expanded_query_phrases(query: str) -> list[tuple[str, float, str]]:
+    terms: dict[str, tuple[float, str]] = {}
+
+    def add(term: str, weight: float, reason: str) -> None:
+        clean = term.strip()
+        if len(clean) < 2:
+            return
+        current = terms.get(clean)
+        if current and current[0] >= weight:
+            return
+        terms[clean] = (weight, reason)
+
+    for phrase in query_phrases(query):
+        add(phrase, 1.0, "query_phrase")
+
+    lowered = query.lower()
+    for trigger, expansions in QUERY_EXPANSIONS.items():
+        if trigger.lower() not in lowered and trigger not in query:
+            continue
+        for expansion in expansions:
+            add(expansion, 0.85, f"expanded_from:{trigger}")
+
+    return sorted(((term, weight, reason) for term, (weight, reason) in terms.items()), key=lambda item: len(item[0]), reverse=True)
+
+
+def metadata_terms(metadata: dict) -> list[str]:
+    values = [
+        metadata.get("term"),
+        metadata.get("english"),
+        metadata.get("canonical_name"),
+        metadata.get("field_name"),
+    ]
+    values.extend(metadata.get("aliases") or [])
+    return [str(item) for item in values if item]
+
+
+def lexical_score_detail(query: str, title: str, text: str, metadata_json: str) -> tuple[float, list[str]]:
     title = title or ""
     text = text or ""
     lower_title = title.lower()
     lower_text = text.lower()
     score = 0.0
+    reasons: list[str] = []
 
     try:
         metadata = json.loads(metadata_json or "{}")
     except json.JSONDecodeError:
         metadata = {}
-    term = str(metadata.get("term") or "")
-    english = str(metadata.get("english") or "")
-    canonical_name = str(metadata.get("canonical_name") or metadata.get("field_name") or "")
-    aliases = [str(item) for item in metadata.get("aliases") or [] if item]
-    metadata_terms = [term, english, canonical_name, *aliases]
-    metadata_terms_lower = [item.lower() for item in metadata_terms if item]
+    structured_terms = metadata_terms(metadata)
+    metadata_terms_lower = [item.lower() for item in structured_terms]
 
-    for phrase in query_phrases(query):
+    for phrase, weight, reason in expanded_query_phrases(query):
         phrase_lower = phrase.lower()
         if phrase and phrase_lower in metadata_terms_lower:
-            score += 6.0 + min(len(phrase) * 0.08, 0.8)
+            score += (6.0 + min(len(phrase) * 0.08, 0.8)) * weight
+            reasons.append(f"metadata:{phrase}:{reason}")
         elif phrase in title or phrase_lower in lower_title:
-            score += 1.4 + min(len(phrase) * 0.04, 0.45)
+            score += (1.4 + min(len(phrase) * 0.04, 0.45)) * weight
+            reasons.append(f"title:{phrase}:{reason}")
         elif phrase in text or phrase_lower in lower_text:
-            score += 0.45 + min(len(phrase) * 0.02, 0.25)
+            score += (0.45 + min(len(phrase) * 0.02, 0.25)) * weight
+            reasons.append(f"text:{phrase}:{reason}")
 
     for word in query_words(query):
         if word in metadata_terms_lower:
             score += 1.4
+            reasons.append(f"metadata_word:{word}")
         elif word in lower_title:
             score += 0.7
+            reasons.append(f"title_word:{word}")
         elif word in lower_text:
             score += 0.18
+            reasons.append(f"text_word:{word}")
 
-    return score
+    return score, reasons[:12]
+
+
+def lexical_score(query: str, title: str, text: str, metadata_json: str) -> float:
+    return lexical_score_detail(query, title, text, metadata_json)[0]
 
 
 def main(argv: list[str]) -> int:
@@ -116,7 +173,7 @@ def main(argv: list[str]) -> int:
         reranked = []
         for hit in hits:
             entity = hit.get("entity", {})
-            rerank_score = lexical_score(
+            rerank_score, match_reasons = lexical_score_detail(
                 args.query,
                 entity.get("title") or "",
                 entity.get("text") or "",
@@ -138,6 +195,7 @@ def main(argv: list[str]) -> int:
                         "distance": final_score,
                         "vector_distance": vector_distance,
                         "rerank_score": rerank_score,
+                        "match_reasons": match_reasons,
                         "title": entity.get("title"),
                         "source_type": entity.get("source_type"),
                         "source_uri": entity.get("source_uri"),

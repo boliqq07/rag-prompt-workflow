@@ -1,6 +1,6 @@
 # RAG 智能体问答系统
 
-一个本地 Web 应用，用来把用户的原始模糊提示词逐步细化为可执行、可导出的规范提示词。应用包含前端工作台和 Node.js 后端代理，可真实接入 OpenAI-compatible LLM。
+一个本地 Web 应用，用来把用户的原始模糊提示词逐步细化为可执行、可导出的规范提示词。应用包含前端工作台和 Python 后端代理，可真实接入 OpenAI-compatible LLM。
 
 ## 当前能力
 
@@ -36,7 +36,7 @@
 
 ## 平台扩展边界
 
-当前版本已进入后端编排阶段。前端主流程会优先调用后端 Orchestrator；如果后端不可用，才回退到浏览器内置模板。后端当前使用内存会话版 Orchestrator，用来承接会话状态、问题推进和提示词生成。
+当前版本已进入后端编排阶段。前端主流程会优先调用后端 Orchestrator；如果后端不可用，才回退到浏览器内置模板。主后端已经迁移为 Python，实现会话状态、问题推进、提示词生成、知识检索、上传文档和持久化存储。
 
 - `知识库检索服务`：根据原始提示词召回术语、标准条目、同义词、字段模板。
 - `问答编排服务`：基于任务类型动态生成单选、多选、判断和补充说明问题。
@@ -57,7 +57,7 @@
 
 ## 后端编排 API
 
-后端 Orchestrator 位于 [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)。会话状态会同时保存在内存和本地 SQLite 中，默认目录为 `data/runtime`，可用 `RUNTIME_STORE_DIR` 覆盖。它提供以下接口：
+后端 Orchestrator 位于 [backend/orchestrator.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.py)。会话状态会同时保存在内存和本地 SQLite 中，默认目录为 `data/runtime`，可用 `RUNTIME_STORE_DIR` 覆盖。它提供以下接口：
 
 创建会话：
 
@@ -131,6 +131,12 @@ cp .env.example .env
 
 ```bash
 npm start
+```
+
+`npm start` 默认启动 [server.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.py)。如果需要对照旧版 Node 实现，可运行：
+
+```bash
+npm run start:node
 ```
 
 访问：
@@ -220,7 +226,7 @@ npm run review
 
 该命令会执行：
 
-- `npm run check`：Node 语法检查。
+- `npm run check`：Node 兼容代码语法检查 + Python 后端语法检查。
 - 启动一个临时本地服务。
 - 跑全部黄金评测集。
 - 要求每条 fixture 分数达到 `100`，否则返回失败码。
@@ -373,7 +379,7 @@ curl -s -X POST http://127.0.0.1:8080/api/knowledge/search \
 - `audit_logs`：创建会话、提交答案、跳转问题、生成提示词、上传/删除文档等审计事件。
 - `settings`：可选保存本机 LLM 接口配置。API Key 不会提交到 Git，但如果勾选“记住到本机”，会写入本机 `runtime.sqlite`。
 
-如果要把这些数据切到外部数据库，优先替换 [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js) 的实现，保持同一组读写函数即可。
+如果要把这些数据切到外部数据库，优先替换 [backend/storage.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.py) 的实现，保持同一组读写函数即可。
 
 ## 自由文本证据解析
 
@@ -427,7 +433,7 @@ EMBEDDING_API_KEY=你的 API Key
 
 ## 真实接入 LLM
 
-后端代理 [server.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.js) 支持 OpenAI-compatible Chat Completions 接口。API Key 可以放在服务端 `.env` / 环境变量中，也可以在页面左侧 `LLM 接入` 卡片中配置。页面只把 Key 发送到本机后端，不会在 `/api/config` 或 `/api/health` 中回显明文。
+后端代理 [server.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.py) 支持 OpenAI-compatible Chat Completions 接口。API Key 可以放在服务端 `.env` / 环境变量中，也可以在页面左侧 `LLM 接入` 卡片中配置。页面只把 Key 发送到本机后端，不会在 `/api/config` 或 `/api/health` 中回显明文。
 
 OpenAI 示例：
 
@@ -463,9 +469,12 @@ LLM_MODEL=你的模型名
 - [index.html](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/index.html)：页面结构
 - [styles.css](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/styles.css)：视觉样式
 - [app.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/app.js)：前端渲染、用户输入收集、后端编排 API 调用与兜底逻辑
-- [server.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.js)：静态文件服务与 LLM 后端代理
-- [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)：后端会话编排器
-- [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js)：SQLite 持久化存储、提示词版本、上传文档和审计日志
+- [server.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.py)：Python 静态文件服务、LLM 后端代理、知识库与上传文档 API
+- [backend/orchestrator.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.py)：Python 后端会话编排器
+- [backend/storage.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.py)：Python SQLite 持久化存储、提示词版本、上传文档和审计日志
+- [server.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.js)：旧版 Node 后端兼容实现，用于回归对照
+- [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)：旧版 Node 会话编排器兼容实现
+- [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js)：旧版 Node SQLite 存储兼容实现
 - [scripts/extract_upload_text.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/extract_upload_text.py)：上传文档文本抽取
 - [scripts/index_uploaded_document.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/index_uploaded_document.py)：上传文档写入 Milvus
 - [scripts/delete_uploaded_document.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/delete_uploaded_document.py)：删除上传文档的 Milvus 记录

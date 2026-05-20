@@ -147,11 +147,35 @@ http://127.0.0.1:8080
 
 如果暂时不配置 `LLM_API_KEY`，应用仍可启动，本地模板问答流程仍然可用；只是 `LLM 生成问答` 和 `LLM 归纳提示词` 会保持禁用。
 
+## 依赖安装说明
+
+基础演示只需要 Python 3 和浏览器即可运行：
+
+```bash
+npm start
+```
+
+这种模式可以展示前端工作台、Python 后端编排、本地模板问答、会话持久化、上传文本和本地哈希向量兜底检索。
+
+如果要完整展示真实 RAG 链路，建议额外安装 Milvus Lite 依赖：
+
+```bash
+python3 -m pip install -r requirements-rag.txt
+```
+
+`requirements-rag.txt` 主要包含：
+
+- `pymilvus[milvus_lite]`：本地 Milvus Lite collection、上传文档入库、真实向量检索。
+- `openpyxl`：读取 Excel 知识源。
+- `setuptools`：兼容部分 Python 包运行时依赖。
+
+未安装 `pymilvus` 时，系统不会崩溃；上传文档会继续写入 SQLite，并使用本地哈希向量检索兜底。但页面和接口会显示 Milvus 入库失败信息。给老师演示“真实文档作为 RAG 输入源”时，推荐先安装 `requirements-rag.txt`，这样上传文档会同时写入 `kb_uploaded_documents` collection。
+
 ## 知识库入库：Excel + 标准网站 + 材料词典
 
 新增的 Milvus 入库脚本位于 [scripts/ingest_knowledge.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/ingest_knowledge.py)，检索自测脚本位于 [scripts/search_knowledge.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/scripts/search_knowledge.py)。当前实现对齐 Milvus 官方快速开始的 Milvus Lite 路径：本地使用 `pymilvus`，数据写入一个 `.db` 文件；后续切到 Docker/K8s Milvus 时，只需要把客户端连接参数替换为服务端 URI。
 
-安装依赖：
+首次写入或检索 Milvus collection 前，先安装 RAG 依赖：
 
 ```bash
 python3 -m pip install -r requirements-rag.txt

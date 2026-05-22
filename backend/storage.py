@@ -1,6 +1,6 @@
 import json
-import os
 import sqlite3
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -28,15 +28,17 @@ class RuntimeStorage:
         self.base_dir.mkdir(parents=True, exist_ok=True)
         self.source_files_dir.mkdir(parents=True, exist_ok=True)
         self.db_path = self.base_dir / "runtime.sqlite"
+        self.lock = threading.RLock()
         self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
         self.conn.row_factory = sqlite3.Row
         self._init_schema()
 
     def _init_schema(self):
-        self.conn.executescript(
-            """
-            PRAGMA journal_mode = WAL;
-            PRAGMA foreign_keys = ON;
+        with self.lock:
+            self.conn.executescript(
+                """
+                PRAGMA journal_mode = WAL;
+                PRAGMA foreign_keys = ON;
 
             CREATE TABLE IF NOT EXISTS sessions (
               id TEXT PRIMARY KEY,
@@ -121,13 +123,13 @@ class RuntimeStorage:
               value_json TEXT NOT NULL,
               updated_at TEXT NOT NULL
             );
-            """
-        )
-        self.conn.commit()
+                """
+            )
+            self.conn.commit()
 
     def save_session(self, session):
         updated_at = session.get("updatedAt") or now_iso()
-        with self.conn:
+        with self.lock, self.conn:
             self.conn.execute(
                 """
                 INSERT INTO sessions (
@@ -175,37 +177,39 @@ class RuntimeStorage:
                 )
 
     def load_session(self, session_id):
-        row = self.conn.execute("SELECT payload_json FROM sessions WHERE id = ?", (session_id,)).fetchone()
-        return from_json(row["payload_json"]) if row else None
+        with self.lock:
+            row = self.conn.execute("SELECT payload_json FROM sessions WHERE id = ?", (session_id,)).fetchone()
+            return from_json(row["payload_json"]) if row else None
 
     def list_sessions(self, limit=100):
         safe_limit = max(1, min(int(limit or 100), 500))
-        rows = self.conn.execute(
-            """
-            SELECT id, prompt, workflow, source_mode, model, scenario_json, final_prompt, created_at, updated_at
-            FROM sessions
-            ORDER BY updated_at DESC
-            LIMIT ?
-            """,
-            (safe_limit,),
-        ).fetchall()
-        return [
-            {
-                "id": row["id"],
-                "prompt": row["prompt"],
-                "workflow": row["workflow"],
-                "sourceMode": row["source_mode"],
-                "model": row["model"],
-                "scenario": from_json(row["scenario_json"]),
-                "finalPrompt": row["final_prompt"],
-                "createdAt": row["created_at"],
-                "updatedAt": row["updated_at"],
-            }
-            for row in rows
-        ]
+        with self.lock:
+            rows = self.conn.execute(
+                """
+                SELECT id, prompt, workflow, source_mode, model, scenario_json, final_prompt, created_at, updated_at
+                FROM sessions
+                ORDER BY updated_at DESC
+                LIMIT ?
+                """,
+                (safe_limit,),
+            ).fetchall()
+            return [
+                {
+                    "id": row["id"],
+                    "prompt": row["prompt"],
+                    "workflow": row["workflow"],
+                    "sourceMode": row["source_mode"],
+                    "model": row["model"],
+                    "scenario": from_json(row["scenario_json"]),
+                    "finalPrompt": row["final_prompt"],
+                    "createdAt": row["created_at"],
+                    "updatedAt": row["updated_at"],
+                }
+                for row in rows
+            ]
 
     def append_prompt_version(self, version):
-        with self.conn:
+        with self.lock, self.conn:
             self.conn.execute(
                 """
                 INSERT INTO prompt_versions (
@@ -235,33 +239,34 @@ class RuntimeStorage:
             )
 
     def list_prompt_versions(self, session_id):
-        rows = self.conn.execute(
-            "SELECT * FROM prompt_versions WHERE session_id = ? ORDER BY created_at DESC",
-            (session_id,),
-        ).fetchall()
-        return [
-            {
-                "versionId": row["version_id"],
-                "sessionId": row["session_id"],
-                "workflow": row["workflow"],
-                "sourceMode": row["source_mode"],
-                "promptMode": row["prompt_mode"],
-                "promptSource": from_json(row["prompt_source_json"]),
-                "prompt": row["prompt"],
-                "knowledge": row["knowledge"],
-                "knowledgeProfile": from_json(row["knowledge_profile_json"]),
-                "answers": from_json(row["answers_json"], {}),
-                "customAnswers": from_json(row["custom_answers_json"], {}),
-                "autoAnswers": from_json(row["auto_answers_json"], {}),
-                "refinements": from_json(row["refinements_json"], []),
-                "finalPrompt": row["final_prompt"],
-                "createdAt": row["created_at"],
-            }
-            for row in rows
-        ]
+        with self.lock:
+            rows = self.conn.execute(
+                "SELECT * FROM prompt_versions WHERE session_id = ? ORDER BY created_at DESC",
+                (session_id,),
+            ).fetchall()
+            return [
+                {
+                    "versionId": row["version_id"],
+                    "sessionId": row["session_id"],
+                    "workflow": row["workflow"],
+                    "sourceMode": row["source_mode"],
+                    "promptMode": row["prompt_mode"],
+                    "promptSource": from_json(row["prompt_source_json"]),
+                    "prompt": row["prompt"],
+                    "knowledge": row["knowledge"],
+                    "knowledgeProfile": from_json(row["knowledge_profile_json"]),
+                    "answers": from_json(row["answers_json"], {}),
+                    "customAnswers": from_json(row["custom_answers_json"], {}),
+                    "autoAnswers": from_json(row["auto_answers_json"], {}),
+                    "refinements": from_json(row["refinements_json"], []),
+                    "finalPrompt": row["final_prompt"],
+                    "createdAt": row["created_at"],
+                }
+                for row in rows
+            ]
 
     def append_audit(self, event):
-        with self.conn:
+        with self.lock, self.conn:
             self.conn.execute(
                 """
                 INSERT INTO audit_logs (type, session_id, document_id, detail_json, created_at)
@@ -279,10 +284,11 @@ class RuntimeStorage:
     def _document_from_row(self, row, include_text=False):
         if not row:
             return None
-        chunk_rows = self.conn.execute(
-            "SELECT * FROM document_chunks WHERE document_id = ? ORDER BY chunk_index ASC",
-            (row["id"],),
-        ).fetchall()
+        with self.lock:
+            chunk_rows = self.conn.execute(
+                "SELECT * FROM document_chunks WHERE document_id = ? ORDER BY chunk_index ASC",
+                (row["id"],),
+            ).fetchall()
         chunks = [
             {
                 "id": chunk["chunk_id"],
@@ -310,7 +316,7 @@ class RuntimeStorage:
         }
 
     def save_uploaded_document(self, document):
-        with self.conn:
+        with self.lock, self.conn:
             self.conn.execute(
                 """
                 INSERT INTO uploaded_documents (
@@ -366,36 +372,39 @@ class RuntimeStorage:
                 )
 
     def update_uploaded_document_index(self, document_id, milvus_collection="", milvus_record_ids=None, milvus_status=None):
-        document = self.get_uploaded_document(document_id, include_text=True)
-        if not document:
-            return None
-        document.update(
-            {
-                "milvusCollection": milvus_collection,
-                "milvusRecordIds": milvus_record_ids or [],
-                "milvusStatus": milvus_status,
-                "updatedAt": now_iso(),
-            }
-        )
-        self.save_uploaded_document(document)
-        return self.get_uploaded_document(document_id, include_text=True)
+        with self.lock:
+            document = self.get_uploaded_document(document_id, include_text=True)
+            if not document:
+                return None
+            document.update(
+                {
+                    "milvusCollection": milvus_collection,
+                    "milvusRecordIds": milvus_record_ids or [],
+                    "milvusStatus": milvus_status,
+                    "updatedAt": now_iso(),
+                }
+            )
+            self.save_uploaded_document(document)
+            return self.get_uploaded_document(document_id, include_text=True)
 
     def list_uploaded_documents(self, include_text=False):
-        rows = self.conn.execute(
-            "SELECT * FROM uploaded_documents WHERE deleted_at IS NULL ORDER BY created_at ASC"
-        ).fetchall()
-        return [self._document_from_row(row, include_text=include_text) for row in rows]
+        with self.lock:
+            rows = self.conn.execute(
+                "SELECT * FROM uploaded_documents WHERE deleted_at IS NULL ORDER BY created_at ASC"
+            ).fetchall()
+            return [self._document_from_row(row, include_text=include_text) for row in rows]
 
     def get_uploaded_document(self, document_id, include_text=False):
-        row = self.conn.execute(
-            "SELECT * FROM uploaded_documents WHERE id = ? AND deleted_at IS NULL",
-            (document_id,),
-        ).fetchone()
-        return self._document_from_row(row, include_text=include_text)
+        with self.lock:
+            row = self.conn.execute(
+                "SELECT * FROM uploaded_documents WHERE id = ? AND deleted_at IS NULL",
+                (document_id,),
+            ).fetchone()
+            return self._document_from_row(row, include_text=include_text)
 
     def delete_uploaded_document(self, document_id):
         timestamp = now_iso()
-        with self.conn:
+        with self.lock, self.conn:
             self.conn.execute(
                 "UPDATE uploaded_documents SET deleted_at = ?, updated_at = ? WHERE id = ?",
                 (timestamp, timestamp, document_id),
@@ -403,28 +412,30 @@ class RuntimeStorage:
 
     def list_audit_logs(self, limit=100):
         safe_limit = max(1, min(int(limit or 100), 1000))
-        rows = self.conn.execute(
-            "SELECT * FROM audit_logs ORDER BY created_at DESC, id DESC LIMIT ?",
-            (safe_limit,),
-        ).fetchall()
-        return [
-            {
-                "id": row["id"],
-                "type": row["type"],
-                "sessionId": row["session_id"],
-                "documentId": row["document_id"],
-                "detail": from_json(row["detail_json"], {}),
-                "createdAt": row["created_at"],
-            }
-            for row in rows
-        ]
+        with self.lock:
+            rows = self.conn.execute(
+                "SELECT * FROM audit_logs ORDER BY created_at DESC, id DESC LIMIT ?",
+                (safe_limit,),
+            ).fetchall()
+            return [
+                {
+                    "id": row["id"],
+                    "type": row["type"],
+                    "sessionId": row["session_id"],
+                    "documentId": row["document_id"],
+                    "detail": from_json(row["detail_json"], {}),
+                    "createdAt": row["created_at"],
+                }
+                for row in rows
+            ]
 
     def get_setting(self, key, fallback=None):
-        row = self.conn.execute("SELECT value_json FROM settings WHERE key = ?", (key,)).fetchone()
-        return from_json(row["value_json"], fallback) if row else fallback
+        with self.lock:
+            row = self.conn.execute("SELECT value_json FROM settings WHERE key = ?", (key,)).fetchone()
+            return from_json(row["value_json"], fallback) if row else fallback
 
     def set_setting(self, key, value):
-        with self.conn:
+        with self.lock, self.conn:
             self.conn.execute(
                 """
                 INSERT INTO settings (key, value_json, updated_at)
@@ -439,4 +450,3 @@ class RuntimeStorage:
 
 def create_runtime_storage(root_dir=None):
     return RuntimeStorage(root_dir=root_dir)
-

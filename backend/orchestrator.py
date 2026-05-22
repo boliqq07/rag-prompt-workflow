@@ -2,6 +2,18 @@ import json
 import re
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def load_json_config(filename, fallback):
+    config_path = ROOT / "config" / filename
+    try:
+        return json.loads(config_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return fallback
 
 
 def now_iso():
@@ -66,23 +78,7 @@ GENERIC_LIBRARY = {
     },
 }
 
-SYNONYM_DICTIONARY = {
-    "强度": ["strength（强度）", "承载力", "极限强度"],
-    "刚度": ["stiffness（刚度）", "抗变形能力"],
-    "稳定性": ["stability（稳定性）", "整体稳定", "局部稳定"],
-    "延性": ["ductility（延性）", "塑性变形能力"],
-    "韧性": ["toughness（韧性）", "断裂韧性"],
-    "抗腐蚀性": ["corrosion resistance（抗腐蚀性）", "耐蚀性"],
-    "屈服性能": ["yield behavior（屈服性能）", "屈服强度"],
-    "点蚀": ["pitting corrosion（点蚀）"],
-    "缝隙腐蚀": ["crevice corrosion（缝隙腐蚀）"],
-    "晶间腐蚀": ["intergranular corrosion（晶间腐蚀）"],
-    "应力腐蚀": ["stress corrosion（应力腐蚀）"],
-    "材料组成": ["material composition（材料组成）"],
-    "工艺参数": ["process parameter（工艺参数）"],
-    "性能指标": ["performance metric（性能指标）"],
-    "测试方法": ["test method（测试方法）"],
-}
+SYNONYM_DICTIONARY = load_json_config("synonym_examples.json", {})
 
 EVIDENCE_DECISION_MATRIX = {
     "excel_includes_parameter": {"grade": "A", "action": "自动合并", "relationType": "字段涵盖参数"},

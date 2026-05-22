@@ -17,19 +17,18 @@ from ingest_knowledge import DEFAULT_COLLECTION, DEFAULT_DB_PATH, embed_texts, l
 ROOT = Path(__file__).resolve().parents[1]
 warnings.filterwarnings("ignore", message="pkg_resources is deprecated as an API.*", category=UserWarning)
 
-QUERY_EXPANSIONS = {
-    "yield strength": ["YS", "σ0.2", "Rp0.2", "屈服强度"],
-    "屈服强度": ["yield strength", "YS", "σ0.2", "Rp0.2"],
-    "strength loss ratio": ["percentage loss of strength", "reduction in strength", "strength loss", "IUTS", "强度损失率"],
-    "强度损失率": ["strength loss ratio", "percentage loss of strength", "reduction in strength", "IUTS"],
-    "foam glass": ["porous glass", "泡沫玻璃", "多孔玻璃"],
-    "泡沫玻璃": ["foam glass", "porous glass", "多孔玻璃"],
-    "gamma prime": ["γ'", "γ'强化相", "gamma prime strengthening phase"],
-    "γ'强化相": ["gamma prime", "γ'", "gamma prime strengthening phase"],
-    "test temperature": ["testing temperature", "试验温度", "测试温度", "温度"],
-    "pre-strain rate": ["pre strain rate", "预应变速率"],
-    "charging time": ["hydrogen charging duration", "充氢时间"],
-}
+
+def load_json_config(filename: str, fallback: dict[str, list[str]]) -> dict[str, list[str]]:
+    try:
+        payload = json.loads((ROOT / "config" / filename).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return fallback
+    if not isinstance(payload, dict):
+        return fallback
+    return {str(key): [str(item) for item in value] for key, value in payload.items() if isinstance(value, list)}
+
+
+QUERY_EXPANSIONS = load_json_config("query_expansions.json", {})
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:

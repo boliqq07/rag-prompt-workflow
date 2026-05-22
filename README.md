@@ -496,6 +496,8 @@ LLM_MODEL=你的模型名
 - [server.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.py)：Python 静态文件服务、LLM 后端代理、知识库与上传文档 API
 - [backend/orchestrator.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.py)：Python 后端会话编排器
 - [backend/storage.py](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.py)：Python SQLite 持久化存储、提示词版本、上传文档和审计日志
+- [config/synonym_examples.json](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/config/synonym_examples.json)：通用同义词演示配置，供无 RAG 兜底和前端离线兜底使用
+- [config/query_expansions.json](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/config/query_expansions.json)：检索 query expansion 配置，用于 Milvus 检索重排
 - [server.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/server.js)：旧版 Node 后端兼容实现，用于回归对照
 - [backend/orchestrator.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/orchestrator.js)：旧版 Node 会话编排器兼容实现
 - [backend/storage.js](/Users/cyc/Desktop/相关文档/00-项目/szlab/RAG智能体问答系统/backend/storage.js)：旧版 Node SQLite 存储兼容实现

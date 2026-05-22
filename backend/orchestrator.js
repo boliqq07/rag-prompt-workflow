@@ -1,4 +1,15 @@
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
+
+function loadJsonConfig(filename, fallback) {
+  try {
+    const configPath = path.join(__dirname, "..", "config", filename);
+    return JSON.parse(fs.readFileSync(configPath, "utf8"));
+  } catch (_error) {
+    return fallback;
+  }
+}
 
 const FLOW_STEPS = [
   { id: "role", title: "角色与背景", description: "确定业务身份与任务语境" },
@@ -65,34 +76,7 @@ const GENERIC_LIBRARY = {
   },
 };
 
-const SYNONYM_DICTIONARY = {
-  强度: ["strength（强度）", "承载力", "极限强度"],
-  刚度: ["stiffness（刚度）", "抗变形能力"],
-  稳定性: ["stability（稳定性）", "整体稳定", "局部稳定"],
-  延性: ["ductility（延性）", "塑性变形能力"],
-  韧性: ["toughness（韧性）", "断裂韧性"],
-  耐火性: ["fire resistance（耐火性）", "耐火极限"],
-  耐久性: ["durability（耐久性）", "服役寿命"],
-  抗震性: ["seismic resistance（抗震性）", "抗震性能"],
-  抗腐蚀性: ["corrosion resistance（抗腐蚀性）", "耐蚀性"],
-  疲劳性能: ["fatigue performance（疲劳性能）", "抗疲劳能力"],
-  屈服性能: ["yield behavior（屈服性能）", "屈服强度"],
-  承载能力: ["load-bearing capacity（承载能力）", "承载极限"],
-  点蚀: ["pitting corrosion（点蚀）"],
-  缝隙腐蚀: ["crevice corrosion（缝隙腐蚀）"],
-  晶间腐蚀: ["intergranular corrosion（晶间腐蚀）"],
-  应力腐蚀: ["stress corrosion（应力腐蚀）"],
-  腐蚀速率: ["corrosion rate（腐蚀速率）"],
-  腐蚀电位: ["corrosion potential（腐蚀电位）"],
-  失重: ["weight loss（失重）"],
-  温度: ["temperature（温度）"],
-  "pH 值": ["pH value（酸碱度）"],
-  材料组成: ["material composition（材料组成）"],
-  工艺参数: ["process parameter（工艺参数）"],
-  性能指标: ["performance metric（性能指标）"],
-  测试方法: ["test method（测试方法）"],
-  实验条件: ["experimental condition（实验条件）"],
-};
+const SYNONYM_DICTIONARY = loadJsonConfig("synonym_examples.json", {});
 
 const EVIDENCE_GRADE = {
   A: "A 级：证据强，可自动合并",

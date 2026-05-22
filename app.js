@@ -113,34 +113,7 @@ const GENERIC_LIBRARY = {
   },
 };
 
-const SYNONYM_DICTIONARY = {
-  强度: ["strength（强度）", "承载力", "极限强度"],
-  刚度: ["stiffness（刚度）", "抗变形能力"],
-  稳定性: ["stability（稳定性）", "整体稳定", "局部稳定"],
-  延性: ["ductility（延性）", "塑性变形能力"],
-  韧性: ["toughness（韧性）", "断裂韧性"],
-  耐火性: ["fire resistance（耐火性）", "耐火极限"],
-  耐久性: ["durability（耐久性）", "服役寿命"],
-  抗震性: ["seismic resistance（抗震性）", "抗震性能"],
-  抗腐蚀性: ["corrosion resistance（抗腐蚀性）", "耐蚀性"],
-  疲劳性能: ["fatigue performance（疲劳性能）", "抗疲劳能力"],
-  屈服性能: ["yield behavior（屈服性能）", "屈服强度"],
-  承载能力: ["load-bearing capacity（承载能力）", "承载极限"],
-  点蚀: ["pitting corrosion（点蚀）"],
-  缝隙腐蚀: ["crevice corrosion（缝隙腐蚀）"],
-  晶间腐蚀: ["intergranular corrosion（晶间腐蚀）"],
-  应力腐蚀: ["stress corrosion（应力腐蚀）"],
-  腐蚀速率: ["corrosion rate（腐蚀速率）"],
-  腐蚀电位: ["corrosion potential（腐蚀电位）"],
-  失重: ["weight loss（失重）"],
-  温度: ["temperature（温度）"],
-  "pH 值": ["pH value（酸碱度）"],
-  材料组成: ["material composition（材料组成）"],
-  工艺参数: ["process parameter（工艺参数）"],
-  性能指标: ["performance metric（性能指标）"],
-  测试方法: ["test method（测试方法）"],
-  实验条件: ["experimental condition（实验条件）"],
-};
+let synonymDictionary = {};
 
 const EVIDENCE_GRADE = {
   A: "A 级：证据强，可自动合并",
@@ -513,6 +486,17 @@ const state = {
   uploadBusy: false,
   lastHealthCheckAt: 0,
 };
+
+async function loadSynonymExamples() {
+  try {
+    const response = await fetch("./config/synonym_examples.json", { cache: "no-store" });
+    if (!response.ok) return;
+    const payload = await response.json();
+    synonymDictionary = payload && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  } catch (_error) {
+    synonymDictionary = {};
+  }
+}
 
 const elements = {
   workflowSwitch: document.querySelector("#workflowSwitch"),
@@ -893,7 +877,7 @@ function getSynonymOptions(terms) {
     const termKey = normalizeAlias(term);
     if (!termKey || usedKeys.has(termKey)) return;
     const ragRelated = (state.knowledgeProfile && state.knowledgeProfile.synonyms[term]) || [];
-    const related = [...new Set([...ragRelated, ...(SYNONYM_DICTIONARY[term] || [])])].filter(
+    const related = [...new Set([...ragRelated, ...(synonymDictionary[term] || [])])].filter(
       (item) => normalizeAlias(item) && normalizeAlias(item) !== termKey && !usedKeys.has(normalizeAlias(item))
     );
     if (!related.length) return;
@@ -3208,6 +3192,7 @@ elements.todayLabel.textContent = new Date().toLocaleDateString("zh-CN", {
   day: "2-digit",
 });
 
+loadSynonymExamples();
 resetApp();
 checkLLMHealth();
 loadLLMConfig();

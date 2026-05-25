@@ -40,7 +40,7 @@ WORKFLOW_DEFINITIONS = {
         ],
     },
     "prompt_generation": {
-        "label": "完整任务提示词",
+        "label": "生成可执行提示词",
         "steps": [
             {"id": "role", "title": "使用场景", "description": "确定模型角色与 prompt 用途"},
             {"id": "target", "title": "任务目标", "description": "确认待处理文档、任务边界和输入变量"},
@@ -96,7 +96,7 @@ EVIDENCE_DECISION_MATRIX = {
 
 
 def workflow_definition(workflow):
-    return WORKFLOW_DEFINITIONS.get(workflow) or WORKFLOW_DEFINITIONS["field_template"]
+    return WORKFLOW_DEFINITIONS.get(workflow) or WORKFLOW_DEFINITIONS["prompt_generation"]
 
 
 def infer_scenario(prompt_text):
@@ -677,7 +677,7 @@ class Orchestrator:
         if not prompt:
             raise ValueError("prompt is required.")
         source_mode = "rag" if input_data.get("sourceMode") == "rag" else "generic"
-        workflow = input_data.get("workflow") if input_data.get("workflow") in WORKFLOW_DEFINITIONS else "field_template"
+        workflow = input_data.get("workflow") if input_data.get("workflow") in WORKFLOW_DEFINITIONS else "prompt_generation"
         model = input_data.get("model") or self.default_model
         knowledge = str(input_data.get("knowledge") or "").strip()
         scenario = infer_scenario(prompt)

@@ -43,7 +43,7 @@ const WORKFLOW_DEFINITIONS = {
     ],
   },
   prompt_generation: {
-    label: "完整任务提示词",
+    label: "生成可执行提示词",
     description: "围绕最终 prompt 的目标、术语合并、输入、输出和约束进行确认。",
     steps: [
       { id: "role", title: "使用场景", description: "确定模型角色与 prompt 用途" },
@@ -430,7 +430,7 @@ function makeSynonymDescription(group) {
 }
 
 const state = {
-  workflow: "field_template",
+  workflow: "prompt_generation",
   mode: "generic",
   model: "qwen3.6-plus",
   prompt: "",
@@ -481,7 +481,6 @@ async function loadSynonymExamples() {
 }
 
 const elements = {
-  workflowSwitch: document.querySelector("#workflowSwitch"),
   modeLabel: document.querySelector("#modeLabel"),
   previewStageLabel: document.querySelector("#previewStageLabel"),
   stageLabel: document.querySelector("#stageLabel"),
@@ -650,7 +649,7 @@ function getGenerationSourceText(kind) {
 }
 
 function getWorkflowDefinition() {
-  return WORKFLOW_DEFINITIONS[state.workflow] || WORKFLOW_DEFINITIONS.field_template;
+  return WORKFLOW_DEFINITIONS[state.workflow] || WORKFLOW_DEFINITIONS.prompt_generation;
 }
 
 function getFlowSteps() {
@@ -2397,7 +2396,7 @@ function buildPromptMarkdown() {
 ${state.prompt || "待输入"}
 
 ## 任务配置
-- 生成目标：${getWorkflowDefinition().label}
+- 输出目标：${getWorkflowDefinition().label}
 - 业务角色：${getAnswerWithCustom({ id: "business_role", type: "single" }) || "待确认"}
 - 任务场景：${state.scenario ? state.scenario.label : "待识别"}
 - 抽取目标：${getAnswerWithCustom({ id: "target_type", type: "single" }) || "待确认"}
@@ -2470,7 +2469,7 @@ function renderPreview() {
 function updateSummaryCards() {
   const cards = [
     {
-      label: "生成目标",
+      label: "输出目标",
       value: getWorkflowDefinition().label,
     },
     {
@@ -2963,7 +2962,7 @@ function downloadPrompt() {
 }
 
 function resetApp() {
-  state.workflow = "field_template";
+  state.workflow = "prompt_generation";
   state.prompt = "";
   state.knowledge = "";
   state.knowledgeProfile = null;
@@ -2988,9 +2987,6 @@ function resetApp() {
   elements.promptInput.value = "";
   elements.knowledgeInput.value = "";
   elements.refineInput.value = "";
-  [...elements.workflowSwitch.querySelectorAll(".mode-btn")].forEach((item) =>
-    item.classList.toggle("active", item.dataset.workflow === state.workflow)
-  );
   elements.previewOutput.textContent = "系统将在这里实时预览规范提示词草稿。";
   elements.emptyState.classList.remove("hidden");
   elements.questionnaire.classList.add("hidden");
@@ -3014,33 +3010,6 @@ function resetApp() {
   renderPromptVersions();
   setLLMBusy(false);
 }
-
-elements.workflowSwitch.addEventListener("click", (event) => {
-  const button = event.target.closest(".mode-btn");
-  if (!button) {
-    return;
-  }
-
-  state.workflow = button.dataset.workflow;
-  state.questions = [];
-  state.answers = {};
-  state.customAnswers = {};
-  state.orchestratorSessionId = "";
-  state.orchestratorEnabled = false;
-  state.currentIndex = 0;
-  state.finalPrompt = "";
-  state.questionSourceDetail = "尚未生成";
-  [...elements.workflowSwitch.querySelectorAll(".mode-btn")].forEach((item) =>
-    item.classList.toggle("active", item === button)
-  );
-  elements.emptyState.classList.remove("hidden");
-  elements.questionnaire.classList.add("hidden");
-  elements.stageLabel.textContent = `已选择流程：${getWorkflowDefinition().label}`;
-  elements.stageDesc.textContent = getWorkflowDefinition().description;
-  updateSummaryCards();
-  renderStepList();
-  renderPreview();
-});
 
 elements.modeSwitch.addEventListener("click", (event) => {
   const button = event.target.closest(".mode-btn");

@@ -429,24 +429,6 @@ function makeSynonymDescription(group) {
     .join("；");
 }
 
-const SAMPLE_INPUT = {
-  prompt: "提取文中钢结构的性能词条，并统一输出为结构化结果",
-  knowledge: `钢结构性能常见条目：
-强度
-刚度
-稳定性
-延性
-韧性
-耐火性
-疲劳性能
-承载能力
-
-相关表述：
-load-bearing capacity（承载能力）
-stiffness（刚度）
-fire resistance（耐火性）`,
-};
-
 const state = {
   workflow: "field_template",
   mode: "generic",
@@ -520,7 +502,6 @@ const elements = {
   generateBtn: document.querySelector("#generateBtn"),
   llmGenerateBtn: document.querySelector("#llmGenerateBtn"),
   resetBtn: document.querySelector("#resetBtn"),
-  loadSampleBtn: document.querySelector("#loadSampleBtn"),
   progressPill: document.querySelector("#progressPill"),
   questionStepLabel: document.querySelector("#questionStepLabel"),
   emptyState: document.querySelector("#emptyState"),
@@ -543,14 +524,12 @@ const elements = {
   knowledgeStatusTitle: document.querySelector("#knowledgeStatusTitle"),
   knowledgeStatusText: document.querySelector("#knowledgeStatusText"),
   knowledgeSourceList: document.querySelector("#knowledgeSourceList"),
-  refreshKnowledgeBtn: document.querySelector("#refreshKnowledgeBtn"),
   knowledgeFileInput: document.querySelector("#knowledgeFileInput"),
   knowledgeFileName: document.querySelector("#knowledgeFileName"),
   uploadKnowledgeBtn: document.querySelector("#uploadKnowledgeBtn"),
   uploadKnowledgeStatus: document.querySelector("#uploadKnowledgeStatus"),
   uploadedDocumentList: document.querySelector("#uploadedDocumentList"),
   historyList: document.querySelector("#historyList"),
-  refreshSessionsBtn: document.querySelector("#refreshSessionsBtn"),
   promptVersionList: document.querySelector("#promptVersionList"),
   auditLogList: document.querySelector("#auditLogList"),
   previewFormatSwitch: document.querySelector("#previewFormatSwitch"),
@@ -1518,10 +1497,6 @@ function getKnowledgeHealthClass(source) {
 }
 
 async function refreshKnowledgeStatus() {
-  if (elements.refreshKnowledgeBtn) {
-    elements.refreshKnowledgeBtn.disabled = true;
-    elements.refreshKnowledgeBtn.textContent = "检测中";
-  }
   try {
     if (!isServerBackedPage()) {
       state.knowledgeAvailable = false;
@@ -1557,12 +1532,8 @@ async function refreshKnowledgeStatus() {
     state.knowledgeDbModifiedAt = "";
     state.knowledgeInspectError = "";
   } finally {
-    if (elements.refreshKnowledgeBtn) {
-      elements.refreshKnowledgeBtn.disabled = false;
-      elements.refreshKnowledgeBtn.textContent = "刷新状态";
-    }
+    renderKnowledgeSourceList();
   }
-  renderKnowledgeSourceList();
   updateTopStatus();
   updateSummaryCards();
 }
@@ -1637,7 +1608,7 @@ function renderUploadedDocuments() {
             <strong>${escapeHtml(document.filename)}</strong>
             <small>${Number(document.chunkCount || 0)} chunks · ${milvusText}</small>
           </span>
-          <button class="icon-btn" type="button" data-delete-upload="${escapeHtml(document.id)}" title="删除文档">×</button>
+          <button class="danger-text-btn" type="button" data-delete-upload="${escapeHtml(document.id)}">删除</button>
         </div>
       `;
     })
@@ -3095,10 +3066,6 @@ elements.knowledgeSourceList.addEventListener("change", () => {
   renderPreview();
 });
 
-elements.refreshKnowledgeBtn.addEventListener("click", () => {
-  refreshKnowledgeStatus();
-});
-
 elements.uploadKnowledgeBtn.addEventListener("click", () => {
   uploadKnowledgeFiles();
 });
@@ -3111,12 +3078,6 @@ elements.uploadedDocumentList.addEventListener("click", (event) => {
   deleteUploadedDocument(button.dataset.deleteUpload).catch((error) => {
     window.alert(`删除上传文档失败。\n${error.message}`);
   });
-});
-
-elements.refreshSessionsBtn.addEventListener("click", () => {
-  loadPersistedSessions();
-  loadPromptVersions();
-  loadAuditLogs();
 });
 
 elements.historyList.addEventListener("click", (event) => {
@@ -3170,21 +3131,6 @@ elements.refineBtn.addEventListener("click", applyRefinement);
 elements.llmPromptBtn.addEventListener("click", regenerateFinalPromptWithLLM);
 elements.downloadBtn.addEventListener("click", downloadPrompt);
 elements.resetBtn.addEventListener("click", resetApp);
-
-  elements.loadSampleBtn.addEventListener("click", () => {
-  elements.promptInput.value = SAMPLE_INPUT.prompt;
-  elements.knowledgeInput.value = SAMPLE_INPUT.knowledge;
-  state.workflow = "field_template";
-  state.mode = "rag";
-  [...elements.workflowSwitch.querySelectorAll(".mode-btn")].forEach((item) =>
-    item.classList.toggle("active", item.dataset.workflow === state.workflow)
-  );
-  [...elements.modeSwitch.querySelectorAll(".mode-btn")].forEach((item) =>
-    item.classList.toggle("active", item.dataset.mode === "rag")
-  );
-  elements.knowledgeField.classList.remove("hidden");
-  updateTopStatus();
-});
 
 elements.todayLabel.textContent = new Date().toLocaleDateString("zh-CN", {
   year: "numeric",

@@ -407,14 +407,16 @@ button:disabled {
   margin-top: 2px;
 }
 
-.icon-btn {
-  width: 28px;
-  height: 28px;
+.danger-text-btn {
+  min-width: 44px;
+  height: 30px;
+  padding: 0 10px;
   border-radius: 8px;
   border: 1px solid rgba(174, 78, 64, 0.28);
   background: rgba(174, 78, 64, 0.08);
   color: #9a3e31;
-  font-weight: 900;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .knowledge-source-option {

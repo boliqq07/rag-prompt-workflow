@@ -481,8 +481,8 @@ async function loadSynonymExamples() {
 }
 
 const elements = {
-  modeLabel: document.querySelector("#modeLabel"),
-  previewStageLabel: document.querySelector("#previewStageLabel"),
+  modeLabel: document.querySelector("#modeLabel") || { textContent: "" },
+  previewStageLabel: document.querySelector("#previewStageLabel") || { textContent: "" },
   stageLabel: document.querySelector("#stageLabel"),
   stageDesc: document.querySelector("#stageDesc"),
   promptInput: document.querySelector("#promptInput"),
@@ -511,7 +511,6 @@ const elements = {
   nextBtn: document.querySelector("#nextBtn"),
   skipBtn: document.querySelector("#skipBtn"),
   confirmBtn: document.querySelector("#confirmBtn"),
-  summaryCards: document.querySelector("#summaryCards"),
   previewOutput: document.querySelector("#previewOutput"),
   refineInput: document.querySelector("#refineInput"),
   refineBtn: document.querySelector("#refineBtn"),
@@ -2467,52 +2466,7 @@ function renderPreview() {
 }
 
 function updateSummaryCards() {
-  const cards = [
-    {
-      label: "输出目标",
-      value: getWorkflowDefinition().label,
-    },
-    {
-      label: "问答来源",
-      value: getGenerationSourceText("question"),
-    },
-    {
-      label: "提示词来源",
-      value: getGenerationSourceText("prompt"),
-    },
-    {
-      label: "知识来源",
-      value:
-        state.mode === "rag"
-          ? getSelectedKnowledgeSources()
-              .map((source) => source.label)
-              .join("、") || "未选择知识库"
-          : "通用模板",
-    },
-    {
-      label: "场景识别",
-      value: state.scenario ? state.scenario.label : "未识别",
-    },
-    {
-      label: "已选词条",
-      value: (getAnswerWithCustom({ id: "candidate_terms", type: "multi" }) || []).join("、") || "尚未选择",
-    },
-    {
-      label: "输出格式",
-      value: getAnswerWithCustom({ id: "output_format", type: "single" }) || "尚未确认",
-    },
-  ];
-
-  elements.summaryCards.innerHTML = cards
-    .map(
-      (card) => `
-        <div class="summary-card">
-          <span>${escapeHtml(card.label)}</span>
-          <strong>${escapeHtml(card.value)}</strong>
-        </div>
-      `
-    )
-    .join("");
+  // The right rail intentionally shows only the prompt preview.
 }
 
 function updateTopStatus() {

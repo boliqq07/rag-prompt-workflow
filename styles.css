@@ -649,8 +649,7 @@ button:disabled {
 .question-shell,
 .refine-card,
 .preview-head,
-.preview-card,
-.preview-foot {
+.preview-card {
   border-radius: var(--radius);
   border: 1px solid var(--line);
   background: var(--surface);
@@ -660,8 +659,7 @@ button:disabled {
 .context-card,
 .question-shell,
 .refine-card,
-.preview-card,
-.preview-foot {
+.preview-card {
   padding: 18px;
 }
 
@@ -1095,7 +1093,7 @@ select:focus {
   position: sticky;
   top: 82px;
   display: grid;
-  grid-template-rows: auto auto minmax(420px, calc(100vh - 360px)) auto;
+  grid-template-rows: auto minmax(520px, calc(100vh - 220px));
   gap: 12px;
   min-width: 0;
   max-height: calc(100vh - 104px);
@@ -1127,34 +1125,6 @@ select:focus {
   padding: 8px 10px;
 }
 
-.summary-cards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
-}
-
-.summary-card {
-  padding: 12px;
-  border-radius: 12px;
-  background: rgba(255, 253, 248, 0.78);
-  border: 1px solid var(--line);
-}
-
-.summary-card span {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--muted-2);
-  font-size: 0.76rem;
-  font-weight: 850;
-}
-
-.summary-card strong {
-  display: block;
-  color: var(--ink-strong);
-  line-height: 1.45;
-  font-size: 0.9rem;
-}
-
 .preview-card {
   min-height: 0;
   overflow: hidden;
@@ -1169,37 +1139,6 @@ select:focus {
   word-break: break-word;
   color: #2d6f61;
   font: 500 0.9rem/1.72 "SFMono-Regular", "Menlo", monospace;
-}
-
-.preview-foot {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-.preview-metric {
-  padding: 11px 12px;
-  border-radius: 12px;
-  background: rgba(255, 253, 248, 0.78);
-  border: 1px solid var(--line);
-}
-
-.preview-metric span {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--muted-2);
-  font-size: 0.78rem;
-  font-weight: 850;
-}
-
-.preview-metric strong {
-  display: block;
-  color: var(--ink-strong);
-  font-size: 0.9rem;
 }
 
 .hidden {
@@ -1244,16 +1183,14 @@ select:focus {
   .question-meta,
   .question-shell-head,
   .question-footer,
-  .context-actions,
-  .preview-foot {
+  .context-actions {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: stretch;
   }
 
   .mode-switch,
-  .preview-format-switch,
-  .summary-cards {
+  .preview-format-switch {
     display: grid;
     grid-template-columns: 1fr;
   }

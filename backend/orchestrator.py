@@ -29,9 +29,9 @@ FLOW_STEPS = [
 ]
 
 WORKFLOW_DEFINITIONS = {
-    "field_template": {"label": "字段模板生成", "steps": FLOW_STEPS},
+    "field_template": {"label": "抽取字段清单", "steps": FLOW_STEPS},
     "synonym_merge": {
-        "label": "仅同义词合并",
+        "label": "同义词合并规则",
         "steps": [
             {"id": "target", "title": "合并范围", "description": "确认要合并的术语集合与应用场景"},
             {"id": "synonym", "title": "术语证据", "description": "确认同义、别名、参见关系和不应合并项"},
@@ -40,7 +40,7 @@ WORKFLOW_DEFINITIONS = {
         ],
     },
     "prompt_generation": {
-        "label": "完整提示词生成",
+        "label": "完整任务提示词",
         "steps": [
             {"id": "role", "title": "使用场景", "description": "确定模型角色与 prompt 用途"},
             {"id": "target", "title": "任务目标", "description": "确认待处理文档、任务边界和输入变量"},

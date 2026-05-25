@@ -28,12 +28,12 @@ const FLOW_STEPS = [
 
 const WORKFLOW_DEFINITIONS = {
   field_template: {
-    label: "字段模板生成",
+    label: "抽取字段清单",
     description: "从抽取需求出发，确认字段、术语、格式和质量约束。",
     steps: FLOW_STEPS,
   },
   synonym_merge: {
-    label: "仅同义词合并",
+    label: "同义词合并规则",
     description: "作为专门工具，只围绕术语簇、证据来源和合并边界生成标准化规则。",
     steps: [
       { id: "target", title: "合并范围", description: "确认要合并的术语集合与应用场景" },
@@ -43,7 +43,7 @@ const WORKFLOW_DEFINITIONS = {
     ],
   },
   prompt_generation: {
-    label: "完整提示词生成",
+    label: "完整任务提示词",
     description: "围绕最终 prompt 的目标、术语合并、输入、输出和约束进行确认。",
     steps: [
       { id: "role", title: "使用场景", description: "确定模型角色与 prompt 用途" },
@@ -553,7 +553,7 @@ function setLLMBusy(isBusy, busyLabel = "LLM 调用中") {
   state.llmBusy = isBusy;
   elements.llmGenerateBtn.disabled = isBusy || !state.llmConfigured;
   elements.llmPromptBtn.disabled = isBusy || !state.llmConfigured;
-  elements.llmGenerateBtn.textContent = isBusy ? busyLabel : "LLM 生成问答";
+  elements.llmGenerateBtn.textContent = isBusy ? busyLabel : "LLM 生成问题流";
   elements.llmPromptBtn.textContent = isBusy ? busyLabel : "LLM 生成提示词";
 }
 
@@ -2395,7 +2395,7 @@ function buildPromptMarkdown() {
 ${state.prompt || "待输入"}
 
 ## 任务配置
-- 任务流程：${getWorkflowDefinition().label}
+- 生成目标：${getWorkflowDefinition().label}
 - 业务角色：${getAnswerWithCustom({ id: "business_role", type: "single" }) || "待确认"}
 - 任务场景：${state.scenario ? state.scenario.label : "待识别"}
 - 抽取目标：${getAnswerWithCustom({ id: "target_type", type: "single" }) || "待确认"}
@@ -2468,7 +2468,7 @@ function renderPreview() {
 function updateSummaryCards() {
   const cards = [
     {
-      label: "任务流程",
+      label: "生成目标",
       value: getWorkflowDefinition().label,
     },
     {
@@ -2589,7 +2589,7 @@ async function generateQuestionnaire() {
 
   setLLMBusy(true, "后端处理中");
   elements.stageLabel.textContent = "后端正在创建问答会话";
-  elements.stageDesc.textContent = "Orchestrator 会在后端管理问题顺序、答案和自定义补充；本路径不调用 LLM。";
+  elements.stageDesc.textContent = "后端会管理问题顺序、答案和自定义补充；本路径不调用 LLM。";
   try {
     state.scenario = inferScenario(state.prompt);
     await hydrateKnowledgeFromMilvus();
@@ -2624,8 +2624,8 @@ async function generateQuestionnaireWithLLM() {
   }
 
   setLLMBusy(true, "LLM 调用中");
-  elements.stageLabel.textContent = "后端正在调用 LLM 生成问答流程";
-  elements.stageDesc.textContent = "Orchestrator 会保存 LLM 生成的问题，并在后端推进后续答案。";
+  elements.stageLabel.textContent = "后端正在调用 LLM 生成问题流";
+  elements.stageDesc.textContent = "后端会保存 LLM 生成的问题，并推进后续答案。";
 
   try {
     state.scenario = inferScenario(state.prompt);
@@ -2644,7 +2644,7 @@ async function generateQuestionnaireWithLLM() {
   } catch (error) {
     window.alert(`后端 LLM 生成失败，已保留本地模板入口。\n${error.message}`);
     elements.stageLabel.textContent = "LLM 生成失败";
-    elements.stageDesc.textContent = "可以继续使用本地模板生成问答流程，或检查后端环境变量与模型服务。";
+    elements.stageDesc.textContent = "可以继续使用后端规则生成问题流，或检查后端环境变量与模型服务。";
   } finally {
     setLLMBusy(false);
   }

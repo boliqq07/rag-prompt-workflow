@@ -136,18 +136,21 @@
               </label>
 
               <label class="field compact">
-                <span>任务流程</span>
+                <span>生成目标</span>
                 <div class="mode-switch workflow-switch" id="workflowSwitch">
-                  <button class="mode-btn active" data-workflow="field_template" type="button">字段模板生成</button>
-                  <button class="mode-btn" data-workflow="prompt_generation" type="button">完整提示词生成</button>
-                  <button class="mode-btn" data-workflow="synonym_merge" type="button">仅同义词合并</button>
+                  <button class="mode-btn active" data-workflow="field_template" type="button">抽取字段清单</button>
+                  <button class="mode-btn" data-workflow="prompt_generation" type="button">完整任务提示词</button>
+                  <button class="mode-btn" data-workflow="synonym_merge" type="button">同义词合并规则</button>
                 </div>
               </label>
 
-              <div class="mode-switch" id="modeSwitch">
-                <button class="mode-btn active" data-mode="generic" type="button">通用模板</button>
-                <button class="mode-btn" data-mode="rag" type="button">RAG 知识库</button>
-              </div>
+              <label class="field compact">
+                <span>知识来源</span>
+                <div class="mode-switch" id="modeSwitch">
+                  <button class="mode-btn active" data-mode="generic" type="button">不使用知识库</button>
+                  <button class="mode-btn" data-mode="rag" type="button">使用 RAG 文档</button>
+                </div>
+              </label>
 
               <label class="field hidden" id="knowledgeField">
                 <span>术语片段 / 标准条目</span>
@@ -158,10 +161,13 @@
                 ></textarea>
               </label>
 
-              <div class="context-actions">
-                <button class="primary-btn" id="generateBtn" type="button">模板生成问答</button>
-                <button class="ghost-btn" id="llmGenerateBtn" type="button">LLM 生成问答</button>
-                <button class="ghost-btn" id="resetBtn" type="button">重置工作台</button>
+              <div class="action-group">
+                <span>生成方式</span>
+                <div class="context-actions">
+                  <button class="primary-btn" id="generateBtn" type="button">开始生成问题流</button>
+                  <button class="ghost-btn" id="llmGenerateBtn" type="button">LLM 生成问题流</button>
+                  <button class="ghost-btn" id="resetBtn" type="button">清空内容</button>
+                </div>
               </div>
             </div>
 

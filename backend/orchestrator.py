@@ -94,6 +94,24 @@ EVIDENCE_DECISION_MATRIX = {
     "category_type_conflict": {"grade": "D", "action": "禁止合并", "relationType": "信息类别冲突"},
 }
 
+MERGE_POLICY_OPTIONS = [
+    {
+        "value": "严格合并",
+        "label": "只合并明确同义",
+        "description": "只有同义词、别名、缩写、符号或“又称/见/参见”证据充分时才合并；拿不准就不合并。",
+    },
+    {
+        "value": "宽松聚类",
+        "label": "先分组，保留关系",
+        "description": "相近或同类术语可以放进同一候选组，但必须标明关系类型；不直接当作完全同义。",
+    },
+    {
+        "value": "人工复核优先",
+        "label": "不确定就交给人工确认",
+        "description": "证据不足、边界模糊或可能混淆的术语进入待复核列表，模型不自动合并。",
+    },
+]
+
 
 def workflow_definition(workflow):
     return WORKFLOW_DEFINITIONS.get(workflow) or WORKFLOW_DEFINITIONS["prompt_generation"]
@@ -340,7 +358,7 @@ def build_questions(source_mode, scenario, knowledge_profile, workflow):
             {"id": "candidate_terms", "stepId": "target", "type": "multi", "category": "合并范围", "title": "请选择需要进入合并判断的术语", "description": "候选项来自原始需求、知识库或通用模板，可手动补充。", "options": option_list(candidate_terms, "纳入本轮同义词/别名合并判断。"), "required": True},
             {"id": "bilingual_synonym", "stepId": "synonym", "type": "boolean", "category": "术语证据", "title": "是否把中英文、缩写和符号视为可合并候选？", "description": "例如 yield strength、YS、σ0.2、Rp0.2 这类表达。", "options": [{"value": "yes", "label": "是", "description": "纳入中英文、缩写和符号别名。"}, {"value": "no", "label": "否", "description": "只处理同语言内的近义或别名。"}], "required": True},
             {"id": "synonym_groups", "stepId": "synonym", "type": "multi", "category": "术语证据", "title": "请确认可合并的同义词组", "description": "优先展示知识证据形成的候选组。", "options": [], "required": False},
-            {"id": "merge_policy", "stepId": "format", "type": "single", "category": "合并规则", "title": "遇到相近但不完全等价的概念时怎么处理？", "description": "这一步决定是否保守合并。", "options": option_list(["严格合并", "宽松聚类", "人工复核优先"], "采用{item}策略。"), "required": True},
+            {"id": "merge_policy", "stepId": "format", "type": "single", "category": "合并规则", "title": "遇到相近但不完全等价的概念时怎么处理？", "description": "选择模型遇到相近术语时的风险偏好。", "options": MERGE_POLICY_OPTIONS, "required": True},
             {"id": "output_format", "stepId": "format", "type": "single", "category": "合并规则", "title": "同义词合并结果用什么格式输出？", "description": "建议输出可审计的标准名、别名、证据和置信度。", "options": option_list(["JSON 数组", "Markdown 表格", "标准名-别名映射表", "待复核清单"], "按照{item}输出合并结果。"), "required": True},
             {"id": "constraints", "stepId": "format", "type": "multi", "category": "合并规则", "title": "合并时必须保留哪些审计信息？", "description": "这些信息会帮助用户判断候选组是否可信。", "options": option_list(["知识来源", "证据原文", "关系类型", "置信度", "不合并原因", "人工复核标记"], "保留{item}。"), "required": False},
             {"id": "extra_instructions", "stepId": "finalize", "type": "text", "category": "最终修改", "title": "还有哪些合并边界需要说明？", "description": "例如哪些术语不能合并、标准名优先级、单位差异处理方式。", "placeholder": "例如：强度值和强度损失率不能合并。", "required": False},
@@ -351,7 +369,7 @@ def build_questions(source_mode, scenario, knowledge_profile, workflow):
         {"id": "candidate_terms", "stepId": "target", "type": "multi", "category": "抽取目标", "title": "请选择你希望纳入的候选词条", "description": "候选词来自知识库或通用模板。", "options": option_list(candidate_terms, "写入提示词中的候选术语集合。"), "required": True},
         {"id": "bilingual_synonym", "stepId": "synonym", "type": "boolean", "category": "术语确认", "title": "是否要求英文术语附带中文翻译，并进行同义词归并？", "description": "适用于术语标准化、别名合并与中英文结果对齐。", "options": [{"value": "yes", "label": "是", "description": "强制中英文归并。"}, {"value": "no", "label": "否", "description": "保留原术语。"}], "required": True},
         {"id": "synonym_groups", "stepId": "synonym", "type": "multi", "category": "术语确认", "title": "请确认以下属性的同义词或同类表达", "description": "系统会根据候选词生成待确认同义词组。", "options": [], "required": False},
-        {"id": "merge_policy", "stepId": "synonym", "type": "single", "category": "术语确认", "title": "最终提示词应采用哪种术语合并策略？", "description": "控制相近术语的处理方式。", "options": option_list(["严格合并", "宽松聚类", "人工复核优先"], "采用{item}策略。"), "required": True},
+        {"id": "merge_policy", "stepId": "synonym", "type": "single", "category": "术语确认", "title": "遇到相近术语时，模型应该多保守？", "description": "选择模型在“可能相关但不完全等价”时的处理方式。", "options": MERGE_POLICY_OPTIONS, "required": True},
         {"id": "output_format", "stepId": "format", "type": "single", "category": "输出格式", "title": "你希望输出格式是什么？", "description": "最终提示词会明确指定模型输出结构。", "options": option_list(library["outputFormats"], "要求模型按照 {item} 输出。"), "required": True},
         {"id": "constraints", "stepId": "format", "type": "multi", "category": "输出格式", "title": "你还希望加入哪些约束？", "description": "这些约束会体现在最终提示词细节里。", "options": option_list(list(dict.fromkeys([*library["constraints"], "证据原文", "输出前自检", "不合并原因"])), "加入约束：{item}。"), "required": False},
         {"id": "extra_instructions", "stepId": "finalize", "type": "text", "category": "最终修改", "title": "还有没有额外说明？", "description": "例如字段命名规则、输出语言、是否允许空值等。", "placeholder": "例如：字段名统一用中文；若没有证据句则不要臆造。", "required": False},

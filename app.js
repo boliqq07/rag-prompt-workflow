@@ -122,6 +122,24 @@ const EVIDENCE_GRADE = {
   D: "D 级：禁止合并",
 };
 
+const MERGE_POLICY_OPTIONS = [
+  {
+    value: "严格合并",
+    label: "只合并明确同义",
+    description: "只有同义词、别名、缩写、符号或“又称/见/参见”证据充分时才合并；拿不准就不合并。",
+  },
+  {
+    value: "宽松聚类",
+    label: "先分组，保留关系",
+    description: "相近或同类术语可以放进同一候选组，但必须标明关系类型；不直接当作完全同义。",
+  },
+  {
+    value: "人工复核优先",
+    label: "不确定就交给人工确认",
+    description: "证据不足、边界模糊或可能混淆的术语进入待复核列表，模型不自动合并。",
+  },
+];
+
 function classifyEvidence({ evidenceType = "llm_inferred", grade = "" } = {}) {
   if (grade) return grade;
   if (["excel_includes_parameter", "dictionary_alias", "dictionary_see_also"].includes(evidenceType)) return "A";
@@ -949,12 +967,8 @@ function buildQuestions() {
         type: "single",
         category: "合并规则",
         title: "遇到相近但不完全等价的概念时怎么处理？",
-        description: "这一步决定是否保守合并。",
-        options: [
-          { value: "严格合并", label: "严格合并", description: "只有明确同义、别名、缩写、又称、见/参见才合并。" },
-          { value: "宽松聚类", label: "宽松聚类", description: "允许近义词或同类术语进入同一候选簇，但标注关系类型。" },
-          { value: "人工复核优先", label: "人工复核优先", description: "低证据项进入待确认列表，不自动合并。" },
-        ],
+        description: "选择模型遇到相近术语时的风险偏好。",
+        options: MERGE_POLICY_OPTIONS,
         required: true,
       },
       {
@@ -1070,13 +1084,9 @@ function buildQuestions() {
         stepId: "synonym",
         type: "single",
         category: "术语确认",
-        title: "最终提示词应采用哪种术语合并策略？",
-        description: "这会控制模型在执行抽取或总结时如何处理相近术语。",
-        options: [
-          { value: "严格合并", label: "严格合并", description: "只有明确同义、别名、缩写、又称、见/参见才合并。" },
-          { value: "宽松聚类", label: "宽松聚类", description: "允许近义词或同类术语进入同一候选簇，但标注关系类型。" },
-          { value: "人工复核优先", label: "人工复核优先", description: "低证据项进入待确认列表，不自动合并。" },
-        ],
+        title: "遇到相近术语时，模型应该多保守？",
+        description: "选择模型在“可能相关但不完全等价”时的处理方式。",
+        options: MERGE_POLICY_OPTIONS,
         required: true,
       },
       {

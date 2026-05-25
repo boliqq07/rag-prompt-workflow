@@ -569,8 +569,14 @@ function setLLMBusy(isBusy, busyLabel = "LLM 调用中") {
   state.llmBusy = isBusy;
   elements.llmGenerateBtn.disabled = isBusy || !state.llmConfigured;
   elements.llmPromptBtn.disabled = isBusy || !state.llmConfigured;
+  elements.refineBtn.disabled = isBusy;
   elements.llmGenerateBtn.textContent = isBusy ? busyLabel : "模型生成问题流";
   elements.llmPromptBtn.textContent = isBusy ? busyLabel : "LLM 生成提示词";
+}
+
+function setRefineBusy(isBusy, busyLabel = "应用中") {
+  elements.refineBtn.disabled = isBusy;
+  elements.refineBtn.textContent = isBusy ? busyLabel : "模板应用修改";
 }
 
 function setLLMStatus(title, text, configured = false) {
@@ -580,6 +586,17 @@ function setLLMStatus(title, text, configured = false) {
   elements.llmConfigCard.classList.toggle("is-connected", configured);
   elements.llmConfigCard.classList.toggle("is-disconnected", !configured);
   setLLMBusy(false);
+}
+
+function notifyUser(message, title = "需要处理") {
+  const text = String(message || "").trim();
+  if (!text) return;
+  if (typeof window.alert === "function") {
+    window.alert(text);
+    return;
+  }
+  elements.stageLabel.textContent = title;
+  elements.stageDesc.textContent = text.replace(/\s*\n+\s*/g, " ");
 }
 
 function isServerBackedPage() {
@@ -2553,7 +2570,7 @@ async function generateQuestionnaire() {
   state.model = elements.modelSelect.value;
 
   if (!state.prompt) {
-    window.alert("请先输入原始提示词。");
+    notifyUser("请先输入原始提示词。");
     return;
   }
 
@@ -2572,7 +2589,7 @@ async function generateQuestionnaire() {
     elements.stageLabel.textContent = "后端已创建问答会话";
     elements.stageDesc.textContent = `当前问题流由后端 Orchestrator 管理，候选项来自本地模板，未调用 LLM；会话 ID：${session.id}`;
   } catch (error) {
-    window.alert(`后端编排不可用，已回退浏览器本地模板。\n${error.message}`);
+    notifyUser(`后端编排不可用，已回退浏览器本地模板。\n${error.message}`);
     generateQuestionnaireLocal();
   } finally {
     setLLMBusy(false);
@@ -2585,11 +2602,11 @@ async function generateQuestionnaireWithLLM() {
   state.model = elements.modelSelect.value;
 
   if (!state.prompt) {
-    window.alert("请先输入原始提示词。");
+    notifyUser("请先输入原始提示词。");
     return;
   }
   if (!state.llmConfigured) {
-    window.alert("LLM 后端未启用。请通过 server.js 启动并配置 LLM_API_KEY。");
+    notifyUser("LLM 后端未启用。请先运行 npm start，并在左侧配置 API Key。");
     return;
   }
 
@@ -2612,7 +2629,7 @@ async function generateQuestionnaireWithLLM() {
     elements.stageLabel.textContent = `LLM 已生成问答流程：${state.model}`;
     elements.stageDesc.textContent = `当前问题流来自后端 Orchestrator 的真实 LLM 调用；会话 ID：${session.id}`;
   } catch (error) {
-    window.alert(`后端 LLM 生成失败，已保留本地模板入口。\n${error.message}`);
+    notifyUser(`后端 LLM 生成失败，已保留本地模板入口。\n${error.message}`);
     elements.stageLabel.textContent = "LLM 生成失败";
     elements.stageDesc.textContent = "可以继续使用后端规则生成问题流，或检查后端环境变量与模型服务。";
   } finally {
@@ -2636,7 +2653,7 @@ async function regenerateFinalPrompt() {
       elements.previewStageLabel.textContent = "后端已生成";
       return;
     } catch (error) {
-      window.alert(`后端归纳失败，已回退浏览器本地归纳。\n${error.message}`);
+      notifyUser(`后端归纳失败，已回退浏览器本地归纳。\n${error.message}`);
     }
   }
 
@@ -2652,11 +2669,11 @@ async function regenerateFinalPrompt() {
 
 async function regenerateFinalPromptWithLLM() {
   if (!state.prompt || !state.questions.length) {
-    window.alert("请先生成并完成问答流程。");
+    notifyUser("请先生成并完成问答流程。");
     return;
   }
   if (!state.llmConfigured) {
-    window.alert("LLM 后端未启用。请通过 server.js 启动并配置 LLM_API_KEY。");
+    notifyUser("LLM 后端未启用。请先运行 npm start，并在左侧配置 API Key。");
     return;
   }
 
@@ -2725,7 +2742,7 @@ async function regenerateFinalPromptWithLLM() {
     elements.stageDesc.textContent = "你可以继续补充要求，系统会在当前草稿上迭代修改。";
     elements.previewStageLabel.textContent = "LLM 已生成";
   } catch (error) {
-    window.alert(`LLM 归纳失败，已保留本地提示词。\n${error.message}`);
+    notifyUser(`LLM 归纳失败，已保留本地提示词。\n${error.message}`);
     regenerateFinalPrompt();
   } finally {
     setLLMBusy(false);
@@ -2753,7 +2770,7 @@ async function moveToNextQuestion() {
   renderPreview();
 
   if (!validateCurrentQuestion()) {
-    window.alert("当前问题是必填项，请先完成选择。");
+    notifyUser("当前问题是必填项，请先完成选择。");
     return;
   }
 
@@ -2767,7 +2784,7 @@ async function moveToNextQuestion() {
         await regenerateFinalPrompt();
       }
     } catch (error) {
-      window.alert(`后端提交答案失败。\n${error.message}`);
+      notifyUser(`后端提交答案失败。\n${error.message}`);
     } finally {
       setLLMBusy(false);
     }
@@ -2802,7 +2819,7 @@ async function moveToPreviousQuestion() {
       });
       syncFromOrchestratorSession(session);
     } catch (error) {
-      window.alert(`后端回退失败。\n${error.message}`);
+      notifyUser(`后端回退失败。\n${error.message}`);
     }
     return;
   }
@@ -2817,7 +2834,7 @@ async function skipCurrentQuestion() {
     return;
   }
   if (question.required) {
-    window.alert("当前问题是必填项，请先完成选择。");
+    notifyUser("当前问题是必填项，请先完成选择。");
     return;
   }
 
@@ -2837,7 +2854,7 @@ async function skipCurrentQuestion() {
         await regenerateFinalPrompt();
       }
     } catch (error) {
-      window.alert(`后端跳过失败。\n${error.message}`);
+      notifyUser(`后端跳过失败。\n${error.message}`);
     } finally {
       setLLMBusy(false);
     }
@@ -2858,11 +2875,11 @@ async function skipCurrentQuestion() {
 async function applyRefinement() {
   const refinement = elements.refineInput.value.trim();
   if (!refinement) {
-    window.alert("请输入修改意见。");
+    notifyUser("请输入修改意见。");
     return;
   }
   if (!state.prompt) {
-    window.alert("请先生成问答流程。");
+    notifyUser("请先生成问答流程。");
     return;
   }
 
@@ -2870,6 +2887,7 @@ async function applyRefinement() {
 
   if (state.orchestratorEnabled && state.orchestratorSessionId) {
     try {
+      setRefineBusy(true, "应用中");
       setLLMBusy(true, "后端处理中");
       const session = await apiJson(`/api/orchestrator/sessions/${state.orchestratorSessionId}/finalize`, {
         method: "POST",
@@ -2883,13 +2901,15 @@ async function applyRefinement() {
       elements.stageLabel.textContent = "后端已应用修改意见";
       elements.stageDesc.textContent = "修改意见已记录在后端会话，并使用后端规则重新归纳提示词，未调用 LLM。";
     } catch (error) {
-      window.alert(`后端应用修改失败。\n${error.message}`);
+      notifyUser(`后端应用修改失败。\n${error.message}`);
     } finally {
       setLLMBusy(false);
+      setRefineBusy(false);
     }
     return;
   }
 
+  setRefineBusy(true, "应用中");
   state.refinements.push(refinement);
   state.promptSource = "本地模板";
   state.promptSourceDetail = "继续追问修改";
@@ -2897,11 +2917,12 @@ async function applyRefinement() {
   renderPreview();
   updateSummaryCards();
   elements.refineInput.value = "";
+  setRefineBusy(false);
 }
 
 function downloadPrompt() {
   if (!state.prompt) {
-    window.alert("请先输入并生成问答流程。");
+    notifyUser("请先输入并生成问答流程。");
     return;
   }
 
@@ -3016,7 +3037,7 @@ elements.uploadedDocumentList.addEventListener("click", (event) => {
   const button = event.target.closest("[data-delete-upload]");
   if (!button) return;
   deleteUploadedDocument(button.dataset.deleteUpload).catch((error) => {
-    window.alert(`删除上传文档失败。\n${error.message}`);
+    notifyUser(`删除上传文档失败。\n${error.message}`);
   });
 });
 
@@ -3024,7 +3045,7 @@ elements.historyList.addEventListener("click", (event) => {
   const button = event.target.closest("[data-load-session]");
   if (!button) return;
   restoreSession(button.dataset.loadSession).catch((error) => {
-    window.alert(`恢复会话失败。\n${error.message}`);
+    notifyUser(`恢复会话失败。\n${error.message}`);
   });
 });
 

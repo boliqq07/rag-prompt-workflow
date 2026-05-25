@@ -553,7 +553,7 @@ function setLLMBusy(isBusy, busyLabel = "LLM 调用中") {
   state.llmBusy = isBusy;
   elements.llmGenerateBtn.disabled = isBusy || !state.llmConfigured;
   elements.llmPromptBtn.disabled = isBusy || !state.llmConfigured;
-  elements.llmGenerateBtn.textContent = isBusy ? busyLabel : "LLM 生成问题流";
+  elements.llmGenerateBtn.textContent = isBusy ? busyLabel : "模型生成问题流";
   elements.llmPromptBtn.textContent = isBusy ? busyLabel : "LLM 生成提示词";
 }
 

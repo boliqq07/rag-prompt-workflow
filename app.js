@@ -602,8 +602,10 @@ async function loadLLMConfig() {
   try {
     const payload = await apiJson("/api/config");
     syncLLMConfigForm(payload);
+    return payload;
   } catch (_error) {
     elements.llmConfigStatus.textContent = "无法读取本机 API 设置";
+    return null;
   }
 }
 
@@ -2543,6 +2545,11 @@ function updateTopStatus() {
 }
 
 async function checkLLMHealth(force = false) {
+  if (!isServerBackedPage()) {
+    setLLMStatus("未连接本机后端", "请通过 http://127.0.0.1:8080/ 打开；真实调用需要先运行 npm start。", false);
+    return;
+  }
+
   const now = Date.now();
   if (!force && (state.llmBusy || now - state.lastHealthCheckAt < 1200)) {
     return;
@@ -2573,7 +2580,7 @@ async function checkLLMHealth(force = false) {
     }
     setLLMStatus("LLM 已连接", `${payload.model} · ${endpointLabel}`, true);
   } catch (error) {
-    setLLMStatus("未启动 LLM 后端", "直接打开 HTML 时使用本地模板；真实调用请用 node server.js 启动。", false);
+    setLLMStatus("未启动本机后端", "请在项目目录运行 npm start；后端入口是 python3 server.py。", false);
   }
 }
 
@@ -3140,8 +3147,7 @@ elements.todayLabel.textContent = new Date().toLocaleDateString("zh-CN", {
 
 loadSynonymExamples();
 resetApp();
-checkLLMHealth();
-loadLLMConfig();
+loadLLMConfig().finally(() => checkLLMHealth(true));
 refreshKnowledgeStatus();
 loadUploadedDocuments();
 loadPersistedSessions();

@@ -87,6 +87,9 @@ EVIDENCE_DECISION_MATRIX = {
     "exact_alias": {"grade": "A", "action": "自动合并", "relationType": "精确别名"},
     "bilingual_alias": {"grade": "B", "action": "建议合并", "relationType": "中英文别名"},
     "abbreviation": {"grade": "B", "action": "建议合并", "relationType": "缩写/符号"},
+    "llm_prior_alias": {"grade": "B", "action": "建议候选，需人工确认", "relationType": "LLM 领域知识候选"},
+    "llm_prior_related": {"grade": "C", "action": "相关但不合并", "relationType": "LLM 相关术语候选"},
+    "llm_prior_rejected": {"grade": "D", "action": "禁止合并", "relationType": "LLM 边界判断"},
     "related_only": {"grade": "C", "action": "相关但不合并", "relationType": "同类相关"},
     "field_type_conflict": {"grade": "D", "action": "禁止合并", "relationType": "字段类型冲突"},
     "metric_type_conflict": {"grade": "D", "action": "禁止合并", "relationType": "指标类型冲突"},
@@ -134,12 +137,79 @@ def clean_term(value):
     return re.sub(r"^[：:，,、\s]+|[：:，,、\s]+$", "", value or "").strip()
 
 
+def extract_candidate_terms_from_prompt(prompt):
+    text = str(prompt or "")
+    stopwords = {
+        "json",
+        "markdown",
+        "csv",
+        "llm",
+        "rag",
+        "请把",
+        "请做",
+        "判断",
+        "生成",
+        "输出",
+        "要求",
+        "提示词",
+        "同义词",
+        "合并",
+        "边界",
+        "证据",
+        "字段",
+        "测试术语",
+        "这些字段类型相近但不能互相合并",
+    }
+    terms = []
+    latin_pattern = r"[A-Za-zα-ωΑ-ΩγδσΣ][A-Za-z0-9α-ωΑ-ΩγδσΣ.%′'_-]*(?:\s+[A-Za-z0-9α-ωΑ-ΩγδσΣ.%′'_-]+){0,4}"
+    for match in re.finditer(latin_pattern, text):
+        term = clean_term(match.group(0))
+        lower = term.lower()
+        if len(term) < 2 or lower in stopwords:
+            continue
+        if lower in {"json", "markdown", "csv"}:
+            continue
+        terms.append(term)
+    for raw in re.split(r"[，,、；;。.!?？：:\n]|\s+和\s+|\s+与\s+|\s+及\s+", text):
+        item = clean_term(raw)
+        item = re.sub(r"^(请|把|将|判断|说明|生成|输出|保留|注意|例如|哪些|这些|这个|一个|用于|文档中|文中)", "", item)
+        item = re.sub(r"(的同义词项?|的合并边界|不能互相合并|可以作为同义词合并|不能合并|合并为同义词组)$", "", item)
+        item = clean_term(item)
+        if not item or item.lower() in stopwords:
+            continue
+        if len(item) < 2 or len(item) > 36:
+            continue
+        if re.search(r"[\u4e00-\u9fffA-Za-zα-ωΑ-ΩγδσΣ]", item):
+            terms.append(item)
+    return list(dict.fromkeys(terms))[:20]
+
+
 def evidence_decision(evidence_type):
     return EVIDENCE_DECISION_MATRIX.get(evidence_type) or {
         "grade": "B",
         "action": "建议合并",
         "relationType": "模型推断",
     }
+
+
+def confidence_label(value):
+    text = str(value or "").strip().lower()
+    if text in ("high", "高", "高置信", "0.8", "0.9", "1"):
+        return "高"
+    if text in ("low", "低", "低置信", "0.3", "0.4"):
+        return "低"
+    if text in ("medium", "mid", "中", "中置信", "0.5", "0.6", "0.7"):
+        return "中"
+    return "中"
+
+
+def synonym_bucket(group):
+    grade = group.get("grade") or evidence_decision(group.get("evidenceType"))["grade"]
+    if grade == "A":
+        return "confirmed"
+    if grade == "B":
+        return "candidate"
+    return "rejected"
 
 
 def make_synonym_value(group):
@@ -156,6 +226,10 @@ def make_synonym_description(group):
     ]
     if group.get("evidenceText"):
         parts.append(f"证据：{group['evidenceText']}")
+    if group.get("confidence"):
+        parts.append(f"置信度：{confidence_label(group.get('confidence'))}")
+    if group.get("reviewRequired"):
+        parts.append("需要人工确认")
     return "；".join(parts)
 
 
@@ -165,6 +239,7 @@ def parse_knowledge_profile(text, scenario):
     synonyms = {}
     synonym_groups = []
     current_field = ""
+    current_term = ""
 
     def add_group(canonical, aliases, evidence_type="llm_inferred", grade="", evidence_text="", disabled=False):
         canonical = clean_term(canonical)
@@ -191,6 +266,8 @@ def parse_knowledge_profile(text, scenario):
 
     for raw_line in str(text or "").splitlines():
         line = raw_line.strip()
+        line = re.sub(r"^[\s\-*+•·\d.、)）]+", "", line)
+        line = re.sub(r"^(?:内容|text)[：:]\s*", "", line, flags=re.I).strip()
         if not line:
             continue
         match = re.search(r"^同义词组[：:]\s*(.+?)\s*=>\s*(.+?)(?:\s*（证据类型：(.+?)；证据等级：(.+?)；证据文本：(.+?)）)?$", line)
@@ -208,7 +285,16 @@ def parse_knowledge_profile(text, scenario):
             continue
         match = re.search(r"^术语[：:]\s*(.+)$", line)
         if match:
-            terms.append(clean_term(match.group(1)))
+            current_term = clean_term(match.group(1))
+            terms.append(current_term)
+            continue
+        match = re.search(r"^定义[：:]\s*又称(.+?)[。；;，,]", line)
+        if match and current_term:
+            add_group(current_term, split_alias_text(match.group(1)), "dictionary_alias", evidence_text=line)
+            continue
+        match = re.search(r"^定义[：:]\s*(?:见|参见)(.+?)(?:[（(]|[。；;，,]|$)", line)
+        if match and current_term:
+            add_group(clean_term(match.group(1)), [current_term], "dictionary_see_also", evidence_text=line)
             continue
         match = re.search(r"^(.{2,80}?)(?:又称|也称|亦称|别称|等价于|等同于|即)\s*([^。；;]{2,140})", line)
         if match:
@@ -280,6 +366,135 @@ def field_conflict_options(terms):
                     "description": make_synonym_description(group),
                     "grade": "D",
                     "evidenceType": evidence_type,
+                    "confidence": "high",
+                    "bucket": "rejected",
+                    "reviewRequired": False,
+                    "autoSelect": False,
+                    "disabled": True,
+                }
+            )
+    return options
+
+
+TERM_CONCEPT_PATTERNS = [
+    ("material", [r"alloy|steel|glass|polymer|ceramic|composite|superalloy|foam glass|porous glass", r"材料|合金|钢|玻璃|陶瓷|复合材料|高温合金|泡沫玻璃|多孔玻璃|塑料"]),
+    ("performance", [r"strength|hardness|ductility|toughness|elongation|fatigue|stiffness|performance|load-bearing|compressive|thermal conductivity", r"性能|强度|屈服|抗拉|抗压|导热系数|硬度|韧性|延性|伸长率|疲劳|刚度|承载"]),
+    ("test_condition", [r"test condition|temperature|duration|pressure|environment|pre-strain|strain rate|charging|hydrogen concentration", r"试验条件|测试条件|温度|时间|压力|环境|预应变|应变速率|加载|充氢|氢浓度"]),
+    ("measurement_result", [r"value|ratio|rate|loss|result|percentage|iuts|potential", r"数值|值|比例|速率|损失|结果|百分比|电位"]),
+]
+
+TERM_FAMILY_PATTERNS = [
+    ("strength", "强度类性能", [r"strength|compressive", r"强度|屈服|抗拉|抗压"]),
+    ("corrosion", "腐蚀类指标", [r"corrosion", r"腐蚀|点蚀|缝隙腐蚀"]),
+    ("hydrogen", "氢脆/充氢相关", [r"hydrogen|embrittlement", r"氢|氢脆|充氢"]),
+    ("strain", "应变相关", [r"strain", r"应变"]),
+    ("temperature", "温度相关", [r"temperature", r"温度"]),
+]
+
+
+def matches_patterns(text, patterns):
+    return any(re.search(pattern, text, re.I) for pattern in patterns)
+
+
+def analyze_term(term):
+    value = clean_term(term)
+    concepts = set()
+    families = set()
+    for concept, patterns in TERM_CONCEPT_PATTERNS:
+        if matches_patterns(value, patterns):
+            concepts.add(concept)
+    for family, _label, patterns in TERM_FAMILY_PATTERNS:
+        if matches_patterns(value, patterns):
+            families.add(family)
+    if "material" in concepts and "test_condition" in concepts and not re.search(r"test|condition|测试|试验|pre-strain|strain rate|charging|hydrogen concentration|预应变|应变速率|充氢|氢浓度", value, re.I):
+        concepts.discard("test_condition")
+    metric_kind = ""
+    if re.search(r"\bratio\b|percentage|iuts|损失率|比例|百分比", value, re.I):
+        metric_kind = "ratio"
+    elif re.search(r"\brate\b|速率", value, re.I):
+        metric_kind = "rate"
+    elif re.search(r"\bvalue\b|数值|值", value, re.I):
+        metric_kind = "value"
+    is_strength_loss = bool(re.search(r"strength loss|loss of strength|reduction in strength|percentage loss|iuts|强度损失", value, re.I))
+    is_strength_metric = bool(re.search(r"strength|强度|屈服|抗拉|抗压", value, re.I)) and not is_strength_loss
+    return {"term": value, "concepts": concepts, "families": families, "metricKind": metric_kind, "isStrengthLoss": is_strength_loss, "isStrengthMetric": is_strength_metric}
+
+
+def shared_family(left, right):
+    for family in left["families"]:
+        if family in right["families"]:
+            return next((label for item, label, _patterns in TERM_FAMILY_PATTERNS if item == family), family)
+    return ""
+
+
+def semantic_decision(left, right):
+    if (left["isStrengthLoss"] and right["isStrengthMetric"]) or (right["isStrengthLoss"] and left["isStrengthMetric"]):
+        return {"grade": "D", "evidenceType": "semantic_boundary_conflict", "evidenceText": "强度损失率描述强度下降比例或损失程度，强度值描述材料性能数值，二者不能合并。"}
+    if left["metricKind"] and right["metricKind"] and left["metricKind"] != right["metricKind"]:
+        return {"grade": "D", "evidenceType": "metric_type_conflict", "evidenceText": f"{left['metricKind']} 与 {right['metricKind']} 属于不同指标类型，不能直接合并。"}
+    if "material" in left["concepts"] and "material" in right["concepts"]:
+        left_text = left["term"]
+        right_text = right["term"]
+        if (re.search(r"plastic|polymer|塑料|聚合物", left_text, re.I) and re.search(r"glass|玻璃", right_text, re.I)) or (
+            re.search(r"plastic|polymer|塑料|聚合物", right_text, re.I) and re.search(r"glass|玻璃", left_text, re.I)
+        ):
+            return {"grade": "D", "evidenceType": "category_type_conflict", "evidenceText": "玻璃类无机材料与塑料/聚合物材料属于不同材料类别，不能作为同义词合并。"}
+    if ("material" in left["concepts"] and ({"performance", "measurement_result", "test_condition"} & right["concepts"])) or ("material" in right["concepts"] and ({"performance", "measurement_result", "test_condition"} & left["concepts"])):
+        return {"grade": "D", "evidenceType": "category_type_conflict", "evidenceText": "材料名或材料类别与性能指标、测量结果或试验条件属于不同信息类型，不能合并为同义词。"}
+    if ("test_condition" in left["concepts"] and ({"measurement_result", "performance"} & right["concepts"])) or ("test_condition" in right["concepts"] and ({"measurement_result", "performance"} & left["concepts"])):
+        return {"grade": "D", "evidenceType": "category_type_conflict", "evidenceText": "试验条件描述实验输入或环境，测量结果/性能指标描述输出结果，不能合并。"}
+    family = shared_family(left, right)
+    if family:
+        return {"grade": "C", "evidenceType": "related_only", "evidenceText": f"二者同属{family}，但缺少同义、别名或符号等价证据，只能标记为相关术语。"}
+    return None
+
+
+def existing_pair_keys(options):
+    keys = set()
+    for option in options:
+        relation = str(option.get("value") or "").split("|", 1)[-1]
+        if "=>" not in relation:
+            continue
+        canonical, aliases_text = [item.strip() for item in relation.split("=>", 1)]
+        for alias in re.split(r"\s*/\s*", aliases_text):
+            key = "|".join(sorted([normalize_alias(canonical), normalize_alias(alias)]))
+            if key:
+                keys.add(key)
+    return keys
+
+
+def semantic_decision_options(terms, existing_options=None):
+    analyses = [analyze_term(term) for term in dict.fromkeys([term for term in terms if clean_term(term)])]
+    options = []
+    seen = existing_pair_keys(existing_options or [])
+    for left_index, left in enumerate(analyses):
+        for right in analyses[left_index + 1 :]:
+            key = "|".join(sorted([normalize_alias(left["term"]), normalize_alias(right["term"])]))
+            if not key or key in seen:
+                continue
+            decision = semantic_decision(left, right)
+            if not decision:
+                continue
+            seen.add(key)
+            group = {
+                "canonical": left["term"],
+                "aliases": [right["term"]],
+                "evidenceType": decision["evidenceType"],
+                "grade": decision["grade"],
+                "evidenceText": decision["evidenceText"],
+                "disabled": True,
+                "autoSelect": False,
+            }
+            options.append(
+                {
+                    "value": make_synonym_value(group),
+                    "label": f"{left['term']}: {right['term']}",
+                    "description": make_synonym_description(group),
+                    "grade": group["grade"],
+                    "evidenceType": group["evidenceType"],
+                    "confidence": "high",
+                    "bucket": "rejected",
+                    "reviewRequired": False,
                     "autoSelect": False,
                     "disabled": True,
                 }
@@ -307,6 +522,9 @@ def get_synonym_options(terms, knowledge_profile):
                 "description": make_synonym_description(group),
                 "grade": group.get("grade"),
                 "evidenceType": group.get("evidenceType"),
+                "confidence": group.get("confidence") or "medium",
+                "bucket": synonym_bucket(group),
+                "reviewRequired": group.get("reviewRequired", group.get("grade") != "A"),
                 "autoSelect": group.get("autoSelect", False),
                 "disabled": group.get("disabled", False),
             }
@@ -336,11 +554,15 @@ def get_synonym_options(terms, knowledge_profile):
                 "description": make_synonym_description(group),
                 "grade": "B",
                 "evidenceType": "bilingual_alias",
+                "confidence": "medium",
+                "bucket": "candidate",
+                "reviewRequired": True,
                 "autoSelect": False,
                 "disabled": False,
             }
         )
     options.extend(field_conflict_options(terms))
+    options.extend(semantic_decision_options(terms, options))
     return options
 
 
@@ -348,10 +570,101 @@ def option_list(items, description):
     return [{"value": item, "label": item, "description": description.format(item=item)} for item in items]
 
 
-def build_questions(source_mode, scenario, knowledge_profile, workflow):
+def empty_knowledge_profile(scenario):
     library = GENERIC_LIBRARY[scenario["domainKey"]]
-    candidate_terms = (knowledge_profile or {}).get("candidateTerms") if source_mode == "rag" else None
-    candidate_terms = candidate_terms or library["candidateTerms"]
+    return {"candidateTerms": library["candidateTerms"], "synonyms": {}, "synonymGroups": [], "sourceLabel": "通用模板"}
+
+
+def parse_llm_json(content):
+    text = str(content or "").strip()
+    text = re.sub(r"^```json\s*|^```\s*|```$", "", text, flags=re.I).strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    if start < 0 or end <= start:
+        raise ValueError("LLM synonym expansion did not return a JSON object.")
+    return json.loads(text[start : end + 1])
+
+
+def normalize_llm_group(item, evidence_type, grade, review_required):
+    if not isinstance(item, dict):
+        return None
+    canonical = clean_term(item.get("canonical") or item.get("standard") or item.get("name") or "")
+    aliases = item.get("aliases")
+    if aliases is None:
+        aliases = item.get("terms") or item.get("related") or []
+    if isinstance(aliases, str):
+        aliases = split_alias_text(aliases)
+    aliases = [clean_term(alias) for alias in aliases or [] if clean_term(alias)]
+    aliases = [alias for alias in dict.fromkeys(aliases) if alias != canonical]
+    if not canonical or not aliases:
+        return None
+    confidence = confidence_label(item.get("confidence"))
+    reason = clean_term(item.get("reason") or item.get("evidence") or item.get("note") or "")
+    group = {
+        "canonical": canonical,
+        "aliases": aliases[:10],
+        "evidenceType": evidence_type,
+        "grade": grade,
+        "relationType": evidence_decision(evidence_type)["relationType"],
+        "evidenceText": reason or "LLM 基于通用领域知识生成，未见文档证据。",
+        "confidence": confidence,
+        "reviewRequired": review_required,
+        "autoSelect": False,
+        "disabled": grade in ("C", "D"),
+    }
+    return group
+
+
+def normalize_llm_synonym_expansion(payload):
+    groups = []
+    for item in payload.get("confirmed") or payload.get("exact_aliases") or []:
+        group = normalize_llm_group(item, "llm_prior_alias", "B", True)
+        if group:
+            groups.append(group)
+    for item in payload.get("candidates") or payload.get("related_candidates") or []:
+        group = normalize_llm_group(item, "llm_prior_related", "C", True)
+        if group:
+            groups.append(group)
+    for item in payload.get("rejected") or payload.get("do_not_merge") or []:
+        group = normalize_llm_group(item, "llm_prior_rejected", "D", False)
+        if group:
+            groups.append(group)
+    return groups
+
+
+def merge_llm_synonym_groups(knowledge_profile, llm_groups):
+    profile = knowledge_profile or {"candidateTerms": [], "synonyms": {}, "synonymGroups": [], "sourceLabel": "通用模板"}
+    existing_keys = {
+        "|".join(sorted([normalize_alias(group.get("canonical")), normalize_alias(alias)]))
+        for group in profile.get("synonymGroups") or []
+        for alias in group.get("aliases") or []
+    }
+    merged_groups = list(profile.get("synonymGroups") or [])
+    candidate_terms = list(profile.get("candidateTerms") or [])
+    for group in llm_groups:
+        aliases_to_add = []
+        for alias in group.get("aliases") or []:
+            key = "|".join(sorted([normalize_alias(group.get("canonical")), normalize_alias(alias)]))
+            if not key or key in existing_keys:
+                continue
+            existing_keys.add(key)
+            aliases_to_add.append(alias)
+        if not aliases_to_add:
+            continue
+        merged = {**group, "aliases": aliases_to_add}
+        merged_groups.append(merged)
+        candidate_terms.extend([merged["canonical"], *aliases_to_add])
+    profile["synonymGroups"] = merged_groups
+    profile["candidateTerms"] = list(dict.fromkeys([term for term in candidate_terms if term]))[:20]
+    profile["sourceLabel"] = f"{profile.get('sourceLabel') or '通用模板'} + LLM 候选"
+    return profile
+
+
+def build_questions(source_mode, scenario, knowledge_profile, workflow, prompt_text=""):
+    library = GENERIC_LIBRARY[scenario["domainKey"]]
+    prompt_terms = extract_candidate_terms_from_prompt(prompt_text)
+    candidate_terms = (knowledge_profile or {}).get("candidateTerms")
+    candidate_terms = list(dict.fromkeys([*prompt_terms, *(candidate_terms or []), *library["candidateTerms"]]))[:20]
     if workflow == "synonym_merge":
         return [
             {"id": "target_type", "stepId": "target", "type": "single", "category": "合并范围", "title": "这次同义词合并主要服务于哪类结果？", "description": "不同用途会影响标准名选择、合并边界和证据要求。", "options": option_list(["抽取字段标准化", "材料术语归一", "中英文别名合并", "标准/规范术语对齐"], "以{item}为主要合并目标。"), "required": True},
@@ -532,7 +845,25 @@ def synonym_evidence_summary(session):
     question = next((item for item in session["questions"] if item["id"] == "synonym_groups"), None)
     options = question.get("options") if question else []
     option_map = {option["value"]: option for option in options}
-    selected_options = [option_map.get(item, {"value": item, "description": ""}) for item in selected]
+    selected_options = []
+    for item in selected:
+        text = str(item)
+        matched = option_map.get(text)
+        if not matched:
+            matched = next(
+                (
+                    option
+                    for option in options
+                    if not option.get("disabled")
+                    and (
+                        str(option.get("value") or "").startswith(f"A|{text} =>")
+                        or str(option.get("value") or "").startswith(f"B|{text} =>")
+                        or str(option.get("label") or "").startswith(f"{text}:")
+                    )
+                ),
+                None,
+            )
+        selected_options.append(matched or {"value": item, "description": ""})
     related = [option for option in options if option.get("grade") == "C"]
     forbidden = [option for option in options if option.get("grade") == "D"]
 
@@ -584,11 +915,12 @@ def build_prompt_text(session):
 {session.get('knowledge') if session.get('sourceMode') == 'rag' else '基于通用领域模板组织候选。'}
 
 执行规则：
-1. 只有明确证据的同义词、别名、英文缩写、符号表达、又称、见/参见关系才能自动合并。
-2. 相近但不完全等价的概念必须标记为待复核或同类相关，不能直接并入标准名。
-3. 每个合并组输出标准名、别名列表、关系类型、证据来源、证据原文、置信度、是否需要人工复核。
-4. 明确列出“不应合并”的边界和原因。
-5. 按“{output_format}”输出。{refinement_block}"""
+1. 可以利用已有领域知识提出候选同义词，但没有文档或词典证据时只能标记为“建议候选/待确认”，不能直接作为最终合并。
+2. 只有明确证据的同义词、别名、英文缩写、符号表达、又称、见/参见关系才能自动合并。
+3. 相近但不完全等价的概念必须标记为“相关但不合并”或“待复核”，不能直接并入标准名。
+4. 每个合并组输出标准名、别名列表、关系类型、证据来源、证据原文、置信度、是否需要人工复核。
+5. 结果必须分为“确认合并”“建议候选”“不建议合并”三类，并明确“不应合并”的边界和原因。
+6. 按“{output_format}”输出。{refinement_block}"""
     return f"""你是{get_answer(session, 'business_role', 'single') or '专业信息抽取助手'}，请根据以下要求从用户提供的文档中执行信息抽取。
 
 原始需求参考：
@@ -626,11 +958,13 @@ def build_prompt_text(session):
 
 执行规则：
 1. 仅基于待处理文档内容抽取，不要臆造文中没有的信息。
-2. 先识别同义词、近义词、英文缩写和等价表达，再归并到标准词条。
-3. 若出现英文术语，必须在同一字段中附带中文翻译。
-4. 每条结果尽量保留原文证据句；无法判断时按约束输出空值或 null。
-5. 按“{output_format}”输出，字段至少包含：标准词条、原文表述、同义/英文表达、证据句、备注。
-6. 输出前检查去重、字段完整性和格式合法性。{refinement_block}"""
+2. 可以利用已有领域知识提出同义词候选，但缺少文档证据时必须标记为“建议候选/待确认”，不能直接合并。
+3. 先识别同义词、近义词、英文缩写和等价表达，再按证据强度归并到标准词条。
+4. 若出现英文术语，必须在同一字段中附带中文翻译。
+5. 每条结果尽量保留原文证据句；无法判断时按约束输出空值或 null。
+6. 同义词处理必须区分“确认合并”“建议候选”“不建议合并”，并给出置信度与人工复核标记。
+7. 按“{output_format}”输出，字段至少包含：标准词条、原文表述、同义/英文表达、证据句、备注。
+8. 输出前检查去重、字段完整性和格式合法性。{refinement_block}"""
 
 
 def serialize_session(session):
@@ -644,6 +978,7 @@ def serialize_session(session):
         "knowledge": session.get("knowledge", ""),
         "scenario": session.get("scenario"),
         "knowledgeProfile": session.get("knowledgeProfile"),
+        "llmSynonymExpansion": session.get("llmSynonymExpansion"),
         "questionSource": session.get("questionSource"),
         "promptSource": session.get("promptSource"),
         "currentIndex": session.get("currentIndex", 0),
@@ -690,6 +1025,108 @@ class Orchestrator:
                 return loaded
         raise KeyError("session not found.")
 
+    def expand_synonyms_with_llm(self, prompt, scenario, knowledge_profile, model=""):
+        if not self.call_llm:
+            return {"groups": [], "error": ""}
+        candidate_terms = (knowledge_profile or {}).get("candidateTerms") or GENERIC_LIBRARY[scenario["domainKey"]]["candidateTerms"]
+        knowledge = str((knowledge_profile or {}).get("sourceLabel") or "")
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "你是严谨的术语标准化助手。你可以使用自己的领域知识提出同义词和相关词候选，"
+                    "但不能把缺少证据的相关概念当作最终同义词。只返回 JSON。"
+                ),
+            },
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {
+                        "task": prompt,
+                        "scenario": scenario,
+                        "candidate_terms": candidate_terms[:20],
+                        "knowledge_source": knowledge,
+                        "return_schema": {
+                            "confirmed": [
+                                {
+                                    "canonical": "标准名",
+                                    "aliases": ["同义词、英文翻译、缩写或符号"],
+                                    "confidence": "high|medium|low",
+                                    "reason": "为什么只是候选，或有什么常识依据",
+                                }
+                            ],
+                            "candidates": [
+                                {
+                                    "canonical": "中心词",
+                                    "aliases": ["相关但不完全等价的术语"],
+                                    "confidence": "high|medium|low",
+                                    "reason": "为什么不能自动合并",
+                                }
+                            ],
+                            "rejected": [
+                                {
+                                    "canonical": "中心词",
+                                    "aliases": ["不应合并的术语"],
+                                    "confidence": "high|medium|low",
+                                    "reason": "不合并边界",
+                                }
+                            ],
+                        },
+                        "rules": [
+                            "confirmed 也只能作为建议候选，前端需要人工确认后才进入最终合并。",
+                            "上下游概念、现象、机理、测试条件、数值字段、单位字段不得直接合并。",
+                            "中英文翻译、缩写、符号写法可以进入 confirmed，但 reason 必须说明依据。",
+                            "最多返回 8 组 confirmed、8 组 candidates、8 组 rejected。",
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+            },
+        ]
+        result = self.call_llm(model=model or self.default_model, messages=messages, temperature=0.1, json_mode=True)
+        content = result.get("content") if isinstance(result, dict) else result
+        payload = parse_llm_json(content)
+        return {"groups": normalize_llm_synonym_expansion(payload), "error": ""}
+
+    def build_llm_final_prompt(self, session, model=""):
+        if not self.call_llm:
+            raise RuntimeError("LLM backend is not configured.")
+        draft = build_prompt_text(session)
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "你是提示词工程师。请把输入草稿改写成可直接执行的最终提示词。"
+                    "保留术语合并证据、LLM 候选限制、RAG 证据要求、null 策略和人工复核规则。"
+                    "不要输出寒暄。"
+                ),
+            },
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {
+                        "raw_task": session.get("prompt"),
+                        "workflow": session.get("workflow"),
+                        "answers": session.get("answers"),
+                        "custom_answers": session.get("customAnswers"),
+                        "knowledge": session.get("knowledge"),
+                        "knowledge_profile": session.get("knowledgeProfile"),
+                        "local_draft": draft,
+                        "requirements": [
+                            "LLM 可以使用已有领域知识提出候选同义词，但不得直接确认最终合并。",
+                            "最终合并必须区分：确认合并、建议候选、不建议合并。",
+                            "缺少文档证据时标记待确认。",
+                            "每个同义词组输出标准名、别名、关系类型、证据、置信度、人工复核标记。",
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+            },
+        ]
+        result = self.call_llm(model=model or session.get("model") or self.default_model, messages=messages, temperature=0.2)
+        content = result.get("content") if isinstance(result, dict) else result
+        return str(content or "").strip() or draft
+
     def create_session(self, input_data):
         prompt = str(input_data.get("prompt") or "").strip()
         if not prompt:
@@ -700,7 +1137,16 @@ class Orchestrator:
         knowledge = str(input_data.get("knowledge") or "").strip()
         scenario = infer_scenario(prompt)
         knowledge_profile = parse_knowledge_profile(knowledge, scenario) if source_mode == "rag" else None
-        questions = build_questions(source_mode, scenario, knowledge_profile, workflow)
+        llm_synonym_expansion = {"enabled": input_data.get("questionMode") == "llm", "groups": [], "error": ""}
+        if input_data.get("questionMode") == "llm" and self.call_llm:
+            try:
+                base_profile = knowledge_profile or empty_knowledge_profile(scenario)
+                llm_synonym_expansion = self.expand_synonyms_with_llm(prompt, scenario, base_profile, model)
+                if llm_synonym_expansion.get("groups"):
+                    knowledge_profile = merge_llm_synonym_groups(base_profile, llm_synonym_expansion["groups"])
+            except Exception as error:
+                llm_synonym_expansion = {"enabled": True, "groups": [], "error": str(error)}
+        questions = build_questions(source_mode, scenario, knowledge_profile, workflow, prompt)
         auto_answers = infer_auto_answers(prompt, workflow, questions)
         answers = default_answers(questions)
         for question_id, item in auto_answers.items():
@@ -715,6 +1161,7 @@ class Orchestrator:
             "knowledge": knowledge,
             "scenario": scenario,
             "knowledgeProfile": knowledge_profile,
+            "llmSynonymExpansion": llm_synonym_expansion,
             "questions": questions,
             "answers": answers,
             "customAnswers": default_custom_answers(questions),
@@ -722,7 +1169,16 @@ class Orchestrator:
             "currentIndex": 0,
             "refinements": [],
             "finalPrompt": "",
-            "questionSource": {"type": "Python 本地模板", "detail": "backend/orchestrator.py"},
+            "questionSource": {
+                "type": "Python + LLM 候选" if llm_synonym_expansion.get("groups") else "Python 本地模板",
+                "detail": (
+                    f"LLM 生成 {len(llm_synonym_expansion.get('groups') or [])} 组同义词候选"
+                    if llm_synonym_expansion.get("groups")
+                    else f"LLM 候选不可用，已回退本地模板：{llm_synonym_expansion.get('error')}"
+                    if llm_synonym_expansion.get("error")
+                    else "backend/orchestrator.py"
+                ),
+            },
             "promptSource": {"type": "Python 本地模板", "detail": "实时预览"},
             "createdAt": timestamp,
             "updatedAt": timestamp,
@@ -782,10 +1238,15 @@ class Orchestrator:
         refinement = str(input_data.get("refinement") or "").strip()
         if refinement:
             session["refinements"].append(refinement)
-        session["finalPrompt"] = build_prompt_text(session)
-        session["promptSource"] = {"type": "Python 本地模板", "detail": "后端规则归纳"}
+        prompt_mode = input_data.get("promptMode") or "local"
+        if prompt_mode == "llm":
+            session["finalPrompt"] = self.build_llm_final_prompt(session, input_data.get("model") or session.get("model"))
+            session["promptSource"] = {"type": "Python + LLM 归纳", "detail": input_data.get("model") or session.get("model") or self.default_model}
+        else:
+            session["finalPrompt"] = build_prompt_text(session)
+            session["promptSource"] = {"type": "Python 本地模板", "detail": "后端规则归纳"}
         session["updatedAt"] = now_iso()
-        serialized = self.persist(session, "finalize_session", {"promptMode": input_data.get("promptMode") or "local"})
+        serialized = self.persist(session, "finalize_session", {"promptMode": prompt_mode})
         if self.storage:
             self.storage.append_prompt_version(
                 {
@@ -793,7 +1254,7 @@ class Orchestrator:
                     "versionId": str(uuid.uuid4()),
                     "workflow": session["workflow"],
                     "sourceMode": session["sourceMode"],
-                    "promptMode": input_data.get("promptMode") or "local",
+                    "promptMode": prompt_mode,
                     "promptSource": session["promptSource"],
                     "prompt": session["prompt"],
                     "knowledge": session.get("knowledge", ""),

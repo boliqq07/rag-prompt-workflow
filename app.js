@@ -117,7 +117,7 @@ let synonymDictionary = {};
 
 const EVIDENCE_GRADE = {
   A: "A 级：证据强，可自动合并",
-  B: "B 级：建议合并，需保留证据",
+  B: "B 级：建议候选，需人工确认",
   C: "C 级：相关术语，不自动合并",
   D: "D 级：禁止合并",
 };
@@ -143,10 +143,17 @@ const MERGE_POLICY_OPTIONS = [
 function classifyEvidence({ evidenceType = "llm_inferred", grade = "" } = {}) {
   if (grade) return grade;
   if (["excel_includes_parameter", "dictionary_alias", "dictionary_see_also"].includes(evidenceType)) return "A";
-  if (["bilingual_alias", "abbreviation"].includes(evidenceType)) return "B";
-  if (evidenceType === "related_only") return "C";
-  if (["field_type_conflict", "metric_type_conflict", "semantic_boundary_conflict", "category_type_conflict"].includes(evidenceType)) return "D";
+  if (["bilingual_alias", "abbreviation", "llm_prior_alias"].includes(evidenceType)) return "B";
+  if (["related_only", "llm_prior_related"].includes(evidenceType)) return "C";
+  if (["field_type_conflict", "metric_type_conflict", "semantic_boundary_conflict", "category_type_conflict", "llm_prior_rejected"].includes(evidenceType)) return "D";
   return "B";
+}
+
+function getSynonymBucket(option) {
+  if (option.bucket) return option.bucket;
+  if (option.grade === "A") return "confirmed";
+  if (option.grade === "B") return "candidate";
+  return "rejected";
 }
 
 const FIELD_TYPE_SUFFIXES = ["name", "value", "unit", "ratio", "rate"];
@@ -215,6 +222,9 @@ function buildFieldConflictOptions(terms, normalizeAlias) {
         description: makeSynonymDescription(group),
         grade: group.grade,
         evidenceType: group.evidenceType,
+        confidence: "high",
+        bucket: "rejected",
+        reviewRequired: false,
         autoSelect: false,
         disabled: true,
       });
@@ -424,6 +434,9 @@ function buildSemanticDecisionOptions(terms, normalizeAlias, existingOptions = [
         description: makeSynonymDescription(group),
         grade: group.grade,
         evidenceType: group.evidenceType,
+        confidence: "high",
+        bucket: "rejected",
+        reviewRequired: false,
         autoSelect: false,
         disabled: true,
       });
@@ -442,6 +455,8 @@ function makeSynonymDescription(group) {
     EVIDENCE_GRADE[group.grade] || EVIDENCE_GRADE.B,
     group.evidenceType ? `证据类型：${group.evidenceType}` : "",
     group.evidenceText ? `证据：${group.evidenceText}` : "",
+    group.confidence ? `置信度：${group.confidence}` : "",
+    group.reviewRequired ? "需要人工确认" : "",
   ]
     .filter(Boolean)
     .join("；");
@@ -454,6 +469,7 @@ const state = {
   prompt: "",
   knowledge: "",
   knowledgeProfile: null,
+  llmSynonymExpansion: null,
   knowledgeAvailable: false,
   knowledgeStatusDetail: "尚未检测",
   knowledgeDbPath: "",
@@ -729,6 +745,9 @@ function parseKnowledgeProfile(text, scenario) {
       evidenceType,
       grade,
       evidenceText: evidence.evidenceText || "",
+      confidence: evidence.confidence || "medium",
+      bucket: grade === "A" ? "confirmed" : grade === "B" ? "candidate" : "rejected",
+      reviewRequired: grade !== "A",
       autoSelect: grade === "A",
       disabled: grade === "C" || grade === "D",
     });
@@ -882,6 +901,9 @@ function getSynonymOptions(terms) {
       description: makeSynonymDescription(group),
       grade: group.grade,
       evidenceType: group.evidenceType,
+      confidence: group.confidence || "medium",
+      bucket: group.bucket || getSynonymBucket(group),
+      reviewRequired: group.reviewRequired ?? group.grade !== "A",
       autoSelect: group.autoSelect,
       disabled: group.disabled,
     });
@@ -909,6 +931,9 @@ function getSynonymOptions(terms) {
       description: makeSynonymDescription(group),
       grade: group.grade,
       evidenceType: group.evidenceType,
+      confidence: "medium",
+      bucket: "candidate",
+      reviewRequired: true,
       autoSelect: false,
       disabled: false,
     });
@@ -1789,6 +1814,7 @@ function syncFromOrchestratorSession(session) {
   state.model = session.model || state.model;
   state.knowledge = session.knowledge || state.knowledge;
   state.knowledgeProfile = session.knowledgeProfile || null;
+  state.llmSynonymExpansion = session.llmSynonymExpansion || null;
   state.scenario = session.scenario || null;
   state.questions = session.questions || [];
   state.answers = session.answers || {};
@@ -2106,6 +2132,69 @@ function renderAuditLogs() {
     .join("");
 }
 
+function renderSynonymOption(option, questionId, currentAnswer) {
+  const checkedValues = Array.isArray(currentAnswer) ? currentAnswer : [];
+  const bucket = getSynonymBucket(option);
+  return `
+    <label class="option synonym-option bucket-${escapeHtml(bucket)}">
+      <input
+        type="checkbox"
+        name="${escapeHtml(questionId)}"
+        value="${escapeHtml(option.value)}"
+        ${checkedValues.includes(option.value) ? "checked" : ""}
+        ${option.disabled ? "disabled" : ""}
+      />
+      <span>
+        <span class="option-title">${option.grade ? `<b class="grade-pill grade-${escapeHtml(option.grade)}">${escapeHtml(option.grade)}</b>` : ""}${escapeHtml(option.label)}</span>
+        <span class="option-desc">${escapeHtml(option.description)}</span>
+      </span>
+    </label>
+  `;
+}
+
+function renderSynonymOptionGroups(question, currentAnswer) {
+  if (!question.options.length) {
+    return `<div class="option muted">当前没有可确认的候选别名，可以直接跳过。</div>`;
+  }
+  const groups = [
+    {
+      id: "confirmed",
+      title: "确认合并",
+      description: "来自文档、词典或明确别名证据，选中后进入最终合并规则。",
+    },
+    {
+      id: "candidate",
+      title: "建议候选",
+      description: "来自 LLM 领域知识或通用词典，需要人工确认后才合并。",
+    },
+    {
+      id: "rejected",
+      title: "不建议合并",
+      description: "相关但不等价，或存在字段/语义冲突，只作为边界写入提示词。",
+    },
+  ];
+  return `
+    <div class="synonym-columns">
+      ${groups
+        .map((group) => {
+          const options = question.options.filter((option) => getSynonymBucket(option) === group.id);
+          return `
+            <section class="synonym-column">
+              <div class="synonym-column-head">
+                <strong>${escapeHtml(group.title)}</strong>
+                <span>${escapeHtml(group.description)}</span>
+              </div>
+              <div class="option-list compact-list">
+                ${options.length ? options.map((option) => renderSynonymOption(option, question.id, currentAnswer)).join("") : `<div class="option muted">暂无</div>`}
+              </div>
+            </section>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
 async function loadPersistedSessions() {
   if (!isServerBackedPage()) return;
   const payload = await apiJson("/api/orchestrator/sessions");
@@ -2200,33 +2289,36 @@ function renderQuestion() {
   }
 
   if (question.type === "multi") {
-    controlHtml = `
-      <div class="option-list">
-        ${
-          question.options.length
-            ? question.options
-                .map(
-                  (option) => `
-              <label class="option">
-                <input
-                  type="checkbox"
-                  name="${escapeHtml(question.id)}"
-                  value="${escapeHtml(option.value)}"
-                  ${currentAnswer.includes(option.value) ? "checked" : ""}
-                  ${option.disabled ? "disabled" : ""}
-                />
-                <span>
-                  <span class="option-title">${option.grade ? `<b class="grade-pill grade-${escapeHtml(option.grade)}">${escapeHtml(option.grade)}</b>` : ""}${escapeHtml(option.label)}</span>
-                  <span class="option-desc">${escapeHtml(option.description)}</span>
-                </span>
-              </label>
-            `
-                )
-                .join("")
-            : `<div class="option muted">当前没有可确认的候选别名，可以直接跳过。</div>`
-        }
-      </div>
-    `;
+    controlHtml =
+      question.id === "synonym_groups"
+        ? renderSynonymOptionGroups(question, currentAnswer)
+        : `
+          <div class="option-list">
+            ${
+              question.options.length
+                ? question.options
+                    .map(
+                      (option) => `
+                  <label class="option">
+                    <input
+                      type="checkbox"
+                      name="${escapeHtml(question.id)}"
+                      value="${escapeHtml(option.value)}"
+                      ${currentAnswer.includes(option.value) ? "checked" : ""}
+                      ${option.disabled ? "disabled" : ""}
+                    />
+                    <span>
+                      <span class="option-title">${option.grade ? `<b class="grade-pill grade-${escapeHtml(option.grade)}">${escapeHtml(option.grade)}</b>` : ""}${escapeHtml(option.label)}</span>
+                      <span class="option-desc">${escapeHtml(option.description)}</span>
+                    </span>
+                  </label>
+                `
+                    )
+                    .join("")
+                : `<div class="option muted">当前没有可确认的候选别名，可以直接跳过。</div>`
+            }
+          </div>
+        `;
   }
 
   if (question.type === "text") {
@@ -2362,11 +2454,12 @@ ${state.answers.extra_instructions || "无"}
 ${state.mode === "rag" ? state.knowledge || "未提供详细知识片段。" : "基于通用领域模板组织候选。"}
 
 执行规则：
-1. 只有存在明确证据的同义词、别名、英文缩写、符号表达、又称、见/参见关系才能自动合并。
-2. 相近但不完全等价的概念必须标记为待复核或同类相关，不能直接并入标准名。
-3. 每个合并组至少输出：标准名、别名列表、关系类型、证据来源、证据原文、置信度、是否需要人工复核。
-4. 明确列出“不应合并”的边界和原因。
-5. 按“${getAnswerWithCustom({ id: "output_format", type: "single" }) || "待确认"}”输出。${refinementBlock}`;
+1. 可以利用已有领域知识提出候选同义词，但没有文档或词典证据时只能标记为“建议候选/待确认”，不能直接作为最终合并。
+2. 只有存在明确证据的同义词、别名、英文缩写、符号表达、又称、见/参见关系才能自动合并。
+3. 相近但不完全等价的概念必须标记为“相关但不合并”或“待复核”，不能直接并入标准名。
+4. 每个合并组至少输出：标准名、别名列表、关系类型、证据来源、证据原文、置信度、是否需要人工复核。
+5. 结果必须分为“确认合并”“建议候选”“不建议合并”三类，并明确“不应合并”的边界和原因。
+6. 按“${getAnswerWithCustom({ id: "output_format", type: "single" }) || "待确认"}”输出。${refinementBlock}`;
   }
 
   return `你是${getAnswerWithCustom({ id: "business_role", type: "single" }) || "专业信息抽取助手"}，请根据以下要求从用户提供的文档中执行信息抽取。
@@ -2408,11 +2501,13 @@ ${state.mode === "rag" ? `优先参考附带术语片段：${state.knowledge || 
 
 执行规则：
 1. 仅基于待处理文档内容抽取，不要臆造文中没有的信息。
-2. 先识别同义词、近义词、英文缩写和等价表达，再归并到标准词条。
-3. 若出现英文术语，必须在同一字段中附带中文翻译。
-4. 每条结果尽量保留原文证据句；无法判断时按约束输出空值或 null。
-5. 按“${getAnswerWithCustom({ id: "output_format", type: "single" }) || "待确认"}”输出，字段至少包含：标准词条、原文表述、同义/英文表达、证据句、备注。
-6. 输出前检查去重、字段完整性和格式合法性。${refinementBlock}`;
+2. 可以利用已有领域知识提出同义词候选，但缺少文档证据时必须标记为“建议候选/待确认”，不能直接合并。
+3. 先识别同义词、近义词、英文缩写和等价表达，再按证据强度归并到标准词条。
+4. 若出现英文术语，必须在同一字段中附带中文翻译。
+5. 每条结果尽量保留原文证据句；无法判断时按约束输出空值或 null。
+6. 同义词处理必须区分“确认合并”“建议候选”“不建议合并”，并给出置信度与人工复核标记。
+7. 按“${getAnswerWithCustom({ id: "output_format", type: "single" }) || "待确认"}”输出，字段至少包含：标准词条、原文表述、同义/英文表达、证据句、备注。
+8. 输出前检查去重、字段完整性和格式合法性。${refinementBlock}`;
 }
 
 function buildPromptMarkdown() {

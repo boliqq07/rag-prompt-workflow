@@ -310,12 +310,26 @@ GitHub Actions 配置位于 [.github/workflows/ci.yml](/Users/cyc/Desktop/相关
 
 ## 同义词合并决策
 
-同义词确认步骤会按证据等级输出四类关系：
+同义词确认步骤会按证据等级输出四类关系，并在前端归入三类工作区：
 
 - `A`：知识库强证据，可自动合并，例如 Excel `涵盖参数`、词典 `又称`、`见/参见`。
-- `B`：内置词典或缩写建议合并，需要保留证据。
+- `B`：内置词典、缩写或 LLM 领域知识建议候选，需要人工确认后才合并。
 - `C`：相关但不合并，例如 `yield strength` 与 `tensile strength` 同属强度类性能，但缺少同义证据。
 - `D`：禁止合并，例如字段类型冲突、材料名 vs 性能指标、试验条件 vs 测量结果、强度值 vs 强度损失率。
+
+前端显示为：
+
+- `确认合并`：主要对应 A 级证据，选中后进入最终合并规则。
+- `建议候选`：主要对应 B 级证据，包括 LLM 根据已有知识提出的候选；默认不把缺少文档证据的项当成最终合并。
+- `不建议合并`：对应 C/D 级边界，写入“相关但不合并”或“禁止合并”规则。
+
+当点击 `模型生成问题流` 且 LLM 后端已配置时，后端会让 LLM 基于原始需求和候选术语补充三类候选：
+
+- `confirmed`：中英文翻译、缩写、符号等常识候选，会降级为 B 级“建议候选”，等待人工确认。
+- `candidates`：相关但不完全等价的术语，会进入 C 级“不建议合并”。
+- `rejected`：明显不同类型或容易误合并的术语，会进入 D 级“不建议合并”。
+
+这意味着 LLM 可以使用已有领域知识扩展候选词，但最终合并仍由证据等级、RAG 文档证据和人工确认共同决定。
 
 后端内置了证据决策矩阵，会把 `evidenceType` 统一映射为证据等级、动作和关系类型：
 
@@ -326,6 +340,9 @@ GitHub Actions 配置位于 [.github/workflows/ci.yml](/Users/cyc/Desktop/相关
 | `dictionary_see_also` | A | 自动合并 | 词典见/参见 |
 | `bilingual_alias` | B | 建议合并 | 中英文别名 |
 | `abbreviation` / `symbol_alias` | B | 建议合并 | 缩写/符号 |
+| `llm_prior_alias` | B | 建议候选，需人工确认 | LLM 领域知识候选 |
+| `llm_prior_related` | C | 相关但不合并 | LLM 相关术语候选 |
+| `llm_prior_rejected` | D | 禁止合并 | LLM 边界判断 |
 | `related_only` | C | 相关但不合并 | 同类相关 |
 | `field_type_conflict` | D | 禁止合并 | 字段类型冲突 |
 | `metric_type_conflict` | D | 禁止合并 | 指标类型冲突 |

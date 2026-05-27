@@ -989,6 +989,10 @@ select:focus {
   gap: 9px;
 }
 
+.compact-list {
+  gap: 8px;
+}
+
 .option {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1053,6 +1057,52 @@ select:focus {
   color: var(--muted);
   line-height: 1.52;
   font-size: 0.9rem;
+}
+
+.synonym-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.synonym-column {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 250, 242, 0.62);
+}
+
+.synonym-column-head {
+  display: grid;
+  gap: 4px;
+}
+
+.synonym-column-head strong {
+  color: var(--ink-strong);
+  font-size: 0.95rem;
+}
+
+.synonym-column-head span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.synonym-option {
+  padding: 11px 12px;
+  border-radius: 11px;
+}
+
+.synonym-option.bucket-candidate {
+  border-style: dashed;
+}
+
+.synonym-option.bucket-rejected {
+  opacity: 0.82;
 }
 
 .helper-text {
@@ -1173,6 +1223,10 @@ select:focus {
   .workspace {
     grid-template-columns: 1fr;
     padding: 18px;
+  }
+
+  .synonym-columns {
+    grid-template-columns: 1fr;
   }
 }
 

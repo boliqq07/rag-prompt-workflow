@@ -20,10 +20,10 @@
   "失重": ["weight loss（失重）"],
   "温度": ["temperature（温度）"],
   "pH 值": ["pH value（酸碱度）"],
+  "氢脆": ["hydrogen embrittlement（氢脆）", "HE（氢脆）"],
   "材料组成": ["material composition（材料组成）"],
   "工艺参数": ["process parameter（工艺参数）"],
   "性能指标": ["performance metric（性能指标）"],
   "测试方法": ["test method（测试方法）"],
   "实验条件": ["experimental condition（实验条件）"]
 }
-

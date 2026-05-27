@@ -172,10 +172,13 @@ def extract_candidate_terms_from_prompt(prompt):
         terms.append(term)
     for raw in re.split(r"[，,、；;。.!?？：:\n]|\s+和\s+|\s+与\s+|\s+及\s+", text):
         item = clean_term(raw)
-        item = re.sub(r"^(请|把|将|判断|说明|生成|输出|保留|注意|例如|哪些|这些|这个|一个|用于|文档中|文中)", "", item)
-        item = re.sub(r"(的同义词项?|的合并边界|不能互相合并|可以作为同义词合并|不能合并|合并为同义词组)$", "", item)
+        item = re.sub(r"^(?:请|把|将|判断|说明|生成|输出|保留|注意|例如|哪些|这些|这个|一个|用于|文档中|文中)+", "", item)
+        item = re.sub(r"(?:是否)?(?:可以)?作为同义词合并.*$", "", item)
+        item = re.sub(r"(的同义词项?|的合并边界|不能互相合并|不能合并|合并为同义词组)$", "", item)
         item = clean_term(item)
         if not item or item.lower() in stopwords:
+            continue
+        if re.search(r"确认合并|建议候选|不建议合并|合并理由|区分", item):
             continue
         if len(item) < 2 or len(item) > 36:
             continue
